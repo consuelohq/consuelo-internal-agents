@@ -1,0 +1,48 @@
+{
+  "company": "TechStartup Inc",
+  "website": "https://techstartup.example",
+  "industry": "B2B SaaS",
+  "employee_count": "50-100",
+  "funding_stage": "Series A",
+  "recent_news": [
+    {
+      "date": "2024-01-15",
+      "headline": "TechStartup Inc raises $10M Series A",
+      "source": "TechCrunch",
+      "relevance": "Growth signal - likely hiring and scaling"
+    }
+  ],
+  "key_contacts": [
+    {
+      "name": "Alex Chen",
+      "title": "VP of Engineering",
+      "linkedin": "https://linkedin.com/in/alexchen-example",
+      "recent_activity": "Posted about microservices migration challenges"
+    }
+  ],
+  "tech_stack": [
+    "React",
+    "Node.js",
+    "AWS",
+    "PostgreSQL"
+  ],
+  "pain_points_identified": [
+    "Scaling engineering team rapidly",
+    "Microservices migration complexity",
+    "Developer productivity tooling"
+  ],
+  "talking_points": [
+    "Reference their recent funding and growth trajectory",
+    "Mention microservices migration (Alex posted about this)",
+    "Position solution around scaling challenges"
+  ],
+  "competitors_using_similar": [
+    "GrowthCo",
+    "ScaleUp Tech"
+  ],
+  "outreach_recommendation": {
+    "approach": "technical-peer",
+    "timing": "optimal - post-funding, likely evaluating tools",
+    "angle": "scaling engineering without sacrificing velocity"
+  }
+}

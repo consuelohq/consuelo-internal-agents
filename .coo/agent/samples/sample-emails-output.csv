@@ -1,0 +1,21 @@
+to_email,to_name,subject,body,template_used,status
+alex.chen@techstartup.example,Alex,"Quick question about TechStartup's scaling","Hi Alex,
+
+Saw your post about the microservices migration challenges at TechStartup - sounds like a significant undertaking, especially with the team growth post-Series A.
+
+Curious how you're thinking about developer velocity during the transition? I've seen a few teams navigate this recently and noticed some patterns that might be relevant.
+
+Happy to share if useful - no pitch, just observations from similar situations.
+
+Best,
+[Your Name]",cold-outreach-value,draft
+sarah.johnson@growthco.example,Sarah,"Operations scaling at GrowthCo","Hi Sarah,
+
+Michael from Acme mentioned you're doing interesting work scaling operations at GrowthCo.
+
+I work with a few ops leaders facing similar growth challenges and thought there might be some overlap worth exploring.
+
+Would a quick 15-min call make sense to see if there's fit?
+
+Best,
+[Your Name]",cold-outreach-referral,draft

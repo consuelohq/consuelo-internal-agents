@@ -1,0 +1,45 @@
+{
+  "name": "single-insight",
+  "type": "single",
+  "category": "insight",
+  "tone": "educational",
+  "description": "Share a non-obvious insight from your industry expertise",
+
+  "hooks": [
+    "Most people think {{common_belief}}. Here's what actually works:",
+    "The {{topic}} mistake I see most often:",
+    "Unpopular opinion: {{contrarian_take}}",
+    "After {{timeframe}} in {{industry}}, here's what I've learned:",
+    "{{metric}}% of {{group}} get this wrong:"
+  ],
+
+  "structure": {
+    "hook": "Pattern-interrupt or curiosity gap",
+    "insight": "The core observation or learning",
+    "evidence": "Brief proof point or example",
+    "takeaway": "Actionable implication"
+  },
+
+  "variables": [
+    "common_belief",
+    "topic",
+    "contrarian_take",
+    "timeframe",
+    "industry",
+    "metric",
+    "group"
+  ],
+
+  "examples": [
+    "Most people think more outreach = more deals.\n\nAfter 5 years in B2B sales, here's what actually works:\n\n10 deeply researched emails > 100 generic ones\n\nThe difference? Response rates jumped from 2% to 18%.",
+
+    "The hiring mistake I see most often:\n\nOptimizing for skills over curiosity.\n\nSkills can be taught. A growth mindset can't.\n\nEvery A-player I've hired asked more questions in the interview than I did."
+  ],
+
+  "tips": [
+    "Share insights from genuine experience",
+    "Be specific with numbers when possible",
+    "Challenge conventional wisdom (if you can back it up)",
+    "Make it actionable"
+  ]
+}

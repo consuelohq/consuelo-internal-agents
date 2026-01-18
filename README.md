@@ -331,6 +331,72 @@ The agent maintains context across sessions via:
 
 Progress is automatically pruned after 6 hours to keep context manageable.
 
+## COO Agent Template
+
+In addition to the development-focused agent workflow, this repository includes a **COO (Chief Operating Officer) Agent** template for autonomous GTM and business automation tasks.
+
+### What the COO Agent Does
+
+The COO agent handles marketing and sales operations on a schedule:
+
+- **Morning Research** - Prospect research and lead gathering
+- **Email Generation** - Personalized cold outreach drafts
+- **Twitter Content** - Posts, threads, and engagement content
+- **Lead Processing** - Dialer lists and CRM-ready exports
+- **Metrics Tracking** - Daily activity and performance metrics
+
+### Key Features
+
+- **Scheduled Automation** - macOS launchd runs tasks at optimal times
+- **Two-Session Workflow** - Worker generates, QA validates before sending
+- **Email Warm-Up** - Gradual volume increase (10→100 emails over 14 days)
+- **Separate Task Queue** - COO Beads instance keeps business tasks separate from dev tasks
+
+### Quick Start
+
+```bash
+# Copy COO template to your project
+cp -r .coo /path/to/your/project/
+
+# Configure
+cd /path/to/your/project
+vim .coo/agent/config.sh  # Set PROJECT_ROOT
+
+# Create your business context
+cp .coo/docs/BUSINESS_CONTEXT_TEMPLATE.md .coo/docs/BUSINESS_CONTEXT.md
+vim .coo/docs/BUSINESS_CONTEXT.md  # Fill in your business details
+
+# Install launchd schedules
+.coo/agent/launchd/install-launchd.sh
+
+# Initialize Beads (separate from dev tasks)
+bd-coo init
+```
+
+### Documentation
+
+- **[.coo/README.md](.coo/README.md)** - Full overview and architecture
+- **[.coo/CUSTOMIZATION.md](.coo/CUSTOMIZATION.md)** - Step-by-step setup guide
+- **[.coo/CLAUDE.md](.coo/CLAUDE.md)** - Agent instructions and workflow
+
+### Schedule (Default)
+
+| Time | Task |
+|------|------|
+| 7:00 AM | Morning research |
+| 7:45 AM | Generate email drafts |
+| 8:00 AM | Twitter post #1 |
+| 9:00 AM | Instagram prospects |
+| 12:00 PM | Twitter post #2 |
+| 12:30 PM | Dialer leads |
+| 4:00 PM | Update metrics |
+| 4:30 PM (Tue/Thu) | Twitter thread |
+| 5:00 PM | Twitter post #3 |
+
+Customize schedules in `.coo/agent/launchd/*.plist` files.
+
+---
+
 ## Contributing
 
 Contributions welcome! Please:

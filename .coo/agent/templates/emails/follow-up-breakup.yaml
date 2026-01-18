@@ -1,0 +1,36 @@
+# EXAMPLE TEMPLATE - Customize for your business
+# Follow-Up: Breakup Email (Final in Sequence)
+
+name: follow-up-breakup
+subject: "Closing the loop"
+category: follow-up
+tone: professional
+
+structure:
+  opening: "Acknowledge this is the last email"
+  body: "Quick summary of what you offered"
+  cta: "Leave door open for future"
+  closing: "Graceful exit"
+
+variables:
+  - first_name
+  - value_summary
+  - your_name
+
+example: |
+  Hi {{first_name}},
+
+  I'll keep this short - I've reached out a few times and haven't heard back,
+  so I'll assume the timing isn't right.
+
+  If {{value_summary}} ever becomes a priority, feel free to reach out.
+
+  Wishing you and the team continued success.
+
+  {{your_name}}
+
+tips:
+  - This often gets the highest response rate
+  - Be genuinely willing to close the loop
+  - Don't be passive-aggressive
+  - Leave a positive impression

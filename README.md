@@ -20,7 +20,7 @@ This workflow turns Claude Code into an autonomous coding agent that:
 Every task follows the **Research-Plan-Implement** pattern:
 
 ```
-Research (10-30 min)     Plan (5-15 min)         Implement (20-60 min)
+Research (2-30 min)     Plan (2-15 min)         Implement (5-60 min)
 ├── Explore codebase     ├── Detailed steps      ├── Execute plan
 ├── Find patterns        ├── File paths          ├── Commit changes
 └── Compress findings    └── Test strategy       └── Run quality gates
@@ -45,13 +45,38 @@ Before installing, ensure you have:
   - Install: https://github.com/steveyegge/beads
   - Or use pip: `pip install beads-cli`
 
+## AI-Assisted Setup
+
+Copy this prompt into Claude Code or OpenCode to have it set everything up for you:
+
+```
+I want to set up the Claude Agent Workflow from this repo. Please help me:
+
+1. First, check which prerequisites I'm missing (node, python, jq, gh, claude/opencode, bd) and install any that are missing using the appropriate package manager for my system.
+
+2. Clone https://github.com/kokayicobb/consuelo-internal-agents to a temporary location, then copy the .agent/ and .claude/ directories to my current project.
+
+3. Initialize Beads in my project with `bd init`.
+
+4. Update .agent/config.sh with my project's settings:
+   - Set the correct BASE_BRANCH (check what my main branch is called)
+   - Set TEST_COMMAND to whatever test command my project uses (check package.json or pyproject.toml)
+   - Keep AGENT_CLI as "claude" unless I'm using opencode
+
+5. Make all scripts executable.
+
+6. Run .agent/init.sh to verify everything is set up correctly.
+
+7. Show me a summary of what was configured and how to create my first task.
+```
+
 ## Quick Start
 
 ### Option 1: Clone and Install (Recommended)
 
 ```bash
 # Clone the template
-git clone https://github.com/YOUR_USERNAME/claude-agent-workflow.git
+git clone https://github.com/kokayicobb/consuelo-internal-agents
 cd claude-agent-workflow
 
 # Copy to your project

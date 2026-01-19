@@ -1,0 +1,7 @@
+{
+  "name": "consuelo-internal-agents",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "echo \"No tests configured\" && exit 0"
+  }
+}

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- TODO: Update label to match your company name -->
+    <key>Label</key>
+    <string>com.yourcompany.coo.generate-emails</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <!-- TODO: Update path to your project -->
+        <string>/path/to/your/project/.coo/agent/launchd/run-scheduled-task.sh</string>
+        <string>generate-emails</string>
+    </array>
+
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>7</integer>
+        <key>Minute</key>
+        <integer>45</integer>
+    </dict>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/coo-agent/generate-emails-stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/coo-agent/generate-emails-stderr.log</string>
+
+    <!-- TODO: Update path to your project -->
+    <key>WorkingDirectory</key>
+    <string>/path/to/your/project</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <false/>
+</dict>
+</plist>

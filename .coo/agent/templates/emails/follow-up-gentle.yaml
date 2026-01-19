@@ -1,0 +1,36 @@
+# EXAMPLE TEMPLATE - Customize for your business
+# Follow-Up: Gentle Bump
+
+name: follow-up-gentle
+subject: "Re: {{original_subject}}"
+category: follow-up
+tone: friendly
+
+structure:
+  opening: "Brief reference to previous email"
+  body: "Add new value or context"
+  cta: "Restate the ask simply"
+  closing: "Understanding of their busy schedule"
+
+variables:
+  - first_name
+  - original_subject
+  - new_value_add
+  - your_name
+
+example: |
+  Hi {{first_name}},
+
+  Just floating this back up - I know things get buried.
+
+  {{new_value_add}}
+
+  Worth a quick chat?
+
+  {{your_name}}
+
+tips:
+  - Wait 3-5 business days before following up
+  - Always add something new
+  - Keep it shorter than the original
+  - Maximum 3 follow-ups per sequence

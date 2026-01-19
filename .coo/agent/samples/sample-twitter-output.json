@@ -1,0 +1,49 @@
+{
+  "generated_at": "2024-01-18T08:00:00Z",
+  "posts": [
+    {
+      "id": "post-001",
+      "type": "single",
+      "content": "Most people think more outreach = more deals.\n\nAfter 5 years in B2B sales, here's what actually works:\n\n10 deeply researched emails > 100 generic ones\n\nThe difference? Response rates jumped from 2% to 18%.",
+      "template_used": "single-insight",
+      "scheduled_time": "2024-01-18T08:00:00Z",
+      "status": "draft",
+      "character_count": 234,
+      "hashtags": [],
+      "mentions": []
+    },
+    {
+      "id": "post-002",
+      "type": "single",
+      "content": "What's one sales tip that actually stuck?\n\n(Not the ones everyone shares - the weird one that works for you)",
+      "template_used": "single-question",
+      "scheduled_time": "2024-01-18T12:00:00Z",
+      "status": "draft",
+      "character_count": 112,
+      "hashtags": [],
+      "mentions": []
+    },
+    {
+      "id": "thread-001",
+      "type": "thread",
+      "content": [
+        "Here's exactly how I book 10+ sales calls per week using cold email (step-by-step):\n\n🧵",
+        "First, why this works:\n\n90% of cold emails are generic templates.\n\nStand out with research + relevance.\n\nHere's the system 👇",
+        "Step 1: Find the right prospects\n\n- Use LinkedIn Sales Navigator\n- Filter by recent job changes, funding, or growth signals\n- Export to a spreadsheet\n\nQuality > Quantity always.",
+        "Step 2: Research (5 min per prospect)\n\n- Their recent posts/content\n- Company news\n- Mutual connections\n- Tech stack (if relevant)\n\nFind ONE specific thing to reference.",
+        "Step 3: Write the email\n\n- Subject: Short, relevant, no clickbait\n- Line 1: Personalized observation\n- Line 2-3: Why you're reaching out\n- Line 4: Clear ask (15-min call)\n\nKeep it under 100 words.",
+        "That's the system. Save this thread and try it this week. 📌"
+      ],
+      "template_used": "thread-howto",
+      "scheduled_time": "2024-01-18T17:00:00Z",
+      "status": "draft",
+      "total_character_count": 892,
+      "tweet_count": 6
+    }
+  ],
+  "validation": {
+    "all_under_280_chars": true,
+    "no_banned_words": true,
+    "no_external_links": true
+  }
+}

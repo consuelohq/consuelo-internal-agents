@@ -1,0 +1,45 @@
+{
+  "name": "single-question",
+  "type": "single",
+  "category": "question",
+  "tone": "casual",
+  "description": "Engagement-focused question to spark conversation",
+
+  "hooks": [
+    "What's one {{topic}} tip you wish you knew earlier?",
+    "Hot take or cold take: {{statement}}",
+    "{{group}} of Twitter: What's your biggest {{challenge}}?",
+    "If you could change one thing about {{subject}}, what would it be?",
+    "Finish this sentence: The best {{category}} advice I ever got was ___"
+  ],
+
+  "structure": {
+    "question": "Clear, easy to answer question",
+    "context": "Optional brief context (1 line max)",
+    "engagement": "Encourage specific responses"
+  },
+
+  "variables": [
+    "topic",
+    "statement",
+    "group",
+    "challenge",
+    "subject",
+    "category"
+  ],
+
+  "examples": [
+    "What's one productivity tip that actually stuck?\n\n(Not the ones everyone shares - the weird one that works for you)",
+
+    "Founders: What's the hardest lesson you learned in year 1?\n\nI'll go first: Saying yes to everything nearly killed the company.",
+
+    "Hot take or cold take:\n\nCold emails are more effective than LinkedIn DMs.\n\n👇"
+  ],
+
+  "tips": [
+    "Make it easy to answer quickly",
+    "Share your own answer to encourage responses",
+    "Engage with replies to boost visibility",
+    "Ask questions your audience is qualified to answer"
+  ]
+}

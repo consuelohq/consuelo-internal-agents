@@ -1,0 +1,62 @@
+{
+  "name": "thread-story",
+  "type": "thread",
+  "category": "story",
+  "tone": "narrative",
+  "description": "Personal story thread with lessons learned",
+
+  "hooks": [
+    "{{time_ago}}, I {{situation}}. Here's what happened:",
+    "The story of how {{outcome}}:",
+    "I {{failure_or_risk}}. Best decision I ever made. Here's why:",
+    "Everyone told me {{common_advice}}. I did the opposite.",
+    "{{Year}} changed everything for me. Thread 🧵"
+  ],
+
+  "structure": {
+    "tweet_1": "Hook with intrigue",
+    "tweet_2_3": "Set the scene / context",
+    "tweet_4_6": "The journey / challenges",
+    "tweet_7_8": "The turning point",
+    "tweet_9": "The outcome",
+    "tweet_10": "The lesson + CTA"
+  },
+
+  "thread_length": "7-12 tweets optimal",
+
+  "variables": [
+    "time_ago",
+    "situation",
+    "outcome",
+    "failure_or_risk",
+    "common_advice",
+    "Year"
+  ],
+
+  "example_thread": [
+    "3 years ago, I quit a $150k job to start a company with $0 in savings.\n\nEveryone thought I was crazy.\n\nHere's what actually happened 🧵",
+
+    "Some context:\n\nI was 28, no kids, renting an apartment.\n\nI'd been thinking about starting something for 5 years.\n\nBut there was always a reason to wait.",
+
+    "The trigger:\n\nMy manager rejected a project I'd worked on for 6 months.\n\nNot because it was bad. Because it 'wasn't a priority anymore.'\n\nI realized I'd never control my work inside a company.",
+
+    "Month 1-3:\n\nI burned through my small savings fast.\n\nNo product. No customers. Just an idea.\n\nI picked up freelance work to survive.\n\n10 hour days minimum.",
+
+    "The lowest point:\n\nMonth 4. $400 in my account.\n\nI almost called my old boss.\n\nInstead, I sent 50 cold emails offering consulting.\n\n3 replied. 1 became a $5k contract.",
+
+    "The turning point:\n\nThat client introduced me to their network.\n\nWithin 2 months, I had more work than I could handle.\n\nI hired my first contractor.",
+
+    "Month 12:\n\n- $180k revenue\n- 3 contractors\n- A real product in development\n- More fulfilled than ever\n\nNot wealthy. But free.",
+
+    "3 years later:\n\nWe're a team of 8.\n\nThe company nearly died twice.\n\nBut I've never once regretted quitting.\n\nNot because of the money. Because of the ownership.",
+
+    "The lesson:\n\nThere's never a 'right time.'\n\nIf you're waiting for certainty, you'll wait forever.\n\nThe best time to start is when you're scared but ready.\n\nWhat's the thing you've been putting off? 👇"
+  ],
+
+  "tips": [
+    "Be vulnerable - share real struggles",
+    "Include specific details (numbers, dates)",
+    "Build tension before the resolution",
+    "End with a lesson that applies broadly"
+  ]
+}

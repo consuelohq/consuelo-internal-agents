@@ -1,0 +1,39 @@
+# EXAMPLE TEMPLATE - Customize for your business
+# Cold Outreach: Problem-Aware Approach
+
+name: cold-outreach-problem
+subject: "{{pain_point}} at {{company_name}}?"
+category: cold-outreach
+tone: empathetic
+
+structure:
+  opening: "Acknowledge a common challenge in their industry"
+  body: "Show understanding of the problem's impact"
+  cta: "Offer to share how others solved it"
+  closing: "Low-pressure"
+
+variables:
+  - first_name
+  - company_name
+  - pain_point
+  - industry
+  - your_name
+
+example: |
+  Hi {{first_name}},
+
+  Many {{industry}} teams I talk to mention {{pain_point}} as one of their
+  biggest challenges right now.
+
+  Curious if this resonates with what you're seeing at {{company_name}}?
+
+  If so, happy to share what's working for similar teams - no pitch, just
+  patterns I've noticed.
+
+  {{your_name}}
+
+tips:
+  - Only use if you genuinely understand the problem
+  - Be specific about the pain point
+  - Position yourself as a peer, not a salesperson
+  - The goal is to start a conversation

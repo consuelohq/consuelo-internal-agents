@@ -1,0 +1,55 @@
+{
+  "name": "thread-howto",
+  "type": "thread",
+  "category": "howto",
+  "tone": "educational",
+  "description": "Step-by-step educational thread teaching a skill or process",
+
+  "hooks": [
+    "Here's exactly how I {{achievement}} (step-by-step):",
+    "{{outcome}} in {{timeframe}}. Here's the playbook:",
+    "The {{topic}} framework that changed everything:",
+    "I spent {{effort}} figuring out {{topic}}. Here's what works:",
+    "Stop overcomplicating {{topic}}. Here's a simple system:"
+  ],
+
+  "structure": {
+    "tweet_1": "Hook with outcome/promise",
+    "tweet_2": "Quick context or why this matters",
+    "tweet_3_to_n": "Steps (one per tweet, numbered)",
+    "final_tweet": "Summary + CTA (save, follow, share)"
+  },
+
+  "thread_length": "5-10 tweets optimal",
+
+  "variables": [
+    "achievement",
+    "outcome",
+    "timeframe",
+    "topic",
+    "effort"
+  ],
+
+  "example_thread": [
+    "Here's exactly how I book 10+ sales calls per week using cold email (step-by-step):\n\n🧵",
+
+    "First, why this works:\n\n90% of cold emails are generic templates.\n\nStand out with research + relevance.\n\nHere's the system 👇",
+
+    "Step 1: Find the right prospects\n\n- Use LinkedIn Sales Navigator\n- Filter by recent job changes, funding, or growth signals\n- Export to a spreadsheet\n\nQuality > Quantity always.",
+
+    "Step 2: Research (5 min per prospect)\n\n- Their recent posts/content\n- Company news\n- Mutual connections\n- Tech stack (if relevant)\n\nFind ONE specific thing to reference.",
+
+    "Step 3: Write the email\n\n- Subject: Short, relevant, no clickbait\n- Line 1: Personalized observation\n- Line 2-3: Why you're reaching out\n- Line 4: Clear ask (15-min call)\n\nKeep it under 100 words.",
+
+    "Step 4: Follow up\n\n- Day 3: Bump with new value\n- Day 7: Different angle\n- Day 14: Breakup email\n\nMost replies come from follow-ups.",
+
+    "Step 5: Track everything\n\n- Response rates by template\n- Best days/times\n- Which industries convert\n\nDouble down on what works.\n\nThat's the system.\n\nSave this thread and try it this week. 📌"
+  ],
+
+  "tips": [
+    "Number your steps clearly",
+    "Make each tweet standalone valuable",
+    "Include specific examples",
+    "End with a clear CTA"
+  ]
+}

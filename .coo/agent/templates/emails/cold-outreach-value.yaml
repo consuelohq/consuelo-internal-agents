@@ -1,0 +1,40 @@
+# EXAMPLE TEMPLATE - Customize for your business
+# Cold Outreach: Value-First Approach
+
+name: cold-outreach-value
+subject: "Quick question about {{company_name}}"
+category: cold-outreach
+tone: professional
+
+structure:
+  opening: "Reference something specific about their company or role"
+  body: "Share a relevant insight or observation that provides value"
+  cta: "Soft ask - invite conversation, not commitment"
+  closing: "Professional but warm"
+
+variables:
+  - first_name
+  - company_name
+  - specific_observation
+  - value_insight
+  - your_name
+
+example: |
+  Hi {{first_name}},
+
+  I noticed {{specific_observation}} about {{company_name}} and wanted to share
+  something that might be useful.
+
+  {{value_insight}}
+
+  Would love to hear your thoughts on this - happy to share more context
+  if it's relevant to what you're working on.
+
+  Best,
+  {{your_name}}
+
+tips:
+  - Research the prospect before sending
+  - Make the insight genuinely valuable
+  - Don't pitch in the first email
+  - Keep it under 100 words

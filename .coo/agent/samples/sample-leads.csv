@@ -1,0 +1,6 @@
+email,first_name,last_name,company,title,linkedin_url,source,notes
+alex.chen@techstartup.example,Alex,Chen,TechStartup Inc,VP of Engineering,https://linkedin.com/in/alexchen-example,conference,Met at SaaS conference 2024
+sarah.johnson@growthco.example,Sarah,Johnson,GrowthCo,Head of Operations,https://linkedin.com/in/sarahjohnson-example,referral,Referred by Michael from Acme
+marcus.williams@enterprise.example,Marcus,Williams,Enterprise Solutions,CTO,https://linkedin.com/in/marcuswilliams-example,linkedin,Posted about scaling challenges
+jennifer.lee@fintech.example,Jennifer,Lee,FinTech Innovations,Director of Product,https://linkedin.com/in/jenniferlee-example,inbound,Downloaded whitepaper
+david.patel@saascompany.example,David,Patel,SaaS Company,Founder & CEO,https://linkedin.com/in/davidpatel-example,podcast,Mentioned pain point on podcast

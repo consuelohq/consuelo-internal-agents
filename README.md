@@ -4,7 +4,7 @@ An autonomous AI agent workflow system for Claude Code that processes tasks from
 
 Coding agent pro tip: use 1-3 times-daily by adding 10-20 (30?) tasks in the morning, afternoon, and evening and let Claude work for a few hours and your job becomes a decision maker and code reviewer, not code writer
 
-COO: Plan work that needs to be done, set the automation in action and update and add as you see ways to improve for your use case.
+COO: Works on a daily schedule so set it up once and improve as you see ways for your use case.
 
 ## What This Does
 

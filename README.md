@@ -1,6 +1,10 @@
 # Claude Agent Workflow Template
 
-An autonomous AI agent workflow system for Claude Code that processes tasks from a queue, implements changes, runs quality gates, and creates pull requests automatically.
+An autonomous AI agent workflow system for Claude Code that processes tasks from a queue, implements changes, runs quality gates, and creates pull requests automatically. 
+
+Coding agent pro tip: use 1-3 times-daily by adding 10-20 (30?) tasks in the morning, afternoon, and evening and let Claude work for a few hours and your job becomes a decision maker and code reviewer, not code writer
+
+COO: Plan work that needs to be done, set the automation in action and update and add as you see ways to improve for your use case.
 
 ## What This Does
 
@@ -45,9 +49,7 @@ Before installing, ensure you have:
   - Install: https://github.com/steveyegge/beads
   - Or use pip: `pip install beads-cli`
 
-## AI-Assisted Setup
-
-Copy this prompt into Claude Code or OpenCode to have it set everything up for you:
+## Copy into Claude Code for Easy Setup
 
 ```
 I want to set up the Claude Agent Workflow from this repo. Please help me:
@@ -67,7 +69,12 @@ I want to set up the Claude Agent Workflow from this repo. Please help me:
 
 6. Run .agent/init.sh to verify everything is set up correctly.
 
-7. Show me a summary of what was configured and how to create my first task.
+7. Walk me through setting up any optional integrations:
+   - Slack notifications: Help me create a Slack webhook URL (guide me through Slack API → Create App → Incoming Webhooks) and add it to config.sh
+   - GitHub CLI auth: Make sure `gh auth status` works, if not guide me through `gh auth login`
+   - Any environment variables I need to set in ~/.zshrc or ~/.bashrc
+
+8. Show me a summary of what was configured, what integrations are active, and how to create my first task with `bd create`.
 ```
 
 ## Quick Start

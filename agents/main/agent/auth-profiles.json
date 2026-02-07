@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "profiles": {
+    "zai:default": {
+      "type": "api_key",
+      "provider": "zai",
+      "key": "e2673df514bb41c1bfb1151d4686848a.jshBQKwBtj6518ZZ"
+    },
+    "kimi-coding:default": {
+      "type": "api_key",
+      "provider": "kimi-coding",
+      "key": "sk-kimi-CW5NXoDlhnsUTlTKcPIio6j2M8WKtXenkbdjIUQnnRoTmfSfwSMyUCUVaZDwXg6M"
+    },
+    "anthropic:default": {
+      "type": "token",
+      "provider": "anthropic",
+      "token": "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"
+    },
+    "nvidia:default": {
+      "type": "api_key",
+      "provider": "nvidia",
+      "key": "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"
+    }
+  },
+  "lastGood": {
+    "zai": "zai:default",
+    "kimi-coding": "kimi-coding:default",
+    "anthropic": "anthropic:default",
+    "nvidia": "nvidia:default"
+  },
+  "usageStats": {
+    "zai:default": {
+      "lastUsed": 1770380236504,
+      "errorCount": 0,
+      "lastFailureAt": 1770361827909
+    },
+    "kimi-coding:default": {
+      "lastUsed": 1770107245707,
+      "errorCount": 1,
+      "lastFailureAt": 1770361829973,
+      "failureCounts": {
+        "rate_limit": 1
+      },
+      "cooldownUntil": 1770361889973
+    },
+    "anthropic:default": {
+      "lastUsed": 1770361954867,
+      "errorCount": 0,
+      "lastFailureAt": 1770242223024
+    }
+  }
+}

@@ -1,0 +1,2019 @@
+{
+  "agent:developer:librechat-dev:b5fbc547-b80a-4797-9d91-8569979b74b2": {
+    "sessionId": "41d4fd1f-6a6c-4c0a-a5ff-eeae5c18bea4",
+    "updatedAt": 1770353271591,
+    "skillsSnapshot": {
+      "prompt": "\n\nThe following skills provide specialized instructions for specific tasks.\nUse the read tool to load a skill's file when the task matches its description.\nWhen a skill file references a relative path, resolve it against the skill directory (parent of SKILL.md / dirname of the path) and use that absolute path in tool commands.\n\n<available_skills>\n  <skill>\n    <name>1password</name>\n    <description>Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>apple-reminders</name>\n    <description>Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>bird</name>\n    <description>X/Twitter CLI for reading, searching, posting, and engagement via cookies.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>blogwatcher</name>\n    <description>Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>clawhub</name>\n    <description>Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>coding-agent</name>\n    <description>Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gemini</name>\n    <description>Gemini CLI for one-shot Q&amp;A, summaries, and generation.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>github</name>\n    <description>Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gog</name>\n    <description>Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>healthcheck</name>\n    <description>Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>imsg</name>\n    <description>iMessage/SMS CLI for listing chats, history, watch, and sending.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>skill-creator</name>\n    <description>Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>slack</name>\n    <description>Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>video-frames</name>\n    <description>Extract frames or short clips from videos using ffmpeg.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>weather</name>\n    <description>Get current weather and forecasts (no API key required).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>agent-browser</name>\n    <description>Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>brave-instagram-search</name>\n    <description>Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says &apos;brave instagram&apos;, &apos;brave search leads&apos;, &apos;get 100 leads&apos;, or wants high-volume lead generation without browser automation.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deep-search</name>\n    <description>Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deepwiki</name>\n    <description>Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>exa-search</name>\n    <description>Search the web using Exa AI instead of Brave (MCP-compatible endpoint)</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>instagram-lead-scraper</name>\n    <description>SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>repo-researcher</name>\n    <description>Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like &quot;find repos&quot;, &quot;research repo&quot;, &quot;what&apos;s trending&quot;, &quot;suggest tools&quot;, or when asked about GitHub repositories.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-creator</name>\n    <description>Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-state-manager</name>\n    <description>Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>charlotte-lead-scraper</name>\n    <description>Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>competitor-intent-leads</name>\n    <description>Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>instagram-dm-automation</name>\n    <description>Automated Instagram DM outreach to insurance agent leads using Agent Browser. Gradual ramping to avoid rate limits.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>last-30-days</name>\n    <description>Research any topic across Reddit and X from the last 30 days, synthesize community insights, and generate copy-paste-ready prompts or expert summaries. Uses Brave Search + Bird CLI — no API keys needed.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>reddit-lead-scraper</name>\n    <description>Extract high-intent insurance agent leads from Reddit using the JSON API + Exa Search. Captures dialer/CRM discussions with intent scoring.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper/SKILL.md</location>\n  </skill>\n</available_skills>",
+      "skills": [
+        {
+          "name": "1password"
+        },
+        {
+          "name": "apple-reminders"
+        },
+        {
+          "name": "bird"
+        },
+        {
+          "name": "blogwatcher"
+        },
+        {
+          "name": "clawhub"
+        },
+        {
+          "name": "coding-agent"
+        },
+        {
+          "name": "gemini"
+        },
+        {
+          "name": "github"
+        },
+        {
+          "name": "gog"
+        },
+        {
+          "name": "healthcheck"
+        },
+        {
+          "name": "imsg"
+        },
+        {
+          "name": "skill-creator"
+        },
+        {
+          "name": "slack"
+        },
+        {
+          "name": "video-frames"
+        },
+        {
+          "name": "weather"
+        },
+        {
+          "name": "agent-browser"
+        },
+        {
+          "name": "brave-instagram-search"
+        },
+        {
+          "name": "deep-search"
+        },
+        {
+          "name": "deepwiki"
+        },
+        {
+          "name": "exa-search"
+        },
+        {
+          "name": "instagram-lead-scraper"
+        },
+        {
+          "name": "repo-researcher"
+        },
+        {
+          "name": "task-creator"
+        },
+        {
+          "name": "task-state-manager"
+        },
+        {
+          "name": "charlotte-lead-scraper"
+        },
+        {
+          "name": "competitor-intent-leads"
+        },
+        {
+          "name": "instagram-dm-automation"
+        },
+        {
+          "name": "last-30-days"
+        },
+        {
+          "name": "reddit-lead-scraper"
+        }
+      ],
+      "resolvedSkills": [
+        {
+          "name": "1password",
+          "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/1password",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "apple-reminders",
+          "description": "Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "bird",
+          "description": "X/Twitter CLI for reading, searching, posting, and engagement via cookies.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/bird",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "blogwatcher",
+          "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "clawhub",
+          "description": "Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "coding-agent",
+          "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gemini",
+          "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "github",
+          "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/github",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gog",
+          "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gog",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "healthcheck",
+          "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "imsg",
+          "description": "iMessage/SMS CLI for listing chats, history, watch, and sending.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "skill-creator",
+          "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "slack",
+          "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/slack",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "video-frames",
+          "description": "Extract frames or short clips from videos using ffmpeg.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "weather",
+          "description": "Get current weather and forecasts (no API key required).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/weather",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "agent-browser",
+          "description": "Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "brave-instagram-search",
+          "description": "Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says 'brave instagram', 'brave search leads', 'get 100 leads', or wants high-volume lead generation without browser automation.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deep-search",
+          "description": "Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deepwiki",
+          "description": "Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "exa-search",
+          "description": "Search the web using Exa AI instead of Brave (MCP-compatible endpoint)",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "instagram-lead-scraper",
+          "description": "SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "repo-researcher",
+          "description": "Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like \"find repos\", \"research repo\", \"what's trending\", \"suggest tools\", or when asked about GitHub repositories.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-creator",
+          "description": "Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-state-manager",
+          "description": "Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "charlotte-lead-scraper",
+          "description": "Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "competitor-intent-leads",
+          "description": "Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "instagram-dm-automation",
+          "description": "Automated Instagram DM outreach to insurance agent leads using Agent Browser. Gradual ramping to avoid rate limits.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "last-30-days",
+          "description": "Research any topic across Reddit and X from the last 30 days, synthesize community insights, and generate copy-paste-ready prompts or expert summaries. Uses Brave Search + Bird CLI — no API keys needed.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "reddit-lead-scraper",
+          "description": "Extract high-intent insurance agent leads from Reddit using the JSON API + Exa Search. Captures dialer/CRM discussions with intent scoring.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        }
+      ],
+      "version": 0
+    },
+    "modelProvider": "zai",
+    "model": "glm-4.7",
+    "contextTokens": 204800,
+    "abortedLastRun": false,
+    "inputTokens": 9820,
+    "outputTokens": 168,
+    "totalTokens": 13652
+  },
+  "agent:developer:librechat-dev:591282b5-fbd4-41e1-ab84-f6243df0ac25": {
+    "sessionId": "4d334f8e-09a2-4a6f-8fa9-775f825e44e2",
+    "updatedAt": 1770362100960,
+    "skillsSnapshot": {
+      "prompt": "\n\nThe following skills provide specialized instructions for specific tasks.\nUse the read tool to load a skill's file when the task matches its description.\nWhen a skill file references a relative path, resolve it against the skill directory (parent of SKILL.md / dirname of the path) and use that absolute path in tool commands.\n\n<available_skills>\n  <skill>\n    <name>1password</name>\n    <description>Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>apple-reminders</name>\n    <description>Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>bird</name>\n    <description>X/Twitter CLI for reading, searching, posting, and engagement via cookies.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>blogwatcher</name>\n    <description>Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>clawhub</name>\n    <description>Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>coding-agent</name>\n    <description>Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gemini</name>\n    <description>Gemini CLI for one-shot Q&amp;A, summaries, and generation.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>github</name>\n    <description>Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gog</name>\n    <description>Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>healthcheck</name>\n    <description>Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>imsg</name>\n    <description>iMessage/SMS CLI for listing chats, history, watch, and sending.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>skill-creator</name>\n    <description>Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>slack</name>\n    <description>Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>video-frames</name>\n    <description>Extract frames or short clips from videos using ffmpeg.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>weather</name>\n    <description>Get current weather and forecasts (no API key required).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>agent-browser</name>\n    <description>Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>brave-instagram-search</name>\n    <description>Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says &apos;brave instagram&apos;, &apos;brave search leads&apos;, &apos;get 100 leads&apos;, or wants high-volume lead generation without browser automation.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deep-search</name>\n    <description>Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deepwiki</name>\n    <description>Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>exa-search</name>\n    <description>Search the web using Exa AI instead of Brave (MCP-compatible endpoint)</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>instagram-lead-scraper</name>\n    <description>SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>repo-researcher</name>\n    <description>Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like &quot;find repos&quot;, &quot;research repo&quot;, &quot;what&apos;s trending&quot;, &quot;suggest tools&quot;, or when asked about GitHub repositories.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-creator</name>\n    <description>Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-state-manager</name>\n    <description>Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>charlotte-lead-scraper</name>\n    <description>Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>competitor-intent-leads</name>\n    <description>Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>instagram-dm-automation</name>\n    <description>Automated Instagram DM outreach to insurance agent leads using Agent Browser. Gradual ramping to avoid rate limits.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>last-30-days</name>\n    <description>Research any topic across Reddit and X from the last 30 days, synthesize community insights, and generate copy-paste-ready prompts or expert summaries. Uses Brave Search + Bird CLI — no API keys needed.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>reddit-lead-scraper</name>\n    <description>Extract high-intent insurance agent leads from Reddit using the JSON API + Exa Search. Captures dialer/CRM discussions with intent scoring.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-planner</name>\n    <description>Research ideas from the internet and codebase, then produce structured briefs for claude code to turn into proper specs and Linear issues. The research + planning phase of the pipeline.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-planner/SKILL.md</location>\n  </skill>\n</available_skills>",
+      "skills": [
+        {
+          "name": "1password"
+        },
+        {
+          "name": "apple-reminders"
+        },
+        {
+          "name": "bird"
+        },
+        {
+          "name": "blogwatcher"
+        },
+        {
+          "name": "clawhub"
+        },
+        {
+          "name": "coding-agent"
+        },
+        {
+          "name": "gemini"
+        },
+        {
+          "name": "github"
+        },
+        {
+          "name": "gog"
+        },
+        {
+          "name": "healthcheck"
+        },
+        {
+          "name": "imsg"
+        },
+        {
+          "name": "skill-creator"
+        },
+        {
+          "name": "slack"
+        },
+        {
+          "name": "video-frames"
+        },
+        {
+          "name": "weather"
+        },
+        {
+          "name": "agent-browser"
+        },
+        {
+          "name": "brave-instagram-search"
+        },
+        {
+          "name": "deep-search"
+        },
+        {
+          "name": "deepwiki"
+        },
+        {
+          "name": "exa-search"
+        },
+        {
+          "name": "instagram-lead-scraper"
+        },
+        {
+          "name": "repo-researcher"
+        },
+        {
+          "name": "task-creator"
+        },
+        {
+          "name": "task-state-manager"
+        },
+        {
+          "name": "charlotte-lead-scraper"
+        },
+        {
+          "name": "competitor-intent-leads"
+        },
+        {
+          "name": "instagram-dm-automation"
+        },
+        {
+          "name": "last-30-days"
+        },
+        {
+          "name": "reddit-lead-scraper"
+        },
+        {
+          "name": "task-planner"
+        }
+      ],
+      "resolvedSkills": [
+        {
+          "name": "1password",
+          "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/1password",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "apple-reminders",
+          "description": "Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "bird",
+          "description": "X/Twitter CLI for reading, searching, posting, and engagement via cookies.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/bird",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "blogwatcher",
+          "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "clawhub",
+          "description": "Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "coding-agent",
+          "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gemini",
+          "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "github",
+          "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/github",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gog",
+          "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gog",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "healthcheck",
+          "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "imsg",
+          "description": "iMessage/SMS CLI for listing chats, history, watch, and sending.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "skill-creator",
+          "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "slack",
+          "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/slack",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "video-frames",
+          "description": "Extract frames or short clips from videos using ffmpeg.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "weather",
+          "description": "Get current weather and forecasts (no API key required).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/weather",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "agent-browser",
+          "description": "Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "brave-instagram-search",
+          "description": "Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says 'brave instagram', 'brave search leads', 'get 100 leads', or wants high-volume lead generation without browser automation.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deep-search",
+          "description": "Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deepwiki",
+          "description": "Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "exa-search",
+          "description": "Search the web using Exa AI instead of Brave (MCP-compatible endpoint)",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "instagram-lead-scraper",
+          "description": "SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "repo-researcher",
+          "description": "Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like \"find repos\", \"research repo\", \"what's trending\", \"suggest tools\", or when asked about GitHub repositories.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-creator",
+          "description": "Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-state-manager",
+          "description": "Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "charlotte-lead-scraper",
+          "description": "Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "competitor-intent-leads",
+          "description": "Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "instagram-dm-automation",
+          "description": "Automated Instagram DM outreach to insurance agent leads using Agent Browser. Gradual ramping to avoid rate limits.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "last-30-days",
+          "description": "Research any topic across Reddit and X from the last 30 days, synthesize community insights, and generate copy-paste-ready prompts or expert summaries. Uses Brave Search + Bird CLI — no API keys needed.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "reddit-lead-scraper",
+          "description": "Extract high-intent insurance agent leads from Reddit using the JSON API + Exa Search. Captures dialer/CRM discussions with intent scoring.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-planner",
+          "description": "Research ideas from the internet and codebase, then produce structured briefs for claude code to turn into proper specs and Linear issues. The research + planning phase of the pipeline.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-planner/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-planner",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        }
+      ],
+      "version": 0
+    },
+    "modelProvider": "zai",
+    "model": "glm-4.7",
+    "contextTokens": 204800,
+    "abortedLastRun": false,
+    "inputTokens": 3459,
+    "outputTokens": 1123,
+    "totalTokens": 100104
+  },
+  "agent:developer:librechat-dev:76c36cd8-d9a5-462c-901d-9016581c09bd": {
+    "sessionId": "d085efa4-28fb-41ae-a34b-ffa41ceebd6e",
+    "updatedAt": 1770362783853,
+    "skillsSnapshot": {
+      "prompt": "\n\nThe following skills provide specialized instructions for specific tasks.\nUse the read tool to load a skill's file when the task matches its description.\nWhen a skill file references a relative path, resolve it against the skill directory (parent of SKILL.md / dirname of the path) and use that absolute path in tool commands.\n\n<available_skills>\n  <skill>\n    <name>1password</name>\n    <description>Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>apple-reminders</name>\n    <description>Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>bird</name>\n    <description>X/Twitter CLI for reading, searching, posting, and engagement via cookies.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>blogwatcher</name>\n    <description>Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>clawhub</name>\n    <description>Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>coding-agent</name>\n    <description>Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gemini</name>\n    <description>Gemini CLI for one-shot Q&amp;A, summaries, and generation.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>github</name>\n    <description>Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gog</name>\n    <description>Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>healthcheck</name>\n    <description>Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>imsg</name>\n    <description>iMessage/SMS CLI for listing chats, history, watch, and sending.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>skill-creator</name>\n    <description>Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>slack</name>\n    <description>Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>video-frames</name>\n    <description>Extract frames or short clips from videos using ffmpeg.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>weather</name>\n    <description>Get current weather and forecasts (no API key required).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>agent-browser</name>\n    <description>Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>brave-instagram-search</name>\n    <description>Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says &apos;brave instagram&apos;, &apos;brave search leads&apos;, &apos;get 100 leads&apos;, or wants high-volume lead generation without browser automation.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deep-search</name>\n    <description>Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deepwiki</name>\n    <description>Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>exa-search</name>\n    <description>Search the web using Exa AI instead of Brave (MCP-compatible endpoint)</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>instagram-lead-scraper</name>\n    <description>SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>repo-researcher</name>\n    <description>Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like &quot;find repos&quot;, &quot;research repo&quot;, &quot;what&apos;s trending&quot;, &quot;suggest tools&quot;, or when asked about GitHub repositories.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-creator</name>\n    <description>Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-state-manager</name>\n    <description>Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>charlotte-lead-scraper</name>\n    <description>Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>competitor-intent-leads</name>\n    <description>Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>instagram-dm-automation</name>\n    <description>Automated Instagram DM outreach to insurance agent leads using Agent Browser. Gradual ramping to avoid rate limits.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>last-30-days</name>\n    <description>Research any topic across Reddit and X from the last 30 days, synthesize community insights, and generate copy-paste-ready prompts or expert summaries. Uses Brave Search + Bird CLI — no API keys needed.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>reddit-lead-scraper</name>\n    <description>Extract high-intent insurance agent leads from Reddit using the JSON API + Exa Search. Captures dialer/CRM discussions with intent scoring.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-planner</name>\n    <description>Research ideas from the internet and codebase, then produce structured briefs for claude code to turn into proper specs and Linear issues. The research + planning phase of the pipeline.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-planner/SKILL.md</location>\n  </skill>\n</available_skills>",
+      "skills": [
+        {
+          "name": "1password"
+        },
+        {
+          "name": "apple-reminders"
+        },
+        {
+          "name": "bird"
+        },
+        {
+          "name": "blogwatcher"
+        },
+        {
+          "name": "clawhub"
+        },
+        {
+          "name": "coding-agent"
+        },
+        {
+          "name": "gemini"
+        },
+        {
+          "name": "github"
+        },
+        {
+          "name": "gog"
+        },
+        {
+          "name": "healthcheck"
+        },
+        {
+          "name": "imsg"
+        },
+        {
+          "name": "skill-creator"
+        },
+        {
+          "name": "slack"
+        },
+        {
+          "name": "video-frames"
+        },
+        {
+          "name": "weather"
+        },
+        {
+          "name": "agent-browser"
+        },
+        {
+          "name": "brave-instagram-search"
+        },
+        {
+          "name": "deep-search"
+        },
+        {
+          "name": "deepwiki"
+        },
+        {
+          "name": "exa-search"
+        },
+        {
+          "name": "instagram-lead-scraper"
+        },
+        {
+          "name": "repo-researcher"
+        },
+        {
+          "name": "task-creator"
+        },
+        {
+          "name": "task-state-manager"
+        },
+        {
+          "name": "charlotte-lead-scraper"
+        },
+        {
+          "name": "competitor-intent-leads"
+        },
+        {
+          "name": "instagram-dm-automation"
+        },
+        {
+          "name": "last-30-days"
+        },
+        {
+          "name": "reddit-lead-scraper"
+        },
+        {
+          "name": "task-planner"
+        }
+      ],
+      "resolvedSkills": [
+        {
+          "name": "1password",
+          "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/1password",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "apple-reminders",
+          "description": "Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "bird",
+          "description": "X/Twitter CLI for reading, searching, posting, and engagement via cookies.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/bird",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "blogwatcher",
+          "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "clawhub",
+          "description": "Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "coding-agent",
+          "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gemini",
+          "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "github",
+          "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/github",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gog",
+          "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gog",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "healthcheck",
+          "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "imsg",
+          "description": "iMessage/SMS CLI for listing chats, history, watch, and sending.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "skill-creator",
+          "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "slack",
+          "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/slack",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "video-frames",
+          "description": "Extract frames or short clips from videos using ffmpeg.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "weather",
+          "description": "Get current weather and forecasts (no API key required).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/weather",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "agent-browser",
+          "description": "Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "brave-instagram-search",
+          "description": "Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says 'brave instagram', 'brave search leads', 'get 100 leads', or wants high-volume lead generation without browser automation.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deep-search",
+          "description": "Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deepwiki",
+          "description": "Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "exa-search",
+          "description": "Search the web using Exa AI instead of Brave (MCP-compatible endpoint)",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "instagram-lead-scraper",
+          "description": "SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "repo-researcher",
+          "description": "Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like \"find repos\", \"research repo\", \"what's trending\", \"suggest tools\", or when asked about GitHub repositories.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-creator",
+          "description": "Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-state-manager",
+          "description": "Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "charlotte-lead-scraper",
+          "description": "Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "competitor-intent-leads",
+          "description": "Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "instagram-dm-automation",
+          "description": "Automated Instagram DM outreach to insurance agent leads using Agent Browser. Gradual ramping to avoid rate limits.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "last-30-days",
+          "description": "Research any topic across Reddit and X from the last 30 days, synthesize community insights, and generate copy-paste-ready prompts or expert summaries. Uses Brave Search + Bird CLI — no API keys needed.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "reddit-lead-scraper",
+          "description": "Extract high-intent insurance agent leads from Reddit using the JSON API + Exa Search. Captures dialer/CRM discussions with intent scoring.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-planner",
+          "description": "Research ideas from the internet and codebase, then produce structured briefs for claude code to turn into proper specs and Linear issues. The research + planning phase of the pipeline.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-planner/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-planner",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        }
+      ],
+      "version": 0
+    },
+    "modelProvider": "zai",
+    "model": "glm-4.7",
+    "contextTokens": 204800,
+    "abortedLastRun": false,
+    "inputTokens": 6355,
+    "outputTokens": 442,
+    "totalTokens": 21816
+  },
+  "agent:developer:librechat-dev:5c4d9054-1b18-4cc9-b802-591d417951f8": {
+    "sessionId": "098a134a-2723-45fd-a6a8-6a08e4271104",
+    "updatedAt": 1770364468708,
+    "skillsSnapshot": {
+      "prompt": "\n\nThe following skills provide specialized instructions for specific tasks.\nUse the read tool to load a skill's file when the task matches its description.\nWhen a skill file references a relative path, resolve it against the skill directory (parent of SKILL.md / dirname of the path) and use that absolute path in tool commands.\n\n<available_skills>\n  <skill>\n    <name>1password</name>\n    <description>Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>apple-reminders</name>\n    <description>Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>bird</name>\n    <description>X/Twitter CLI for reading, searching, posting, and engagement via cookies.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>blogwatcher</name>\n    <description>Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>clawhub</name>\n    <description>Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>coding-agent</name>\n    <description>Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gemini</name>\n    <description>Gemini CLI for one-shot Q&amp;A, summaries, and generation.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>github</name>\n    <description>Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gog</name>\n    <description>Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>healthcheck</name>\n    <description>Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>imsg</name>\n    <description>iMessage/SMS CLI for listing chats, history, watch, and sending.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>skill-creator</name>\n    <description>Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>slack</name>\n    <description>Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>video-frames</name>\n    <description>Extract frames or short clips from videos using ffmpeg.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>weather</name>\n    <description>Get current weather and forecasts (no API key required).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>agent-browser</name>\n    <description>Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>brave-instagram-search</name>\n    <description>Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says &apos;brave instagram&apos;, &apos;brave search leads&apos;, &apos;get 100 leads&apos;, or wants high-volume lead generation without browser automation.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deep-search</name>\n    <description>Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deepwiki</name>\n    <description>Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>exa-search</name>\n    <description>Search the web using Exa AI instead of Brave (MCP-compatible endpoint)</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>instagram-lead-scraper</name>\n    <description>SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>repo-researcher</name>\n    <description>Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like &quot;find repos&quot;, &quot;research repo&quot;, &quot;what&apos;s trending&quot;, &quot;suggest tools&quot;, or when asked about GitHub repositories.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-creator</name>\n    <description>Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-state-manager</name>\n    <description>Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>charlotte-lead-scraper</name>\n    <description>Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>competitor-intent-leads</name>\n    <description>Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>instagram-dm-automation</name>\n    <description>Automated Instagram DM outreach to insurance agent leads using Agent Browser. Gradual ramping to avoid rate limits.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>last-30-days</name>\n    <description>Research any topic across Reddit and X from the last 30 days, synthesize community insights, and generate copy-paste-ready prompts or expert summaries. Uses Brave Search + Bird CLI — no API keys needed.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>reddit-lead-scraper</name>\n    <description>Extract high-intent insurance agent leads from Reddit using the JSON API + Exa Search. Captures dialer/CRM discussions with intent scoring.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-planner</name>\n    <description>Research ideas from the internet and codebase, then produce structured briefs for claude code to turn into proper specs and Linear issues. The research + planning phase of the pipeline.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-planner/SKILL.md</location>\n  </skill>\n</available_skills>",
+      "skills": [
+        {
+          "name": "1password"
+        },
+        {
+          "name": "apple-reminders"
+        },
+        {
+          "name": "bird"
+        },
+        {
+          "name": "blogwatcher"
+        },
+        {
+          "name": "clawhub"
+        },
+        {
+          "name": "coding-agent"
+        },
+        {
+          "name": "gemini"
+        },
+        {
+          "name": "github"
+        },
+        {
+          "name": "gog"
+        },
+        {
+          "name": "healthcheck"
+        },
+        {
+          "name": "imsg"
+        },
+        {
+          "name": "skill-creator"
+        },
+        {
+          "name": "slack"
+        },
+        {
+          "name": "video-frames"
+        },
+        {
+          "name": "weather"
+        },
+        {
+          "name": "agent-browser"
+        },
+        {
+          "name": "brave-instagram-search"
+        },
+        {
+          "name": "deep-search"
+        },
+        {
+          "name": "deepwiki"
+        },
+        {
+          "name": "exa-search"
+        },
+        {
+          "name": "instagram-lead-scraper"
+        },
+        {
+          "name": "repo-researcher"
+        },
+        {
+          "name": "task-creator"
+        },
+        {
+          "name": "task-state-manager"
+        },
+        {
+          "name": "charlotte-lead-scraper"
+        },
+        {
+          "name": "competitor-intent-leads"
+        },
+        {
+          "name": "instagram-dm-automation"
+        },
+        {
+          "name": "last-30-days"
+        },
+        {
+          "name": "reddit-lead-scraper"
+        },
+        {
+          "name": "task-planner"
+        }
+      ],
+      "resolvedSkills": [
+        {
+          "name": "1password",
+          "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/1password",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "apple-reminders",
+          "description": "Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "bird",
+          "description": "X/Twitter CLI for reading, searching, posting, and engagement via cookies.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/bird",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "blogwatcher",
+          "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "clawhub",
+          "description": "Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "coding-agent",
+          "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gemini",
+          "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "github",
+          "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/github",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gog",
+          "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gog",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "healthcheck",
+          "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "imsg",
+          "description": "iMessage/SMS CLI for listing chats, history, watch, and sending.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "skill-creator",
+          "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "slack",
+          "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/slack",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "video-frames",
+          "description": "Extract frames or short clips from videos using ffmpeg.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "weather",
+          "description": "Get current weather and forecasts (no API key required).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/weather",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "agent-browser",
+          "description": "Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "brave-instagram-search",
+          "description": "Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says 'brave instagram', 'brave search leads', 'get 100 leads', or wants high-volume lead generation without browser automation.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deep-search",
+          "description": "Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deepwiki",
+          "description": "Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "exa-search",
+          "description": "Search the web using Exa AI instead of Brave (MCP-compatible endpoint)",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "instagram-lead-scraper",
+          "description": "SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "repo-researcher",
+          "description": "Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like \"find repos\", \"research repo\", \"what's trending\", \"suggest tools\", or when asked about GitHub repositories.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-creator",
+          "description": "Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-state-manager",
+          "description": "Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "charlotte-lead-scraper",
+          "description": "Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "competitor-intent-leads",
+          "description": "Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "instagram-dm-automation",
+          "description": "Automated Instagram DM outreach to insurance agent leads using Agent Browser. Gradual ramping to avoid rate limits.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/instagram-dm-automation",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "last-30-days",
+          "description": "Research any topic across Reddit and X from the last 30 days, synthesize community insights, and generate copy-paste-ready prompts or expert summaries. Uses Brave Search + Bird CLI — no API keys needed.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/last-30-days",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "reddit-lead-scraper",
+          "description": "Extract high-intent insurance agent leads from Reddit using the JSON API + Exa Search. Captures dialer/CRM discussions with intent scoring.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/reddit-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-planner",
+          "description": "Research ideas from the internet and codebase, then produce structured briefs for claude code to turn into proper specs and Linear issues. The research + planning phase of the pipeline.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-planner/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-planner",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        }
+      ],
+      "version": 0
+    },
+    "modelProvider": "zai",
+    "model": "glm-4.7",
+    "contextTokens": 204800,
+    "abortedLastRun": false,
+    "inputTokens": 90954,
+    "outputTokens": 845,
+    "totalTokens": 94788
+  },
+  "agent:developer:librechat-dev:283ba6a5-1f9c-46e0-87a9-29721a3b2db5": {
+    "sessionId": "7338fcb6-695a-47a9-ad33-9497253be9de",
+    "updatedAt": 1770367751270,
+    "skillsSnapshot": {
+      "prompt": "\n\nThe following skills provide specialized instructions for specific tasks.\nUse the read tool to load a skill's file when the task matches its description.\nWhen a skill file references a relative path, resolve it against the skill directory (parent of SKILL.md / dirname of the path) and use that absolute path in tool commands.\n\n<available_skills>\n  <skill>\n    <name>1password</name>\n    <description>Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>apple-reminders</name>\n    <description>Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>bird</name>\n    <description>X/Twitter CLI for reading, searching, posting, and engagement via cookies.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>blogwatcher</name>\n    <description>Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>clawhub</name>\n    <description>Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>coding-agent</name>\n    <description>Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gemini</name>\n    <description>Gemini CLI for one-shot Q&amp;A, summaries, and generation.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>github</name>\n    <description>Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gog</name>\n    <description>Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>healthcheck</name>\n    <description>Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>imsg</name>\n    <description>iMessage/SMS CLI for listing chats, history, watch, and sending.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>skill-creator</name>\n    <description>Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>slack</name>\n    <description>Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>video-frames</name>\n    <description>Extract frames or short clips from videos using ffmpeg.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>weather</name>\n    <description>Get current weather and forecasts (no API key required).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>agent-browser</name>\n    <description>Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>brave-instagram-search</name>\n    <description>Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says &apos;brave instagram&apos;, &apos;brave search leads&apos;, &apos;get 100 leads&apos;, or wants high-volume lead generation without browser automation.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deep-search</name>\n    <description>Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deepwiki</name>\n    <description>Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>exa-search</name>\n    <description>Search the web using Exa AI instead of Brave (MCP-compatible endpoint)</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>instagram-lead-scraper</name>\n    <description>SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.</description>\n    <location>/Users/kokayi/.openclaw/skills/instagram-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>repo-researcher</name>\n    <description>Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like &quot;find repos&quot;, &quot;research repo&quot;, &quot;what&apos;s trending&quot;, &quot;suggest tools&quot;, or when asked about GitHub repositories.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-creator</name>\n    <description>Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-state-manager</name>\n    <description>Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>charlotte-lead-scraper</name>\n    <description>Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>competitor-intent-leads</name>\n    <description>Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-planner</name>\n    <description>Research ideas from the internet and codebase, then produce structured briefs for claude code to turn into proper specs and Linear issues. The research + planning phase of the pipeline.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-planner/SKILL.md</location>\n  </skill>\n</available_skills>",
+      "skills": [
+        {
+          "name": "1password"
+        },
+        {
+          "name": "apple-reminders"
+        },
+        {
+          "name": "bird"
+        },
+        {
+          "name": "blogwatcher"
+        },
+        {
+          "name": "clawhub"
+        },
+        {
+          "name": "coding-agent"
+        },
+        {
+          "name": "gemini"
+        },
+        {
+          "name": "github"
+        },
+        {
+          "name": "gog"
+        },
+        {
+          "name": "healthcheck"
+        },
+        {
+          "name": "imsg"
+        },
+        {
+          "name": "skill-creator"
+        },
+        {
+          "name": "slack"
+        },
+        {
+          "name": "video-frames"
+        },
+        {
+          "name": "weather"
+        },
+        {
+          "name": "agent-browser"
+        },
+        {
+          "name": "brave-instagram-search"
+        },
+        {
+          "name": "deep-search"
+        },
+        {
+          "name": "deepwiki"
+        },
+        {
+          "name": "exa-search"
+        },
+        {
+          "name": "instagram-lead-scraper"
+        },
+        {
+          "name": "repo-researcher"
+        },
+        {
+          "name": "task-creator"
+        },
+        {
+          "name": "task-state-manager"
+        },
+        {
+          "name": "charlotte-lead-scraper"
+        },
+        {
+          "name": "competitor-intent-leads"
+        },
+        {
+          "name": "task-planner"
+        }
+      ],
+      "resolvedSkills": [
+        {
+          "name": "1password",
+          "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/1password",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "apple-reminders",
+          "description": "Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "bird",
+          "description": "X/Twitter CLI for reading, searching, posting, and engagement via cookies.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/bird",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "blogwatcher",
+          "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "clawhub",
+          "description": "Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "coding-agent",
+          "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gemini",
+          "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "github",
+          "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/github",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gog",
+          "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gog",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "healthcheck",
+          "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "imsg",
+          "description": "iMessage/SMS CLI for listing chats, history, watch, and sending.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "skill-creator",
+          "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "slack",
+          "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/slack",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "video-frames",
+          "description": "Extract frames or short clips from videos using ffmpeg.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "weather",
+          "description": "Get current weather and forecasts (no API key required).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/weather",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "agent-browser",
+          "description": "Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "brave-instagram-search",
+          "description": "Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says 'brave instagram', 'brave search leads', 'get 100 leads', or wants high-volume lead generation without browser automation.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deep-search",
+          "description": "Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deepwiki",
+          "description": "Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "exa-search",
+          "description": "Search the web using Exa AI instead of Brave (MCP-compatible endpoint)",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "instagram-lead-scraper",
+          "description": "SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.",
+          "filePath": "/Users/kokayi/.openclaw/skills/instagram-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/skills/instagram-lead-scraper",
+          "source": "openclaw-managed",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "repo-researcher",
+          "description": "Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like \"find repos\", \"research repo\", \"what's trending\", \"suggest tools\", or when asked about GitHub repositories.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-creator",
+          "description": "Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-state-manager",
+          "description": "Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "charlotte-lead-scraper",
+          "description": "Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "competitor-intent-leads",
+          "description": "Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-planner",
+          "description": "Research ideas from the internet and codebase, then produce structured briefs for claude code to turn into proper specs and Linear issues. The research + planning phase of the pipeline.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-planner/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-planner",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        }
+      ],
+      "version": 0
+    },
+    "modelProvider": "zai",
+    "model": "glm-4.7",
+    "contextTokens": 204800,
+    "abortedLastRun": false,
+    "inputTokens": 51,
+    "outputTokens": 298,
+    "totalTokens": 14210
+  },
+  "agent:developer:librechat-dev:0a727111-dffa-4705-9555-a76ab1f143b8": {
+    "sessionId": "97049a05-1cc1-4bb9-b50f-024cae936e0b",
+    "updatedAt": 1770369268022,
+    "skillsSnapshot": {
+      "prompt": "\n\nThe following skills provide specialized instructions for specific tasks.\nUse the read tool to load a skill's file when the task matches its description.\nWhen a skill file references a relative path, resolve it against the skill directory (parent of SKILL.md / dirname of the path) and use that absolute path in tool commands.\n\n<available_skills>\n  <skill>\n    <name>1password</name>\n    <description>Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>apple-reminders</name>\n    <description>Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>bird</name>\n    <description>X/Twitter CLI for reading, searching, posting, and engagement via cookies.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>blogwatcher</name>\n    <description>Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>clawhub</name>\n    <description>Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>coding-agent</name>\n    <description>Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gemini</name>\n    <description>Gemini CLI for one-shot Q&amp;A, summaries, and generation.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>github</name>\n    <description>Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>gog</name>\n    <description>Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>healthcheck</name>\n    <description>Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>imsg</name>\n    <description>iMessage/SMS CLI for listing chats, history, watch, and sending.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>skill-creator</name>\n    <description>Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>slack</name>\n    <description>Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>video-frames</name>\n    <description>Extract frames or short clips from videos using ffmpeg.</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>weather</name>\n    <description>Get current weather and forecasts (no API key required).</description>\n    <location>/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>agent-browser</name>\n    <description>Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>brave-instagram-search</name>\n    <description>Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says &apos;brave instagram&apos;, &apos;brave search leads&apos;, &apos;get 100 leads&apos;, or wants high-volume lead generation without browser automation.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deep-search</name>\n    <description>Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>deepwiki</name>\n    <description>Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>exa-search</name>\n    <description>Search the web using Exa AI instead of Brave (MCP-compatible endpoint)</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>instagram-lead-scraper</name>\n    <description>SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.</description>\n    <location>/Users/kokayi/.openclaw/skills/instagram-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>repo-researcher</name>\n    <description>Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like &quot;find repos&quot;, &quot;research repo&quot;, &quot;what&apos;s trending&quot;, &quot;suggest tools&quot;, or when asked about GitHub repositories.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-creator</name>\n    <description>Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-state-manager</name>\n    <description>Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>charlotte-lead-scraper</name>\n    <description>Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>competitor-intent-leads</name>\n    <description>Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md</location>\n  </skill>\n  <skill>\n    <name>task-planner</name>\n    <description>Research ideas from the internet and codebase, then produce structured briefs for claude code to turn into proper specs and Linear issues. The research + planning phase of the pipeline.</description>\n    <location>/Users/kokayi/.openclaw/workspace-developer/skills/task-planner/SKILL.md</location>\n  </skill>\n</available_skills>",
+      "skills": [
+        {
+          "name": "1password"
+        },
+        {
+          "name": "apple-reminders"
+        },
+        {
+          "name": "bird"
+        },
+        {
+          "name": "blogwatcher"
+        },
+        {
+          "name": "clawhub"
+        },
+        {
+          "name": "coding-agent"
+        },
+        {
+          "name": "gemini"
+        },
+        {
+          "name": "github"
+        },
+        {
+          "name": "gog"
+        },
+        {
+          "name": "healthcheck"
+        },
+        {
+          "name": "imsg"
+        },
+        {
+          "name": "skill-creator"
+        },
+        {
+          "name": "slack"
+        },
+        {
+          "name": "video-frames"
+        },
+        {
+          "name": "weather"
+        },
+        {
+          "name": "agent-browser"
+        },
+        {
+          "name": "brave-instagram-search"
+        },
+        {
+          "name": "deep-search"
+        },
+        {
+          "name": "deepwiki"
+        },
+        {
+          "name": "exa-search"
+        },
+        {
+          "name": "instagram-lead-scraper"
+        },
+        {
+          "name": "repo-researcher"
+        },
+        {
+          "name": "task-creator"
+        },
+        {
+          "name": "task-state-manager"
+        },
+        {
+          "name": "charlotte-lead-scraper"
+        },
+        {
+          "name": "competitor-intent-leads"
+        },
+        {
+          "name": "task-planner"
+        }
+      ],
+      "resolvedSkills": [
+        {
+          "name": "1password",
+          "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in (single or multi-account), or reading/injecting/running secrets via op.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/1password/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/1password",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "apple-reminders",
+          "description": "Manage Apple Reminders via the `remindctl` CLI on macOS (list, add, edit, complete, delete). Supports lists, date filters, and JSON/plain output.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/apple-reminders",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "bird",
+          "description": "X/Twitter CLI for reading, searching, posting, and engagement via cookies.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/bird/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/bird",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "blogwatcher",
+          "description": "Monitor blogs and RSS/Atom feeds for updates using the blogwatcher CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/blogwatcher",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "clawhub",
+          "description": "Use the ClawHub CLI to search, install, update, and publish agent skills from clawhub.com. Use when you need to fetch new skills on the fly, sync installed skills to latest or a specific version, or publish new/updated skill folders with the npm-installed clawhub CLI.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/clawhub",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "coding-agent",
+          "description": "Run Codex CLI, Claude Code, OpenCode, or Pi Coding Agent via background process for programmatic control.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/coding-agent",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gemini",
+          "description": "Gemini CLI for one-shot Q&A, summaries, and generation.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gemini",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "github",
+          "description": "Interact with GitHub using the `gh` CLI. Use `gh issue`, `gh pr`, `gh run`, and `gh api` for issues, PRs, CI runs, and advanced queries.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/github/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/github",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "gog",
+          "description": "Google Workspace CLI for Gmail, Calendar, Drive, Contacts, Sheets, and Docs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/gog/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/gog",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "healthcheck",
+          "description": "Host security hardening and risk-tolerance configuration for OpenClaw deployments. Use when a user asks for security audits, firewall/SSH/update hardening, risk posture, exposure review, OpenClaw cron scheduling for periodic checks, or version status checks on a machine running OpenClaw (laptop, workstation, Pi, VPS).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/healthcheck",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "imsg",
+          "description": "iMessage/SMS CLI for listing chats, history, watch, and sending.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/imsg",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "skill-creator",
+          "description": "Create or update AgentSkills. Use when designing, structuring, or packaging skills with scripts, references, and assets.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/skill-creator",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "slack",
+          "description": "Use when you need to control Slack from OpenClaw via the slack tool, including reacting to messages or pinning/unpinning items in Slack channels or DMs.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/slack/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/slack",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "video-frames",
+          "description": "Extract frames or short clips from videos using ffmpeg.",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/video-frames",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "weather",
+          "description": "Get current weather and forecasts (no API key required).",
+          "filePath": "/opt/homebrew/lib/node_modules/openclaw/skills/weather/SKILL.md",
+          "baseDir": "/opt/homebrew/lib/node_modules/openclaw/skills/weather",
+          "source": "openclaw-bundled",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "agent-browser",
+          "description": "Browser automation for opening, navigating, and interacting with web pages using the agent-browser CLI. Use when you need to access web content beyond simple text extraction, navigate complex websites that require JavaScript rendering, interact with forms, buttons, or dynamic content, take screenshots of web pages, or test/automate web workflows. Note: This is NOT a web search tool - for searching, use web_search or web_fetch instead.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/agent-browser",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "brave-instagram-search",
+          "description": "Fast Instagram lead generation using Brave Search API. Scrapes 100+ insurance agent leads from Instagram via Google search results. Use when user wants quick lead volume via Brave search method, needs 100+ leads fast, or says 'brave instagram', 'brave search leads', 'get 100 leads', or wants high-volume lead generation without browser automation.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/brave-instagram-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deep-search",
+          "description": "Hybrid search using Brave for discovery + Agent Browser for deep extraction. Triggered by /deep-search command. Sequential execution, combined summary output.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deep-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "deepwiki",
+          "description": "Query the DeepWiki MCP server for GitHub repository documentation, wiki structure, and AI-powered questions.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/deepwiki",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "exa-search",
+          "description": "Search the web using Exa AI instead of Brave (MCP-compatible endpoint)",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/exa-search",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "instagram-lead-scraper",
+          "description": "SCALED Instagram lead scraper using Agent Browser. Scrapes hashtags + profiles for rich contact data including phone, email, location. 50-100+ leads per run.",
+          "filePath": "/Users/kokayi/.openclaw/skills/instagram-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/skills/instagram-lead-scraper",
+          "source": "openclaw-managed",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "repo-researcher",
+          "description": "Research GitHub repositories to find trending tools, MCP servers, and CLI utilities that could expand AI assistant capabilities. Use when the user wants to discover new repos, research a specific repo, or find trending tools for their stack (LibreChat, OpenClaw, MCP servers, CLI tools, etc.). Triggers on phrases like \"find repos\", \"research repo\", \"what's trending\", \"suggest tools\", or when asked about GitHub repositories.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/repo-researcher",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-creator",
+          "description": "Create Linear issues for coding workflows in the Suelo project. Auto-detects complexity to create full specs or quick tasks. Supports priority levels. Use when Ko asks to create tasks, issues, or linear tasks for coding work.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-creator",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-state-manager",
+          "description": "Manages long-running tasks using Linear for persistence and LangSmith for observability. Multi-session aware - any chat can see and resume tasks.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-state-manager",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "charlotte-lead-scraper",
+          "description": "Google Places API scraper for Charlotte, NC local business leads. Extracts name, phone, website, address, rating, review_count and saves to database with batch tagging.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/charlotte-lead-scraper",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "competitor-intent-leads",
+          "description": "Find high-intent leads discussing competitors on Reddit. Uses Exa Search for discovery + Reddit JSON API for extraction.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/competitor-intent-leads",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        },
+        {
+          "name": "task-planner",
+          "description": "Research ideas from the internet and codebase, then produce structured briefs for claude code to turn into proper specs and Linear issues. The research + planning phase of the pipeline.",
+          "filePath": "/Users/kokayi/.openclaw/workspace-developer/skills/task-planner/SKILL.md",
+          "baseDir": "/Users/kokayi/.openclaw/workspace-developer/skills/task-planner",
+          "source": "openclaw-workspace",
+          "disableModelInvocation": false
+        }
+      ],
+      "version": 0
+    },
+    "modelProvider": "zai",
+    "model": "glm-4.7",
+    "contextTokens": 204800,
+    "abortedLastRun": false,
+    "inputTokens": 20980,
+    "outputTokens": 319,
+    "totalTokens": 35281
+  }
+}

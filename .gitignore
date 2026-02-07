@@ -37,3 +37,11 @@ Thumbs.db
 .env
 .env.local
 .env.*.local
+
+# Session files (may contain API keys and sensitive data)
+agents/*/sessions/
+
+# Configuration files with secrets
+openclaw.json
+opencode.json
+.agent/config.sh

@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "socket": {
+    "path": "/Users/kokayi/.openclaw/exec-approvals.sock",
+    "token": "ajhcWCa9-4aNYstiKkbVzvIn3kam_29u"
+  },
+  "defaults": {},
+  "agents": {}
+}

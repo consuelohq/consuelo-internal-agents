@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+"""
+GitHub PR Review - One command, everything posted to GitHub.
+
+Usage:
+  review pr 788
+  review pr 788 --local-only
+  review "https://github.com/owner/repo/pull/788"
+  review pr 788 --approve
+  review pr 788 --split-pr
+  review pr 788 --verbose
+"""
+
+import sys
+import os
+
+# Add skill directory to path
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+from review import main
+
+if __name__ == "__main__":
+    main()

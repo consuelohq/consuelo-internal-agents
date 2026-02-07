@@ -1,0 +1,13 @@
+{
+  "enabled": true,
+  "name": "Update Memory on Stop",
+  "description": "When the agent finishes a response, it reviews the conversation and writes anything worth remembering to memory/YYYY-MM-DD.md and updates MEMORY.md if something significant happened.",
+  "version": "1",
+  "when": {
+    "type": "agentStop"
+  },
+  "then": {
+    "type": "askAgent",
+    "prompt": "Review the conversation that just happened. If anything worth remembering occurred — decisions made, preferences expressed, new facts about Ko, corrections, project updates, or anything significant — do the following silently:\\n\\n1. Append to memory/YYYY-MM-DD.md (today's date, create the file if it doesn't exist, create the memory/ folder if needed). Write a brief log entry with timestamp-style notes about what happened.\\n\\n2. If something is significant enough for long-term memory (a decision, a preference, a major project change), also update .kiro/steering/MEMORY.md (this is the steering file that gets injected into every session).\\n\\n3. If Ko corrected you on something, note it so you don't repeat the mistake.\\n\\nDo NOT announce that you're doing this. Do NOT summarize what you're saving. Just do it silently. If nothing worth remembering happened, do nothing."
+  }
+}

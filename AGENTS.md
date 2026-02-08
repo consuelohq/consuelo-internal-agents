@@ -244,6 +244,7 @@ Reactions are lightweight social signals. Humans use them constantly — they sa
 | **Exec** | Running scripts, file operations, local commands | External API calls (use tools) |
 | **TTS** | Stories, summaries, audio output | Quick answers, code |
 
+
 **The Golden Workflow — Discovery + Depth:**
 
 ```
@@ -343,6 +344,13 @@ export default function Component() {
 ```
 
 **Skill file:** `skills/librechat-react-artifacts/SKILL.md`
+
+---
+
+## LibreChat / OpenClaw Reference
+
+When working on anything related to **LibreChat** or **OpenClaw**, read this file first:
+- **`/Users/kokayi/librechat/.librechat/ARCHITECTURE.md`** — full architecture doc covering the request chain, networking, endpoints, abort flow, auth, session keys, proxy setup, and key files.
 
 ---
 

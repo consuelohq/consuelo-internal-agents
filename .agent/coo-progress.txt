@@ -1,0 +1,33 @@
+
+## Session 2026-01-16T02:33:00Z
+
+**Task**: [COO-AGENT] Phase 4.4: Create coo-instagram skill
+**Status**: Completed
+**Files Created**:
+- .claude/skills/coo-instagram/SKILL.md (8118 bytes)
+- .claude/skills/coo-instagram/instagram-research.md (7697 bytes)
+**Summary**:
+- Created coo-instagram skill for Instagram prospect list generation
+- Includes proper frontmatter, step-by-step instructions, CSV format spec
+- Supporting documentation with Meta API limitations and research strategies
+- Integrates with COO agent scheduled task system (9:00 AM daily)
+- Output format: CSV with username, profile_url, suggested_dm_opener, etc.
+- Emphasizes manual DM sending (API does not support cold outreach)
+**Blockers**: None
+
+---
+
+## QA Session 2026-01-16T00:25:36Z - 2026-01-16
+
+**Status:** passed
+**Duration:** 1s
+**Staging:** /Users/kokayi/Dev/consuelo_on_call_coaching/.coo/agent/staging/2026-01-16
+**Validation Errors:** 0
+**Validation Warnings:** 0
+
+**Results:**
+- Emails sent: 0
+- Tweets posted: 0
+- Dry run: true
+
+---

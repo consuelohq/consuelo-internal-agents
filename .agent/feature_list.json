@@ -1,0 +1,7 @@
+{
+  "project": "consuelo-on-call-coaching",
+  "created_by": "initializer-agent",
+  "created_at": "2025-01-01T20:00:00Z",
+  "description": "Feature tracking for AI agents. Descriptions are IMMUTABLE. Only 'passes' and 'verified_at' can be modified.",
+  "features": []
+}

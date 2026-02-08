@@ -54,11 +54,14 @@ linear_check_api() {
 # GraphQL query wrapper
 linear_graphql() {
     local query="$1"
+    # Escape newlines and quotes for valid JSON
+    local escaped
+    escaped=$(echo "$query" | tr '\n' ' ' | sed 's/"/\\"/g')
 
     curl -s -X POST https://api.linear.app/graphql \
         -H "Authorization: $LINEAR_API_KEY" \
         -H "Content-Type: application/json" \
-        -d "{\"query\":\"$query\"}"
+        -d "{\"query\":\"$escaped\"}"
 }
 
 # =============================================================================
@@ -133,48 +136,18 @@ linear_get_state_id() {
 # =============================================================================
 
 # Get kiro-labeled issues in Open state
+# Uses label name filter (works for both team and workspace labels)
 linear_get_kiro_issues() {
-    local label_id="${LINEAR_LABEL_KIRO_ID}"
-    if [ -z "$label_id" ]; then
-        label_id=$(linear_get_label_id "$LINEAR_LABEL_NAME")
-        if [ $? -ne 0 ] || [ -z "$label_id" ]; then
-            echo "[]"
-            return 1
-        fi
-    fi
+    local label_name="${LINEAR_LABEL_NAME:-kiro}"
+    local state_name="${LINEAR_STATE_OPEN:-Open}"
 
-    local state_id="${LINEAR_STATE_OPEN_ID}"
-    if [ -z "$state_id" ]; then
-        state_id=$(linear_get_state_id "$LINEAR_STATE_OPEN")
-        if [ $? -ne 0 ] || [ -z "$state_id" ]; then
-            echo "[]"
-            return 1
-        fi
-    fi
+    local query='{ issues(first: 20, filter: { and: [{ labels: { name: { eq: \"'"$label_name"'\" } } }, { state: { name: { eq: \"'"$state_name"'\" } } }] }, orderBy: createdAt) { nodes { id identifier title description priority createdAt } } }'
 
     local response
-    response=$(linear_graphql "{
-        issues(
-            first: 20
-            filter: {
-                and: [
-                    { team: { id: { eq: \"$LINEAR_TEAM_ID\" } } },
-                    { labels: { id: { eq: \"$label_id\" } } },
-                    { state: { id: { eq: \"$state_id\" } } }
-                ]
-            }
-            orderBy: createdAt
-        ) {
-            nodes {
-                id
-                identifier
-                title
-                description
-                priority
-                createdAt
-            }
-        }
-    }")
+    response=$(curl -s -X POST https://api.linear.app/graphql \
+        -H "Authorization: $LINEAR_API_KEY" \
+        -H "Content-Type: application/json" \
+        -d "{\"query\": \"$query\"}")
 
     local issues
     issues=$(echo "$response" | jq -c '.data.issues.nodes[]' 2>/dev/null)

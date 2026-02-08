@@ -79,14 +79,12 @@ TOC_ENTRY="- [Task: $TASK_ID - $TASK_TITLE](#task-$ANCHOR_ID) ($DATE_SHORT)"
 # Find the line "<!-- TOC entries will be added here -->" and insert before it
 if grep -q "<!-- TOC entries" "$RESEARCH_FILE"; then
   # Insert new TOC entry before the comment marker
-  sed -i '' "s|<!-- TOC entries will be added here -->|$TOC_ENTRY\n<!-- TOC entries will be added here -->|" "$RESEARCH_FILE" 2>/dev/null || \
-  sed -i "s|<!-- TOC entries will be added here -->|$TOC_ENTRY\n<!-- TOC entries will be added here -->|" "$RESEARCH_FILE"
+  sed -i '' "s|<!-- TOC entries will be added here -->|$TOC_ENTRY\n<!-- TOC entries will be added here -->|" "$RESEARCH_FILE"
 else
   # If no marker, add after "## Table of Contents"
   sed -i '' "/## Table of Contents/a\\
 $TOC_ENTRY
-" "$RESEARCH_FILE" 2>/dev/null || \
-  sed -i "/## Table of Contents/a\\$TOC_ENTRY" "$RESEARCH_FILE"
+" "$RESEARCH_FILE"
 fi
 
 echo "Appended research for task $TASK_ID to $RESEARCH_FILE"

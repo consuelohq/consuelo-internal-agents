@@ -31,7 +31,7 @@ LINEAR_TEAM_ID="${LINEAR_TEAM_ID:-29f5c661-da6c-4bfb-bd48-815a006ccaac}"
 
 # Label name to filter issues
 LINEAR_LABEL_NAME="kiro"
-LINEAR_LABEL_KIRO_ID="40bf16b8-3f47-4238-b104-de0158e8413a"
+LINEAR_LABEL_KIRO_ID="04de73b2-9801-4690-8e9d-5890e5e14d6a"
 
 # Workflow state names + IDs
 LINEAR_STATE_OPEN="Open"
@@ -78,7 +78,7 @@ SLACK_WEBHOOK_URL="${SLACK_WEBHOOK_URL:-}"
 POLL_INTERVAL="${POLL_INTERVAL:-1800}"
 
 # Maximum tasks per run (0 = unlimited)
-MAX_TASKS_PER_RUN="${MAX_TASKS_PER_RUN:-0}"
+MAX_TASKS_PER_RUN="${MAX_TASKS_PER_RUN:-1}"
 
 # =============================================================================
 # HELPER FUNCTIONS

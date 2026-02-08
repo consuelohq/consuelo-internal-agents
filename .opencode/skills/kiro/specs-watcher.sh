@@ -86,11 +86,12 @@ create_task_branch() {
 
     # Generate short hash from issue + timestamp
     local hash
-    hash=$(echo "$issue_id$(date +%s)" | md5 | head -c 6)
+    hash=$(echo "$issue_id$(date +%s)" | md5 2>/dev/null || echo "$issue_id$(date +%s)" | md5sum 2>/dev/null | cut -d' ' -f1)
+    hash=$(echo "$hash" | head -c 6)
 
     local branch_name="kiro/${sanitized}-${hash}"
 
-    log_info "Creating branch: $branch_name"
+    log_info "Creating branch: $branch_name" >&2
 
     # Create branch via github-dev
     local result
@@ -100,7 +101,7 @@ create_task_branch() {
         echo "$branch_name"
         return 0
     else
-        log_error "Failed to create branch: $result"
+        log_error "Failed to create branch: $result" >&2
         return 1
     fi
 }

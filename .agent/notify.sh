@@ -27,7 +27,7 @@ init_metrics() {
   "date": "$today",
   "reset_hour_utc": $RESET_HOUR_UTC,
   "tasks_completed": 0,
-  "tasks_failed": 0,
+  "tasks_needs_review": 0,
   "total_duration_mins": 0,
   "last_updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 }
@@ -70,7 +70,7 @@ reset_metrics() {
   "date": "$today",
   "reset_hour_utc": $RESET_HOUR_UTC,
   "tasks_completed": 0,
-  "tasks_failed": 0,
+  "tasks_needs_review": 0,
   "total_duration_mins": 0,
   "last_updated": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
 }
@@ -79,7 +79,7 @@ EOF
 }
 
 # Update metrics (call after task completion)
-# Usage: update_metrics "success" [duration_mins]
+# Usage: update_metrics "success|needs_review" [duration_mins]
 update_metrics() {
   local status="${1:-success}"
   local duration="${2:-0}"
@@ -93,7 +93,7 @@ update_metrics() {
 
   # Read current values
   local completed=$(jq -r '.tasks_completed' "$METRICS_FILE")
-  local failed=$(jq -r '.tasks_failed' "$METRICS_FILE")
+  local failed=$(jq -r '.tasks_needs_review' "$METRICS_FILE")
   local total_duration=$(jq -r '.total_duration_mins' "$METRICS_FILE")
 
   # Update based on status
@@ -111,7 +111,7 @@ update_metrics() {
      --argjson failed "$failed" \
      --argjson duration "$total_duration" \
      --arg updated "$(date -u +%Y-%m-%dT%H:%M:%SZ)" \
-     '.date = $date | .tasks_completed = $completed | .tasks_failed = $failed | .total_duration_mins = $duration | .last_updated = $updated' \
+     '.date = $date | .tasks_completed = $completed | .tasks_needs_review = $failed | .total_duration_mins = $duration | .last_updated = $updated' \
      "$METRICS_FILE" > "${METRICS_FILE}.tmp" && mv "${METRICS_FILE}.tmp" "$METRICS_FILE"
 }
 
@@ -125,7 +125,7 @@ get_metrics_summary() {
   fi
 
   local completed=$(jq -r '.tasks_completed' "$METRICS_FILE")
-  local failed=$(jq -r '.tasks_failed' "$METRICS_FILE")
+  local failed=$(jq -r '.tasks_needs_review' "$METRICS_FILE")
   local total_duration=$(jq -r '.total_duration_mins' "$METRICS_FILE")
 
   local total=$((completed + failed))
@@ -134,7 +134,7 @@ get_metrics_summary() {
     avg_duration=$((total_duration / total))
   fi
 
-  echo "$completed completed, $failed failed, avg ${avg_duration}min/task"
+  echo "$completed completed, $failed needs review, avg ${avg_duration}min/task"
 }
 
 send_slack_notification() {
@@ -175,8 +175,7 @@ send_slack_notification() {
     --arg color "$color" \
     --arg title "$title" \
     --arg text "$message" \
-    --arg repo "$repo_name" \
-    --arg branch "$branch" \
+    --arg repo_branch "${repo_name} → ${branch}" \
     --arg metrics "$metrics_summary" \
     --argjson ts "$(date +%s)" \
     '{
@@ -185,11 +184,10 @@ send_slack_notification() {
         title: $title,
         text: $text,
         fields: [
-          {title: "Repo", value: $repo, short: true},
-          {title: "Branch", value: $branch, short: true},
-          {title: "Today", value: $metrics, short: false}
+          {title: "Today\u0027s Totals", value: $metrics, short: false},
+          {title: "Repo/Branch", value: $repo_branch, short: false}
         ],
-        footer: "Agent Workflow",
+        footer: "Consuelo Agent",
         ts: $ts
       }]
     }')

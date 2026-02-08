@@ -63,21 +63,17 @@ while IFS= read -r line || [[ -n "$line" ]]; do
         # Convert timestamp to epoch seconds
         # Handle both "2026-01-04T10:30:00Z" and "2026-01-04T10:30:00" formats
         CLEAN_TS=$(echo "$CURRENT_TIMESTAMP" | sed 's/Z$//')
-
-        # Try macOS date format first, then GNU date
         if BLOCK_TIME=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$CLEAN_TS" +%s 2>/dev/null); then
-          : # macOS format worked
-        elif BLOCK_TIME=$(date -d "$CLEAN_TS" +%s 2>/dev/null); then
-          : # GNU date format worked
+          if [[ $BLOCK_TIME -ge $CUTOFF_TIME ]]; then
+            echo "$CURRENT_BLOCK" >> "$TEMP_FILE"
+            ((BLOCKS_KEPT++)) || true
+          else
+            ((BLOCKS_PRUNED++)) || true
+          fi
         else
-          BLOCK_TIME=0  # Couldn't parse, keep the block
-        fi
-
-        if [[ $BLOCK_TIME -ge $CUTOFF_TIME ]] || [[ $BLOCK_TIME -eq 0 ]]; then
+          # If we can't parse the timestamp, keep the block
           echo "$CURRENT_BLOCK" >> "$TEMP_FILE"
           ((BLOCKS_KEPT++)) || true
-        else
-          ((BLOCKS_PRUNED++)) || true
         fi
       fi
 
@@ -95,20 +91,16 @@ done < "$PROGRESS_FILE"
 # Process final block
 if [[ -n "$CURRENT_BLOCK" ]] && [[ -n "$CURRENT_TIMESTAMP" ]]; then
   CLEAN_TS=$(echo "$CURRENT_TIMESTAMP" | sed 's/Z$//')
-
   if BLOCK_TIME=$(date -j -f "%Y-%m-%dT%H:%M:%S" "$CLEAN_TS" +%s 2>/dev/null); then
-    : # macOS format worked
-  elif BLOCK_TIME=$(date -d "$CLEAN_TS" +%s 2>/dev/null); then
-    : # GNU date format worked
+    if [[ $BLOCK_TIME -ge $CUTOFF_TIME ]]; then
+      echo "$CURRENT_BLOCK" >> "$TEMP_FILE"
+      ((BLOCKS_KEPT++)) || true
+    else
+      ((BLOCKS_PRUNED++)) || true
+    fi
   else
-    BLOCK_TIME=0
-  fi
-
-  if [[ $BLOCK_TIME -ge $CUTOFF_TIME ]] || [[ $BLOCK_TIME -eq 0 ]]; then
     echo "$CURRENT_BLOCK" >> "$TEMP_FILE"
     ((BLOCKS_KEPT++)) || true
-  else
-    ((BLOCKS_PRUNED++)) || true
   fi
 fi
 

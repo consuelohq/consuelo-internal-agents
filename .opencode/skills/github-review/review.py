@@ -760,11 +760,15 @@ Would you like help splitting this PR?
         env = os.environ.copy()
         env["PATH"] = "/opt/homebrew/bin:" + env.get("PATH", "")
 
+        # Run railway from the project directory where it's linked
+        railway_cwd = os.path.expanduser("~/Dev/consuelo_on_call_coaching")
+
         # Check Railway logs for errors
         try:
             result = subprocess.run(
                 ["railway", "logs", "--latest", "-n", "50"],
                 capture_output=True, text=True, env=env, timeout=30,
+                cwd=railway_cwd,
             )
 
             logs = result.stdout + result.stderr

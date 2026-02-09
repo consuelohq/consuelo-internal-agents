@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Consuelo Docs</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#000;--fg:#fff;--muted:#888;--border:#222;--code-bg:#111}
+@media(prefers-color-scheme:light){:root{--bg:#fff;--fg:#000;--muted:#666;--border:#ddd;--code-bg:#f5f5f5}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.7}
+a{color:var(--fg)}
+header{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--border)}
+.logo{font-weight:700;font-size:1.2rem;text-decoration:none}
+nav a{color:var(--muted);text-decoration:none;margin-left:1.5rem;font-size:.9rem}
+
+.layout{display:flex;max-width:1100px;margin:0 auto}
+.sidebar{width:220px;padding:2rem 1rem;border-right:1px solid var(--border);position:sticky;top:0;height:100vh;overflow-y:auto}
+.sidebar a{display:block;padding:.3rem .5rem;color:var(--muted);text-decoration:none;font-size:.9rem;border-radius:4px}
+.sidebar a:hover,.sidebar a.active{color:var(--fg);background:var(--code-bg)}
+.sidebar h4{color:var(--muted);font-size:.75rem;text-transform:uppercase;letter-spacing:.05em;margin:1.5rem .5rem .5rem;font-weight:600}
+
+.content{flex:1;padding:2rem 3rem;max-width:750px}
+.content h1{font-size:2rem;margin-bottom:1rem}
+.content h2{font-size:1.3rem;margin:2rem 0 .5rem;padding-top:1rem;border-top:1px solid var(--border)}
+.content p{color:var(--muted);margin-bottom:1rem}
+.content code{background:var(--code-bg);padding:.15rem .4rem;border-radius:3px;font-size:.85rem}
+.content pre{background:var(--code-bg);padding:1rem;border-radius:6px;overflow-x:auto;margin-bottom:1.5rem}
+.content pre code{background:none;padding:0}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">consuelo</a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/docs" style="color:var(--fg)">Docs</a>
+    <a href="https://github.com/consuelohq/consuelo-internal-agents">GitHub</a>
+  </nav>
+</header>
+
+<div class="layout">
+  <aside class="sidebar">
+    <h4>Getting Started</h4>
+    <a href="/docs" class="active">Introduction</a>
+    <a href="/docs/quickstart.html">Quickstart</a>
+    <a href="/docs/installation.html">Installation</a>
+
+    <h4>Packages</h4>
+    <a href="/docs/dialer.html">@consuelo/dialer</a>
+    <a href="/docs/coaching.html">@consuelo/coaching</a>
+    <a href="/docs/analytics.html">@consuelo/analytics</a>
+    <a href="/docs/contacts.html">@consuelo/contacts</a>
+    <a href="/docs/api.html">@consuelo/api</a>
+    <a href="/docs/cli.html">@consuelo/cli</a>
+
+    <h4>Guides</h4>
+    <a href="/docs/self-hosting.html">Self-hosting</a>
+    <a href="/docs/providers.html">LLM Providers</a>
+    <a href="/docs/webhooks.html">Webhooks</a>
+  </aside>
+
+  <main class="content">
+    <h1>Consuelo SDK Documentation</h1>
+    <p>Consuelo is an open source sales infrastructure SDK. It gives you AI-powered dialing, real-time coaching, call analytics, and contact management — as code.</p>
+
+    <h2>Quick Install</h2>
+    <pre><code>curl -fsSL consuelohq.com/install | bash</code></pre>
+    <p>Or install via npm:</p>
+    <pre><code>npm install @consuelo/sdk</code></pre>
+
+    <h2>Hello World</h2>
+    <pre><code>import { Coach } from '@consuelo/coaching';
+
+const coach = new Coach({ apiKey: process.env.GROQ_API_KEY });
+
+const tips = await coach.coach([
+  { role: 'customer', content: 'I'm not sure about the price...' },
+  { role: 'sales_rep', content: 'I understand. Let me walk you through the value.' },
+]);
+
+console.log(tips);</code></pre>
+
+    <h2>Packages</h2>
+    <p>Each module is independently installable:</p>
+    <pre><code>npm install @consuelo/dialer     # Twilio-powered dialer
+npm install @consuelo/coaching   # AI coaching engine
+npm install @consuelo/analytics  # Call analytics + transcription
+npm install @consuelo/contacts   # Contact + queue management
+npm install @consuelo/api        # REST API layer
+npm install @consuelo/cli        # CLI tool</code></pre>
+
+    <h2>Architecture</h2>
+    <p>Consuelo is a monorepo of composable packages. Use the unified <code>@consuelo/sdk</code> or pick individual modules:</p>
+    <pre><code>import { dialer, coaching, analytics, contacts } from '@consuelo/sdk';</code></pre>
+
+    <h2>Self-hosted vs Managed</h2>
+    <p>Self-host with your own Twilio + LLM keys, or use <a href="/zen">Consuelo Zen</a> for zero-config managed infrastructure.</p>
+  </main>
+</div>
+</body>
+</html>

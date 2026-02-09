@@ -1,0 +1,25 @@
+{
+  "name": "@consuelo/workspace",
+  "version": "0.0.1",
+  "description": "Workspace system with SQLite database and REST API",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "peerDependencies": {
+    "better-sqlite3": ">=9.0.0"
+  },
+  "peerDependenciesMeta": {
+    "better-sqlite3": {
+      "optional": true
+    }
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

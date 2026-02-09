@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Consuelo — The open source sales infrastructure</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#000;--fg:#fff;--muted:#888;--border:#222;--accent:#fff}
+@media(prefers-color-scheme:light){:root{--bg:#fff;--fg:#000;--muted:#666;--border:#ddd;--accent:#000}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
+a{color:var(--fg);text-decoration:none}
+a:hover{opacity:.8}
+
+/* Header */
+header{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--border)}
+.logo{font-weight:700;font-size:1.2rem}
+nav{display:flex;gap:1.5rem;align-items:center;font-size:.9rem}
+nav a{color:var(--muted)}
+nav a:hover{color:var(--fg)}
+.gh-stars{display:inline-flex;align-items:center;gap:.3rem;border:1px solid var(--border);border-radius:6px;padding:.2rem .6rem;font-size:.8rem}
+
+/* Hero */
+.hero{text-align:center;padding:6rem 2rem 4rem;max-width:700px;margin:0 auto}
+.hero h1{font-size:3rem;font-weight:700;letter-spacing:-.02em;line-height:1.1;margin-bottom:1rem}
+.hero p{color:var(--muted);font-size:1.1rem;margin-bottom:2.5rem}
+
+/* Install tabs */
+.install{max-width:500px;margin:0 auto;border:1px solid var(--border);border-radius:8px;overflow:hidden}
+.install-tabs{display:flex;border-bottom:1px solid var(--border)}
+.install-tabs button{flex:1;background:none;border:none;color:var(--muted);padding:.5rem;cursor:pointer;font-size:.8rem;font-family:inherit}
+.install-tabs button.active{color:var(--fg);background:var(--border)}
+.install-cmd{display:flex;align-items:center;justify-content:space-between;padding:.8rem 1rem;font-family:'SF Mono',monospace;font-size:.85rem}
+.install-cmd code{opacity:.9}
+.install-cmd button{background:none;border:none;color:var(--muted);cursor:pointer;font-size:.8rem}
+
+/* Features */
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.feature{background:var(--bg);padding:2rem}
+.feature h3{font-size:1rem;margin-bottom:.5rem}
+.feature p{color:var(--muted);font-size:.9rem}
+
+/* Social proof */
+.social{text-align:center;padding:4rem 2rem}
+.social .badges{display:flex;gap:1rem;justify-content:center;margin-top:1rem}
+.badge{border:1px solid var(--border);border-radius:20px;padding:.3rem 1rem;font-size:.8rem;color:var(--muted)}
+
+/* Email capture */
+.email-capture{text-align:center;padding:4rem 2rem;border-top:1px solid var(--border)}
+.email-capture h2{font-size:1.5rem;margin-bottom:.5rem}
+.email-capture p{color:var(--muted);margin-bottom:1.5rem}
+.email-form{display:flex;gap:.5rem;max-width:400px;margin:0 auto}
+.email-form input{flex:1;padding:.6rem 1rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--fg);font-size:.9rem}
+.email-form button{padding:.6rem 1.5rem;border:none;border-radius:6px;background:var(--fg);color:var(--bg);cursor:pointer;font-size:.9rem;font-weight:600}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.8rem}
+footer a{color:var(--muted);margin:0 .5rem}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">consuelo</a>
+  <nav>
+    <a href="https://github.com/consuelohq/consuelo-internal-agents" class="gh-stars">★ GitHub</a>
+    <a href="/docs">Docs</a>
+    <a href="/enterprise">Enterprise</a>
+    <a href="/zen">Zen</a>
+    <a href="#install">Download</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>The open source sales infrastructure</h1>
+  <p>AI-powered dialer, real-time coaching, and call analytics — as code. Build your sales stack with open primitives.</p>
+
+  <div class="install" id="install">
+    <div class="install-tabs">
+      <button class="active" onclick="setTab(this,'curl -fsSL consuelohq.com/install | bash')">curl</button>
+      <button onclick="setTab(this,'npm install -g @consuelo/cli')">npm</button>
+      <button onclick="setTab(this,'bun add -g @consuelo/cli')">bun</button>
+      <button onclick="setTab(this,'brew install consuelo')">brew</button>
+    </div>
+    <div class="install-cmd">
+      <code id="cmd">curl -fsSL consuelohq.com/install | bash</code>
+      <button onclick="navigator.clipboard.writeText(document.getElementById('cmd').textContent)">copy</button>
+    </div>
+  </div>
+</section>
+
+<section class="features">
+  <div class="feature">
+    <h3>🎯 AI-powered coaching</h3>
+    <p>Real-time sales coaching during live calls. Objection handling, buying signals, and actionable tips — powered by any LLM.</p>
+  </div>
+  <div class="feature">
+    <h3>📞 Built-in dialer</h3>
+    <p>Twilio-powered dialer with local presence, caller ID management, and queue-based power dialing.</p>
+  </div>
+  <div class="feature">
+    <h3>📊 Call analytics</h3>
+    <p>Sentiment analysis, key moments, performance metrics, and talk ratio — structured data from every call.</p>
+  </div>
+  <div class="feature">
+    <h3>🤖 Any LLM</h3>
+    <p>Groq, OpenAI, Anthropic, or bring your own. Swap providers with one line of config.</p>
+  </div>
+  <div class="feature">
+    <h3>👥 Contact management</h3>
+    <p>Queues, CSV import, search, and tagging. Everything you need to manage your pipeline.</p>
+  </div>
+  <div class="feature">
+    <h3>🔓 Open source</h3>
+    <p>MIT licensed. Self-host on your infrastructure or use our managed tier. Your data, your rules.</p>
+  </div>
+</section>
+
+<section class="social">
+  <p>Trusted by sales teams building the future</p>
+  <div class="badges">
+    <span class="badge">Open Source</span>
+    <span class="badge">MIT License</span>
+    <span class="badge">TypeScript</span>
+  </div>
+</section>
+
+<section class="email-capture">
+  <h2>Be the first to know</h2>
+  <p>Get notified when we launch new features and modules.</p>
+  <div class="email-form">
+    <input type="email" placeholder="you@company.com">
+    <button>Subscribe</button>
+  </div>
+</section>
+
+<footer>
+  <a href="https://github.com/consuelohq/consuelo-internal-agents">GitHub</a>
+  <a href="/docs">Docs</a>
+  <a href="#">Changelog</a>
+  <a href="#">Discord</a>
+  <a href="#">X</a>
+  <br><br>
+  © 2026 Consuelo. Open source sales infrastructure.
+</footer>
+
+<script>
+function setTab(btn, cmd) {
+  document.querySelectorAll('.install-tabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('cmd').textContent = cmd;
+}
+</script>
+</body>
+</html>

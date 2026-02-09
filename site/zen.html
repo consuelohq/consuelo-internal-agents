@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Consuelo Zen — Managed sales infrastructure</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#000;--fg:#fff;--muted:#888;--border:#222}
+@media(prefers-color-scheme:light){:root{--bg:#fff;--fg:#000;--muted:#666;--border:#ddd}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
+a{color:var(--fg);text-decoration:none}
+a:hover{opacity:.8}
+header{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--border)}
+.logo{font-weight:700;font-size:1.2rem}
+nav{display:flex;gap:1.5rem;font-size:.9rem}
+nav a{color:var(--muted)}
+
+.hero{text-align:center;padding:6rem 2rem 3rem;max-width:600px;margin:0 auto}
+.hero h1{font-size:2.5rem;font-weight:700;letter-spacing:-.02em;margin-bottom:1rem}
+.hero p{color:var(--muted);font-size:1.1rem;margin-bottom:2rem}
+.hero .cta{display:inline-block;padding:.7rem 2rem;border:1px solid var(--fg);border-radius:6px;font-weight:600;font-size:1rem}
+
+.tiers{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1.5rem;max-width:900px;margin:0 auto;padding:2rem}
+.tier{border:1px solid var(--border);border-radius:8px;padding:2rem}
+.tier h3{font-size:1.2rem;margin-bottom:.5rem}
+.tier .price{font-size:2rem;font-weight:700;margin-bottom:1rem}
+.tier .price span{font-size:.9rem;font-weight:400;color:var(--muted)}
+.tier ul{list-style:none;margin-bottom:1.5rem}
+.tier ul li{padding:.3rem 0;color:var(--muted);font-size:.9rem}
+.tier ul li::before{content:"✓ ";color:var(--fg)}
+.tier .btn{display:block;text-align:center;padding:.6rem;border:1px solid var(--border);border-radius:6px;font-size:.9rem}
+.tier.featured{border-color:var(--fg)}
+.tier.featured .btn{background:var(--fg);color:var(--bg)}
+
+.compare{max-width:700px;margin:3rem auto;padding:2rem}
+.compare h2{text-align:center;margin-bottom:1.5rem;font-size:1.5rem}
+.compare table{width:100%;border-collapse:collapse}
+.compare th,.compare td{padding:.6rem;text-align:left;border-bottom:1px solid var(--border);font-size:.9rem}
+.compare th{color:var(--muted);font-weight:400}
+
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.8rem;margin-top:4rem}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">consuelo</a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/docs">Docs</a>
+    <a href="/enterprise">Enterprise</a>
+    <a href="/zen" style="color:var(--fg)">Zen</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Zero config. Just sell.</h1>
+  <p>Consuelo Zen is the managed tier — we handle infrastructure, you handle conversations. Same open source SDK, hosted for you.</p>
+  <a href="#pricing" class="cta">Get started</a>
+</section>
+
+<section class="tiers" id="pricing">
+  <div class="tier">
+    <h3>Free</h3>
+    <div class="price">$0<span>/mo</span></div>
+    <ul>
+      <li>100 calls/month</li>
+      <li>Basic coaching (Groq)</li>
+      <li>Call analytics</li>
+      <li>1 user</li>
+      <li>Community support</li>
+    </ul>
+    <a href="#" class="btn">Start free</a>
+  </div>
+  <div class="tier featured">
+    <h3>Pro</h3>
+    <div class="price">$49<span>/mo per seat</span></div>
+    <ul>
+      <li>Unlimited calls</li>
+      <li>Advanced coaching (any LLM)</li>
+      <li>Full analytics + exports</li>
+      <li>Local presence dialing</li>
+      <li>Priority support</li>
+      <li>Custom playbooks</li>
+    </ul>
+    <a href="#" class="btn">Start trial</a>
+  </div>
+  <div class="tier">
+    <h3>Team</h3>
+    <div class="price">$99<span>/mo per seat</span></div>
+    <ul>
+      <li>Everything in Pro</li>
+      <li>Team analytics + leaderboards</li>
+      <li>Manager dashboard</li>
+      <li>CRM integrations</li>
+      <li>SSO</li>
+      <li>Dedicated support</li>
+    </ul>
+    <a href="#" class="btn">Contact sales</a>
+  </div>
+</section>
+
+<section class="compare">
+  <h2>Self-hosted vs Managed</h2>
+  <table>
+    <tr><th></th><th>Self-hosted (free)</th><th>Zen (managed)</th></tr>
+    <tr><td>Infrastructure</td><td>You manage</td><td>We manage</td></tr>
+    <tr><td>Updates</td><td>Manual</td><td>Automatic</td></tr>
+    <tr><td>Twilio account</td><td>Your own</td><td>Included</td></tr>
+    <tr><td>LLM keys</td><td>Your own</td><td>Included</td></tr>
+    <tr><td>Support</td><td>Community</td><td>Priority/Dedicated</td></tr>
+    <tr><td>Data</td><td>Your servers</td><td>SOC 2 compliant</td></tr>
+  </table>
+</section>
+
+<footer>
+  <a href="/">Home</a> · <a href="/docs">Docs</a> · <a href="https://github.com/consuelohq/consuelo-internal-agents">GitHub</a>
+  <br><br>© 2026 Consuelo
+</footer>
+</body>
+</html>

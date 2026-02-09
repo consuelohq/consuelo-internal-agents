@@ -11,10 +11,10 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@consuelo/dialer": "workspace:*",
-    "@consuelo/coaching": "workspace:*",
-    "@consuelo/analytics": "workspace:*",
-    "@consuelo/contacts": "workspace:*"
+    "@consuelo/dialer": "*",
+    "@consuelo/coaching": "*",
+    "@consuelo/analytics": "*",
+    "@consuelo/contacts": "*"
   },
   "license": "MIT",
   "publishConfig": {

@@ -11,6 +11,14 @@
     "typecheck": "tsc --noEmit"
   },
   "license": "MIT",
+  "peerDependencies": {
+    "twilio": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "twilio": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
   }

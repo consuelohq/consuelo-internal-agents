@@ -1,7 +1,7 @@
-// @consuelo/sdk
-// Unified re-export of all Consuelo SDK packages
+// @consuelo/sdk — unified re-export of all Consuelo SDK packages
+// Use namespaced imports to avoid collisions between packages
 
-export * from "@consuelo/dialer";
-export * from "@consuelo/coaching";
-export * from "@consuelo/analytics";
-export * from "@consuelo/contacts";
+export * as dialer from '@consuelo/dialer';
+export * as coaching from '@consuelo/coaching';
+export * as analytics from '@consuelo/analytics';
+export * as contacts from '@consuelo/contacts';

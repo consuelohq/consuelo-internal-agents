@@ -1,42 +1,49 @@
-// @consuelo/coaching — types
-
+/** LLM provider configuration */
 export interface CoachingConfig {
-  provider?: "groq" | "openai" | "anthropic";
+  provider?: 'groq' | 'openai' | 'anthropic';
   apiKey?: string;
   model?: string;
-  playbookDir?: string;
+  baseUrl?: string;
+  temperature?: number;
+  maxTokens?: number;
 }
 
-export interface CoachingRequest {
-  transcript: string;
-  context?: string;
-  playbook?: string;
+/** A single message in a conversation */
+export interface Message {
+  role: 'customer' | 'sales_rep';
+  content: string;
 }
 
-export interface SalesCoaching {
-  emotionalTrigger: string;
-  actionablePhrases: string[];
-  painFunnelQuestions: string[];
-  objectionHandling?: string;
-  closingStrategy?: string;
+/** Options for real-time coaching */
+export interface CoachOptions {
+  callSid?: string;
+  contextChunks?: string[];
+  maxRecentMessages?: number;
 }
 
-export interface CoachingProvider {
-  coach(request: CoachingRequest): Promise<SalesCoaching>;
-  analyzeCall(transcript: string): Promise<CallAnalysis>;
+/** Options for post-call analysis */
+export interface AnalyzeOptions {
+  callSid?: string;
+  userId?: string;
+  phoneNumber?: string;
 }
 
-export interface CallAnalysis {
-  sentiment: "positive" | "neutral" | "negative";
-  keyMoments: KeyMoment[];
-  talkRatio: number;
-  questionsAsked: number;
-  objectionsHandled: number;
+/** Playbook upload options */
+export interface PlaybookUploadOptions {
+  collectionName: string;
+  userId?: string;
+  fileTag?: string;
+  chunkSize?: number;
 }
 
-export interface KeyMoment {
-  timestamp: string;
-  type: "objection" | "buying_signal" | "closing_attempt" | "pain_point";
-  text: string;
-  significance: number;
+/** Vector store abstraction for playbook search */
+export interface VectorStore {
+  add(documents: string[], embeddings: number[][], ids: string[], metadata?: Record<string, string>[]): Promise<void>;
+  query(embedding: number[], topK: number, where?: Record<string, string>): Promise<string[]>;
 }
+
+/** Embedding function abstraction */
+export type EmbedFn = (text: string) => Promise<number[]>;
+
+/** Text extraction function for file uploads */
+export type ReadFileFn = (content: Buffer, ext: string) => Promise<string>;

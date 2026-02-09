@@ -11,6 +11,14 @@
     "typecheck": "tsc --noEmit"
   },
   "license": "MIT",
+  "peerDependencies": {
+    "openai": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "openai": {
+      "optional": true
+    }
+  },
   "publishConfig": {
     "access": "public"
   }

@@ -1,9 +1,17 @@
-// @consuelo/contacts
-// Contact CRUD, queue management, and CSV import
+// Core
+export { Contacts } from './contacts.js';
+export { Queues } from './queues.js';
 
+// Providers
+export { MemoryProvider } from './providers/memory.js';
+
+// Utilities
+export { normalizePhone, parseCsv } from './utils.js';
+
+// Types
 export type {
-  ContactsConfig,
   Contact,
   Queue,
+  QueueResult,
   StorageProvider,
-} from "./types";
+} from './types.js';

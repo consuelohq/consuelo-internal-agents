@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Consuelo Enterprise — Sales infrastructure at scale</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#000;--fg:#fff;--muted:#888;--border:#222}
+@media(prefers-color-scheme:light){:root{--bg:#fff;--fg:#000;--muted:#666;--border:#ddd}}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--fg);line-height:1.6}
+a{color:var(--fg);text-decoration:none}
+header{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:1px solid var(--border)}
+.logo{font-weight:700;font-size:1.2rem}
+nav{display:flex;gap:1.5rem;font-size:.9rem}
+nav a{color:var(--muted)}
+
+.hero{text-align:center;padding:6rem 2rem 3rem;max-width:600px;margin:0 auto}
+.hero h1{font-size:2.5rem;font-weight:700;letter-spacing:-.02em;margin-bottom:1rem}
+.hero p{color:var(--muted);font-size:1.1rem;margin-bottom:2rem}
+
+.features{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:1px;background:var(--border);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+.feature{background:var(--bg);padding:2rem}
+.feature h3{font-size:1rem;margin-bottom:.5rem}
+.feature p{color:var(--muted);font-size:.9rem}
+
+.contact-form{max-width:500px;margin:4rem auto;padding:2rem}
+.contact-form h2{text-align:center;margin-bottom:1.5rem;font-size:1.5rem}
+.contact-form label{display:block;color:var(--muted);font-size:.85rem;margin-bottom:.3rem;margin-top:1rem}
+.contact-form input,.contact-form textarea,.contact-form select{width:100%;padding:.6rem;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--fg);font-size:.9rem;font-family:inherit}
+.contact-form textarea{height:100px;resize:vertical}
+.contact-form button{margin-top:1.5rem;width:100%;padding:.7rem;border:none;border-radius:6px;background:var(--fg);color:var(--bg);font-size:1rem;font-weight:600;cursor:pointer}
+
+footer{border-top:1px solid var(--border);padding:2rem;text-align:center;color:var(--muted);font-size:.8rem;margin-top:4rem}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="/" class="logo">consuelo</a>
+  <nav>
+    <a href="/">Home</a>
+    <a href="/docs">Docs</a>
+    <a href="/enterprise" style="color:var(--fg)">Enterprise</a>
+    <a href="/zen">Zen</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <h1>Sales infrastructure at scale</h1>
+  <p>Dedicated infrastructure, custom integrations, SLA guarantees, and white-glove onboarding for teams that need more.</p>
+</section>
+
+<section class="features">
+  <div class="feature">
+    <h3>🏢 Dedicated infrastructure</h3>
+    <p>Single-tenant deployment in your cloud or ours. SOC 2 Type II, HIPAA available.</p>
+  </div>
+  <div class="feature">
+    <h3>🔗 Custom integrations</h3>
+    <p>Salesforce, HubSpot, custom CRM. We build the connectors your team needs.</p>
+  </div>
+  <div class="feature">
+    <h3>📊 Advanced analytics</h3>
+    <p>Team leaderboards, manager dashboards, custom reports, and data exports.</p>
+  </div>
+  <div class="feature">
+    <h3>🛡️ SLA guarantee</h3>
+    <p>99.9% uptime SLA with dedicated support engineer and 1-hour response time.</p>
+  </div>
+  <div class="feature">
+    <h3>🎓 White-glove onboarding</h3>
+    <p>Dedicated implementation team. We migrate your data and train your reps.</p>
+  </div>
+  <div class="feature">
+    <h3>🔒 Security & compliance</h3>
+    <p>SSO/SAML, audit logs, data residency options, and custom retention policies.</p>
+  </div>
+</section>
+
+<section class="contact-form">
+  <h2>Talk to sales</h2>
+  <form>
+    <label>Name</label>
+    <input type="text" placeholder="Your name" required>
+    <label>Work email</label>
+    <input type="email" placeholder="you@company.com" required>
+    <label>Company</label>
+    <input type="text" placeholder="Company name">
+    <label>Team size</label>
+    <select>
+      <option>1-10</option>
+      <option>11-50</option>
+      <option>51-200</option>
+      <option>200+</option>
+    </select>
+    <label>Tell us about your needs</label>
+    <textarea placeholder="What are you looking to build?"></textarea>
+    <button type="submit">Get in touch</button>
+  </form>
+</section>
+
+<footer>
+  <a href="/">Home</a> · <a href="/docs">Docs</a> · <a href="https://github.com/consuelohq/consuelo-internal-agents">GitHub</a>
+  <br><br>© 2026 Consuelo
+</footer>
+</body>
+</html>

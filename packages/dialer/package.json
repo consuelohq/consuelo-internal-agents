@@ -1,0 +1,25 @@
+{
+  "name": "@consuelo/dialer",
+  "version": "0.0.1",
+  "description": "Twilio-powered dialer with local presence and caller ID",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "twilio": ">=4.0.0"
+  },
+  "peerDependenciesMeta": {
+    "twilio": {
+      "optional": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  }
+}

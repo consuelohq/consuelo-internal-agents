@@ -1,0 +1,26 @@
+{
+  "name": "@consuelo/cli",
+  "version": "0.0.1",
+  "description": "CLI tool for Consuelo SDK",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": {
+    "consuelo": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@consuelo/dialer": "*",
+    "@consuelo/coaching": "*",
+    "@consuelo/analytics": "*",
+    "@consuelo/contacts": "*"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

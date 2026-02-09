@@ -71,6 +71,24 @@ KIRO_CWD="/Users/kokayi/Dev/consuelo_on_call_coaching"
 SLACK_WEBHOOK_URL="${SLACK_WEBHOOK_URL:-}"
 
 # =============================================================================
+# LINEAR AGENT (OAUTH APP) SETTINGS
+# =============================================================================
+
+# OAuth app credentials (for agent identity — @kiro in Linear)
+LINEAR_OAUTH_CLIENT_ID="${LINEAR_OAUTH_CLIENT_ID:-35ca7ab95f78ee3630e3d71aef2d7dc4}"
+LINEAR_OAUTH_CLIENT_SECRET="${LINEAR_OAUTH_CLIENT_SECRET:-65d189586c30932bcb96dc370150477d}"
+
+# Webhook signing secret (for verifying webhook payloads from Linear)
+LINEAR_WEBHOOK_SECRET="${LINEAR_WEBHOOK_SECRET:-lin_wh_3TnUisvCIznQXXwROg6LqEKK5TkeFnqfIA4ar49Xxur3}"
+
+# Webhook receiver URL (tailscale funnel)
+LINEAR_WEBHOOK_URL="https://picassos-mac-mini.tail38ed59.ts.net:8847/webhook/linear"
+LINEAR_OAUTH_CALLBACK_URL="https://picassos-mac-mini.tail38ed59.ts.net:8847/oauth/callback"
+
+# Webhook receiver port (local)
+WEBHOOK_PORT=8847
+
+# =============================================================================
 # POLLING SETTINGS
 # =============================================================================
 

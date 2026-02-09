@@ -340,6 +340,10 @@ class RemoteDev:
                     f"URL: {pr.get('url', 'N/A')}\n\n"
                     f"Ready for review."
                 )
+                # Attach PR to Linear issue (shows in sidebar)
+                pr_url = pr.get("url") or pr.get("html_url", "")
+                if pr_url:
+                    linear.attach_pr(self.task_id, pr_url, self.pr_number, self.repo)
                 print(f"  Linear task moved to 'In Review'")
 
             self._save_state()
@@ -474,6 +478,11 @@ class RemoteDev:
             lines.append("## Changes")
             lines.append("")
             lines.append("*Remote development — no local clone.*")
+            lines.append("")
+
+        # Linear magic link — Linear's GitHub integration auto-links when it sees this
+        if self.task:
+            lines.append(f"Fixes {self.task['identifier']}")
             lines.append("")
 
         lines.append("---")

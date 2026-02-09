@@ -247,6 +247,25 @@ class LinearAPI:
 
         return result.get("commentCreate", {}).get("success", False)
 
+    def attach_pr(self, issue_id: str, pr_url: str, pr_number: str, repo: str) -> bool:
+        """Attach a GitHub PR to a Linear issue (shows in sidebar)."""
+        mutation = """
+        mutation AttachmentCreate($input: AttachmentCreateInput!) {
+            attachmentCreate(input: $input) {
+                success
+            }
+        }
+        """
+        result = self._query(mutation, {
+            "input": {
+                "issueId": issue_id,
+                "url": pr_url,
+                "title": f"PR #{pr_number} — {repo}",
+                "subtitle": "GitHub Pull Request",
+            },
+        })
+        return result.get("attachmentCreate", {}).get("success", False)
+
     def _get_state_id(self, state_name: str) -> Optional[str]:
         """Resolve a state name to its ID."""
         query = """
@@ -371,3 +390,76 @@ class LinearAPI:
             lines.append("")
 
         return "\n".join(lines)
+
+    # -------------------------------------------------------------------------
+    # Agent Activity methods (for Linear Agent Sessions)
+    # -------------------------------------------------------------------------
+
+    def send_thought(self, session_id: str, body: str, ephemeral: bool = False) -> bool:
+        """Send a thought activity to an agent session."""
+        return self._send_activity(session_id, {
+            "type": "thought", "body": body
+        }, ephemeral=ephemeral)
+
+    def send_action(self, session_id: str, action: str, parameter: str,
+                    result: Optional[str] = None, ephemeral: bool = False) -> bool:
+        """Send an action activity (tool invocation) to an agent session."""
+        content: Dict[str, Any] = {"type": "action", "action": action, "parameter": parameter}
+        if result is not None:
+            content["result"] = result
+        return self._send_activity(session_id, content, ephemeral=ephemeral)
+
+    def send_response(self, session_id: str, body: str) -> bool:
+        """Send a final response activity to an agent session."""
+        return self._send_activity(session_id, {"type": "response", "body": body})
+
+    def send_error(self, session_id: str, body: str) -> bool:
+        """Send an error activity to an agent session."""
+        return self._send_activity(session_id, {"type": "error", "body": body})
+
+    def send_elicitation(self, session_id: str, body: str) -> bool:
+        """Request clarification from the user."""
+        return self._send_activity(session_id, {"type": "elicitation", "body": body})
+
+    def update_plan(self, session_id: str, steps: List[Dict[str, str]]) -> bool:
+        """Update the agent session plan (checklist visible in Linear UI).
+
+        steps: list of {"content": "step description", "status": "pending|inProgress|completed|canceled"}
+        """
+        mutation = """
+        mutation AgentSessionUpdate($id: String!, $input: AgentSessionUpdateInput!) {
+            agentSessionUpdate(id: $id, input: $input) { success }
+        }
+        """
+        result = self._query(mutation, {"id": session_id, "input": {"plan": steps}})
+        return result.get("agentSessionUpdate", {}).get("success", False)
+
+    def update_session_external_urls(self, session_id: str, urls: List[Dict[str, str]]) -> bool:
+        """Set external URLs on an agent session (e.g. PR link).
+
+        urls: list of {"label": "PR #123", "url": "https://github.com/..."}
+        """
+        mutation = """
+        mutation AgentSessionUpdate($id: String!, $input: AgentSessionUpdateInput!) {
+            agentSessionUpdate(id: $id, input: $input) { success }
+        }
+        """
+        result = self._query(mutation, {"id": session_id, "input": {"externalUrls": urls}})
+        return result.get("agentSessionUpdate", {}).get("success", False)
+
+    def _send_activity(self, session_id: str, content: Dict[str, Any],
+                       ephemeral: bool = False) -> bool:
+        """Send an agent activity to a session."""
+        mutation = """
+        mutation AgentActivityCreate($input: AgentActivityCreateInput!) {
+            agentActivityCreate(input: $input) {
+                success
+                agentActivity { id }
+            }
+        }
+        """
+        input_data: Dict[str, Any] = {"agentSessionId": session_id, "content": content}
+        if ephemeral:
+            input_data["ephemeral"] = True
+        result = self._query(mutation, {"input": input_data})
+        return result.get("agentActivityCreate", {}).get("success", False)

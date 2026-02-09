@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.consuelo.kiro-proxy</string>
+
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/bin/python3</string>
+        <string>-m</string>
+        <string>uvicorn</string>
+        <string>proxy:app</string>
+        <string>--host</string>
+        <string>0.0.0.0</string>
+        <string>--port</string>
+        <string>18794</string>
+        <string>--log-level</string>
+        <string>info</string>
+    </array>
+
+    <key>WorkingDirectory</key>
+    <string>/Users/kokayi/Dev/claude-agent-workflow/kiro-proxy</string>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/kiro-proxy-stdout.log</string>
+
+    <key>StandardErrorPath</key>
+    <string>/tmp/kiro-proxy-stderr.log</string>
+
+    <key>EnvironmentVariables</key>
+    <dict>
+        <key>PATH</key>
+        <string>/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/opt/homebrew/bin:/Library/Frameworks/Python.framework/Versions/3.9/bin</string>
+    </dict>
+
+    <key>RunAtLoad</key>
+    <true/>
+
+    <key>KeepAlive</key>
+    <true/>
+</dict>
+</plist>

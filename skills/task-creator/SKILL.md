@@ -403,6 +403,55 @@ When using `--priority` flag:
 
 Priority doesn't affect agent pickup order (always processes oldest first by `createdAt`).
 
+## Executive Planning Docs (Big Task Runs)
+
+When you create a batch of 5+ related tasks (e.g., a new product, major initiative, SDK buildout), **also create an executive planning doc** as a separate Linear issue tagged with the `doc` label. This captures the strategic context, decisions, and rationale so future AI sessions (or humans) can understand the full picture without re-deriving it.
+
+**When to create a doc:**
+- 5+ related tasks created in one session
+- New product or major feature initiative
+- Strategic planning that involved brainstorming/decision-making
+- Any batch where the "why" and "how we got here" matters
+
+**Doc issue format:**
+
+```markdown
+Title: [DOC]: Executive Planning — <Initiative Name>
+
+Body:
+## Context & Vision
+
+[What problem are we solving? What's the thesis? Capture the strategic thinking.]
+
+## Key Decisions
+
+[Decisions made during planning — pricing model, tech choices, target users, etc.]
+
+## Architecture Overview
+
+[High-level view of what's being built and how pieces fit together]
+
+## Task Map
+
+[List all related task identifiers with brief descriptions — serves as an index]
+
+## Open Questions
+
+[Anything unresolved that future sessions should address]
+
+## Conversation Summary
+
+[Condensed version of the brainstorming that led to these tasks — capture the reasoning, not just the output]
+```
+
+**Important rules:**
+- Tag with `doc` label ONLY — do NOT add the `kiro` or `claude` label (agents should not pick this up as a coding task)
+- Add to the same project as the related tasks
+- Reference all related task identifiers so they're linked
+
+**Label IDs:**
+- `doc` label: `b0caddea-9a0e-45a4-910c-351581e3b375`
+
 ## Best Practices
 
 1. **When in doubt, use Full Spec** - Over-specification is better than under-specification
@@ -411,6 +460,7 @@ Priority doesn't affect agent pickup order (always processes oldest first by `cr
 4. **One concept per issue** - Split "add feature + refactor auth" into two issues
 5. **Keep quick issues truly quick** - If it needs more than 3-5 acceptance criteria, use full spec
 6. **Include error handling** - Even quick issues should consider failure cases
+7. **Create a doc for big batches** - 5+ related tasks → create an executive planning doc with `doc` tag
 
 ## Useful Commands
 

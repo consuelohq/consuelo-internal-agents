@@ -77,7 +77,44 @@ For major work (coding projects, research jobs, batch processing)
 
 You have multiple memory systems. USE THEM without being asked:
 
-**1. mem0.ai (Semantic Memory)**
+**0. brain.py — Second Brain (PRIMARY)**
+This is your main memory interface. Writes to both mem0 AND nocodb simultaneously.
+```python
+import sys
+sys.path.insert(0, "/Users/kokayi/.openclaw/workspace/skills/mem0-nocodb")
+from brain import Brain
+b = Brain()
+
+# store a memory (goes to mem0 + nocodb)
+b.remember("ko prefers railway over heroku", category="preference", priority="high")
+
+# semantic search
+b.search("deployment preferences")
+
+# check open loops
+b.open_loops()
+
+# get context for current conversation
+b.context_for_prompt("what we're discussing")
+
+# browse nocodb directly
+b.recent(10)
+b.pinned()
+b.by_category("decision")
+```
+
+**nocodb dashboard:** `http://100.112.173.49:8090/dashboard` (suelo base → memories table)
+**views:** all memories, active memories, pinned & high priority, open loops, by category
+
+**categories:** preference, fact, decision, observation, pattern, goal, open_loop, follow_up, evolution, session, idea, correction
+
+**At session start:**
+1. Check `b.open_loops()` for pending follow-ups
+2. Check `b.pinned()` for high-priority context
+3. Use `b.context_for_prompt()` with the conversation topic
+
+**1. mem0.ai (Semantic Memory) — accessed via brain.py**
+Direct access still available if needed:
 ```python
 from skills.mem0-memory.mem0_client import get_memory
 mem = get_memory()
@@ -117,16 +154,17 @@ Example: "Ko corrected that he prefers lowercase even in code blocks — added t
 
 ### 🎯 Ambient Awareness (Proactive Memory)
 
-Track "open loops" — things Ko mentions needing to do, follow up on, or think about later. Use mem0 to store these with tags like "follow-up", "open-loop", "pinned-topic".
+Track "open loops" — things Ko mentions needing to do, follow up on, or think about later. Use brain.py to store these.
 
 **Store open loops:**
 ```python
-mem.add("Ko needs to follow up with Sarah about the partnership — tagged as follow-up")
+b.remember("Ko needs to follow up with Sarah about the partnership", category="open_loop", priority="high")
 ```
 
 **Surface proactively:**
-- At session start: Search mem0 for "follow-up" or "open-loop" from past 7 days
+- At session start: Check `b.open_loops()` for pending items
 - If something hasn't been mentioned again: "Earlier this week you wanted to follow up with Sarah — still on your radar?"
+- Check `b.pinned()` for high-priority context that should always be top of mind
 
 **Attention budget awareness:**
 - If Ko has been coding/researching for 2+ hours in the conversation
@@ -344,6 +382,36 @@ export default function Component() {
 ```
 
 **Skill file:** `skills/librechat-react-artifacts/SKILL.md`
+
+---
+
+### 🌐 Tailscale Artifacts (ANY AGENT) — PRIMARY WORKFLOW TOOL
+
+**This is the go-to for planning, research, and any visual/interactive output.** When Ko says "artifact" or "tailscale artifact", build a React component and serve it on the tailnet. But don't wait to be asked — if the output would be better as something visual/interactive, make it an artifact.
+
+- **Port 8445** — always on, always serving
+- **Hub URL:** `https://picassos-mac-mini.tail38ed59.ts.net:8445/` — bookmark forever
+  - Shows all artifacts as tabs (newest first), 5 visible + "more ▾" dropdown for overflow
+  - Each tab shows the full url as a clickable link + copy button
+- **Artifacts dir:** `~/.openclaw/workspace/artifacts/`
+- Ko can access from any device on the tailnet (ipad, iphone, macbook air)
+
+**When to use:**
+- Planning sessions → build the plan as an interactive component
+- Research → present findings as a browsable artifact
+- Dashboards, calculators, forms, prototypes, diagrams
+- Any time the output would be better visual/interactive than text
+
+**Quick path — use the script:**
+```bash
+~/.openclaw/workspace/skills/tailscale-artifacts/serve-artifact.sh <name> <path-to-jsx>
+```
+
+**Manual path:** write jsx → wrap in html template (react 18 + babel + tailwind cdn) → save to artifacts dir → server picks it up live. no restart needed.
+
+**To shut down:** `tailscale serve --https=8445 off`
+
+**Full skill doc:** `~/.openclaw/workspace/skills/tailscale-artifacts/SKILL.md`
 
 ---
 

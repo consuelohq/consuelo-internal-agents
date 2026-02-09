@@ -2,7 +2,9 @@
 
 Skills define _how_ tools work. This file is for _your_ specifics — the stuff that's unique to your setup.
 
-## What Goes Here
+Visual Structure with LaTeX
+
+use latex styling cards, badges, and callouts early and often when they add clarity. think visually — if you're presenting tasks, leads, metrics, priorities, or anything that would benefit from structure, throw it in a card or badge. don't overthink it: task cards for work items, priority badges for urgency, callout boxes for ideas, metric tables for summaries. if it helps ko scan and understand faster, style it. it should feel natural, not forced — if it doesn't add value, skip it.
 
 ## CLI Tools Available
 
@@ -46,6 +48,87 @@ ko has modern rust/go replacements installed and aliased over the defaults. use 
 ### Shell Utilities
 - `sed` / `awk` — text processing (system defaults)
 - `rg` (ripgrep) — use directly or via `grep` alias for fast code search
+
+Things like:
+
+- Camera names and locations
+- SSH hosts and aliases
+- Preferred voices for TTS
+- Speaker/room names
+- Device nicknames
+- Anything environment-specific
+
+## Examples
+
+```markdown
+### Cameras
+
+- living-room → Main area, 180° wide angle
+- front-door → Entrance, motion-triggered
+
+### SSH
+
+- home-server → 192.168.1.100, user: admin
+
+### TTS
+
+- Preferred voice: "Nova" (warm, slightly British)
+- Default speaker: Kitchen HomePod
+```
+
+## Why Separate?
+
+Skills are shared. Your setup is yours. Keeping them apart means you can update skills without losing your notes, and share skills without leaking your infrastructure.
+
+---
+
+## Search
+
+- **Default:** Agent-Browser or zai search mcp via mcporter (built-in `web_search` tool)
+- **API Key:** Set in config (`tools.web.search.apiKey`)
+- **Status:** Active and ready to use
+
+---
+
+## qmd — Local Document Search
+
+local-first semantic search over ko's workspace documents. no api calls, no costs. hybrid search combining bm25 (keyword) + vector (semantic) + reranking.
+
+- data: `~/.cache/qmd/index.sqlite`
+- models: embeddinggemma-300m-q8 + qwen3-reranker-0.6b-q8 (~1.5gb total)
+- workspace: `/users/kokayi/.openclaw/workspace`
+
+### collections
+- `memory-root` — default workspace memory (memory.md + memory/**/*.md)
+
+### commands
+
+```bash
+# hybrid search (default, best results)
+qmd query "search term" --json
+
+# list collections
+qmd collection list
+
+# get full document
+qmd get "path/to/file.md"
+qmd get "memory.md#42"  # specific line
+
+# get multiple docs by pattern
+qmd multi-get "*.md" -l 50
+
+# pure vector search (semantic)
+qmd vsearch "semantic concepts" -n 10
+
+# pure text search (keyword)
+qmd search "exact phrase" -n 10
+```
+
+### when to use
+- searching ko's notes/memory for context
+- finding related documents across the workspace
+- json output includes file path, score (0-1), snippet, line numbers
+- system-wide install — all agents can use it, just run `qmd`
 
 ---
 

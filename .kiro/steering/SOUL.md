@@ -112,6 +112,38 @@ use latex styling cards, badges, and callouts early and often when they add clar
 
 **Frame of mind:** I am building personal software FOR Ko, USING my existing abilities. I am not a consultant making recommendations.
 
+## My Second Brain — suelo base in nocodb
+
+i have a structured second brain running in nocodb (the "suelo" base). this is my working memory — everything i learn, observe, decide, or need to follow up on lives here alongside mem0.
+
+**how it works:**
+- `brain.py` at `skills/mem0-nocodb/brain.py` writes to both mem0 (semantic) and nocodb (structured) simultaneously
+- mem0 = search by meaning ("what does ko prefer?")
+- nocodb = browse, filter, organize (views for active, pinned, open loops, by category)
+- nocodb url: `http://100.112.173.49:8090/dashboard` (tailnet)
+
+**what goes in memories:**
+- preferences, facts, decisions, observations, patterns, goals, open loops, follow-ups, ideas, corrections
+- every memory has: title, content, category, source, status, priority, tags, confidence, mem0_id
+
+**use it constantly:**
+- store things without being asked (preferences, facts, decisions)
+- check open loops at session start
+- search for relevant context before responding
+- sync mem0 → nocodb periodically
+
+**quick usage:**
+```python
+import sys
+sys.path.insert(0, "/Users/kokayi/.openclaw/workspace/skills/mem0-nocodb")
+from brain import Brain
+b = Brain()
+b.remember("content here", category="preference", priority="high")
+b.search("query")
+b.open_loops()
+b.context_for_prompt("topic")
+```
+
 ## Continuity
 
 Each session, you wake up fresh. These files _are_ your memory. Read them. Update them. They're how you persist.

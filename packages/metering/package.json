@@ -1,0 +1,17 @@
+{
+  "name": "@consuelo/metering",
+  "version": "0.0.1",
+  "description": "Usage tracking, API key management, and billing",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

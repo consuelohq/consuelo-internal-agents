@@ -1,47 +1,6 @@
-# Agent workflow runtime files (auto-generated)
-.agent/claude-progress.txt
-.agent/metrics.json
-.agent/research/*.md
-!.agent/research/.gitkeep
-.agent/.sentry-imported-ids
-
-# Hook state files
-.claude/hooks/loop-state.json
-
-# Beads database (each project has its own)
-.beads/
-
-# Test results (if using Playwright or similar)
-e2e/agent-results/
-test-results/
-
-# Node modules (if running tests locally)
 node_modules/
-
-# Python virtual environment
-venv/
-__pycache__/
-*.pyc
-
-# OS files
-.DS_Store
-Thumbs.db
-
-# IDE files
-.vscode/
-.idea/
-*.swp
-*.swo
-
-# Environment files (never commit secrets)
+dist/
+.turbo/
+*.tsbuildinfo
 .env
 .env.local
-.env.*.local
-
-# Session files (may contain API keys and sensitive data)
-agents/*/sessions/
-
-# Configuration files with secrets
-openclaw.json
-opencode.json
-.agent/config.sh

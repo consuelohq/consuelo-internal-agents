@@ -1,0 +1,17 @@
+{
+  "name": "@consuelo/contacts",
+  "version": "0.0.1",
+  "description": "Contact CRUD, queue management, and CSV import",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc --noEmit"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  }
+}

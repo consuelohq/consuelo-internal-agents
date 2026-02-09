@@ -1,0 +1,23 @@
+{
+  "name": "consuelo-sdk",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "clean": "turbo clean",
+    "typecheck": "turbo typecheck"
+  },
+  "devDependencies": {
+    "turbo": "^2",
+    "typescript": "^5.7"
+  },
+  "packageManager": "npm@10.9.2",
+  "engines": {
+    "node": ">=18"
+  }
+}

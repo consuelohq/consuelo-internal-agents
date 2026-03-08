@@ -129,7 +129,7 @@ AUTOMATION SETUP (One-time)
 
 crontab -e
 
-# Add: 0 2 ** * cd /Users/kokayi/Dev/consuelo_on_call_coaching && .agent/run-tasks.sh --max-tasks 5
+# Add: 0 2 ** * cd /path/to/your/project && .agent/run-tasks.sh --max-tasks 5
 
 # Or use launchd on macOS for better control
 

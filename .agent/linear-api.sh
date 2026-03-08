@@ -44,11 +44,11 @@ linear_graphql() {
 # ISSUE QUERIES
 # =============================================================================
 
-# Get issues ready for the agent (Claude label + Open state)
+# Get issues ready for the agent (kiro label + Open state)
 # Orders by createdAt ASC (oldest first for multi-part specs)
 linear_get_ready_issues() {
   local team_id="${LINEAR_TEAM_ID:-}"
-  local label_name="${LINEAR_LABEL_NAME:-claude}"
+  local label_name="${LINEAR_LABEL_NAME:-kiro}"
   local state_name="${LINEAR_STATE_OPEN:-Open}"
 
   if [ -z "$team_id" ]; then
@@ -64,8 +64,8 @@ linear_get_ready_issues() {
       issues(
         filter: {
           team: { id: { eq: \"$team_id\" } }
-          labels: { name: { eq: \"$label_name\" } }
-          state: { name: { eq: \"$state_name\" } }
+          labels: { name: { eqIgnoreCase: \"$label_name\" } }
+          state: { name: { eqIgnoreCase: \"$state_name\" } }
         }
         sort: [{ createdAt: { order: Ascending } }]
         first: 100
@@ -76,6 +76,13 @@ linear_get_ready_issues() {
           title
           description
           createdAt
+          comments {
+            nodes {
+              body
+              user { name }
+              createdAt
+            }
+          }
         }
       }
     }
@@ -346,7 +353,7 @@ linear_get_team_projects() {
 # Environment vars used:
 #   LINEAR_TEAM_ID
 #   LINEAR_STATE_OPEN_ID
-#   LINEAR_LABEL_CLAUDE_ID (must be set, run linear_setup_cache to get it)
+#   LINEAR_LABEL_KIRO_ID (must be set, run linear_setup_cache to get it)
 #   LINEAR_PROJECT_MERCURY_ID (optional)
 linear_create_issue() {
   local title="$1"
@@ -368,8 +375,8 @@ linear_create_issue() {
     return 1
   fi
 
-  if [ -z "$LINEAR_LABEL_CLAUDE_ID" ]; then
-    echo "ERROR: LINEAR_LABEL_CLAUDE_ID not set. Run: linear_setup_cache" >&2
+  if [ -z "$LINEAR_LABEL_KIRO_ID" ]; then
+    echo "ERROR: LINEAR_LABEL_KIRO_ID not set. Run: linear_setup_cache" >&2
     return 1
   fi
 
@@ -390,7 +397,7 @@ linear_create_issue() {
 
   # Build variables JSON with jq (properly handle multi-line descriptions)
   local label_ids_json
-  label_ids_json=$(jq -n --arg id "$LINEAR_LABEL_CLAUDE_ID" '[$id]')
+  label_ids_json=$(jq -n --arg id "$LINEAR_LABEL_KIRO_ID" '[$id]')
 
   local variables
   variables=$(jq -n \
@@ -431,17 +438,17 @@ linear_setup_cache() {
   echo "Querying Linear for label and project IDs..."
   echo ""
 
-  # Get Claude label ID
+  # Get kiro label ID
   local labels_json=$(linear_get_team_labels "$LINEAR_TEAM_ID")
-  local claude_label_id=$(echo "$labels_json" | jq -r 'select(.name == "claude") | .id')
+  local hero_label_id=$(echo "$labels_json" | jq -r 'select(.name == "kiro") | .id')
 
-  if [ -z "$claude_label_id" ] || [ "$claude_label_id" = "null" ]; then
-    echo "ERROR: 'claude' label not found in Linear. Create it first:" >&2
-    echo "  Linear -> Settings -> Labels -> Create label named 'claude'" >&2
+  if [ -z "$hero_label_id" ] || [ "$hero_label_id" = "null" ]; then
+    echo "ERROR: 'kiro' label not found in Linear. Create it first:" >&2
+    echo "  Linear -> Settings -> Labels -> Create label named 'kiro'" >&2
     return 1
   fi
 
-  echo "Found 'claude' label: $claude_label_id"
+  echo "Found 'kiro' label: $hero_label_id"
 
   # Get projects (case-insensitive search for "mercury")
   local projects_json=$(linear_get_team_projects "$LINEAR_TEAM_ID")
@@ -459,8 +466,8 @@ linear_setup_cache() {
   echo "Add these to .agent/config.sh LINEAR SETTINGS:"
   echo "=============================================="
   echo ""
-  echo "# Claude label ID (required for task-creator)"
-  echo "LINEAR_LABEL_CLAUDE_ID=\"$claude_label_id\""
+  echo "# Kiro label ID (required for task-creator)"
+  echo "LINEAR_LABEL_KIRO_ID=\"$hero_label_id\""
   echo ""
   if [ -n "$mercury_project_id" ]; then
     echo "# Mercury project ID (optional - auto-adds issues to project)"

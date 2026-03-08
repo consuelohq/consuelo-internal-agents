@@ -1,0 +1,88 @@
+phase: 2
+name: "dialer UI"
+staging_url: "${STAGING_URL:-https://staging.consuelohq.com}"
+
+setup:
+  - open: "/"
+  - click: "text=Continue with Email"
+  - wait: 3000
+
+scenarios:
+  - name: "dashboard loads"
+    steps:
+      - assert:
+          url: "/objects"
+      - snapshot: "dashboard.png"
+      - assert:
+          visible: "[data-testid=main-navigation]"
+
+  - name: "open dialer sidebar"
+    depends_on: "dashboard loads"
+    steps:
+      - click: "[data-testid=dialer-toggle]"
+      - wait: "[data-testid=dial-pad]"
+      - snapshot: "dialer-sidebar.png"
+      - assert:
+          visible: "[data-testid=dial-pad]"
+      - assert:
+          visible: "[data-testid=phone-input]"
+
+  - name: "enter number and dial"
+    depends_on: "open dialer sidebar"
+    steps:
+      - fill:
+          selector: "[data-testid=phone-input]"
+          text: "+15551234567"
+      - click: "[data-testid=dial-button]"
+      - wait: 3000
+      - snapshot: "in-call.png"
+      - assert:
+          visible: "[data-testid=in-call-controls]"
+
+  - name: "in-call controls visible"
+    depends_on: "enter number and dial"
+    steps:
+      - assert:
+          visible: "[data-testid=mute-button]"
+      - assert:
+          visible: "[data-testid=hold-button]"
+      - assert:
+          visible: "[data-testid=transfer-button]"
+      - assert:
+          visible: "[data-testid=hangup-button]"
+      - snapshot: "in-call-controls.png"
+
+  - name: "open transfer modal"
+    depends_on: "in-call controls visible"
+    steps:
+      - click: "[data-testid=transfer-button]"
+      - wait: "[data-testid=transfer-modal]"
+      - snapshot: "transfer-modal.png"
+      - assert:
+          visible: "[data-testid=transfer-input]"
+      - assert:
+          visible: "text=Warm"
+      - assert:
+          visible: "text=Cold"
+
+  - name: "initiate warm transfer"
+    depends_on: "open transfer modal"
+    steps:
+      - fill:
+          selector: "[data-testid=transfer-input]"
+          text: "+15559876543"
+      - click: "text=Warm"
+      - click: "[data-testid=start-transfer]"
+      - wait: 3000
+      - snapshot: "warm-transfer.png"
+      - assert:
+          visible: "[data-testid=consult-bar]"
+
+  - name: "end call"
+    depends_on: "in-call controls visible"
+    steps:
+      - click: "[data-testid=hangup-button]"
+      - wait: 2000
+      - snapshot: "call-ended.png"
+      - assert:
+          not_visible: "[data-testid=in-call-controls]"

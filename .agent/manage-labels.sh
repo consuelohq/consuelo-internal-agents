@@ -91,7 +91,7 @@ log_info "Creating required labels..."
 
 # Workflow labels
 LABELS_TO_CREATE=(
-  "claude|Ready for Claude agent|FFA500"
+  "kiro|Ready for kiro agent|FFA500"
   "agent-working|Agent is processing|FBCA04"
   "agent-review|Needs human review|D93F0B"
   "agent-completed|Agent completed|1D76DB"
@@ -211,7 +211,7 @@ echo ""
 log_success "Label management complete!"
 echo ""
 log_info "Required labels (8):"
-echo "  - claude (orange)        - Issues for agent pickup"
+echo "  - kiro (orange)          - Issues for agent pickup"
 echo "  - agent-working (yellow) - Agent is processing"
 echo "  - agent-review (red)     - Needs human review"
 echo "  - agent-completed (blue) - Successfully done"

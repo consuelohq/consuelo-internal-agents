@@ -9,14 +9,14 @@
 # Usage:
 #   .agent/run-tasks.sh                    # Process all open issues with default agent
 #   .agent/run-tasks.sh --max-tasks 3      # Process at most 3 issues
-#   .agent/run-tasks.sh --agent opencode   # Use OpenCode instead of Claude
+#   .agent/run-tasks.sh                    # Process all open issues with kiro
 #   .agent/run-tasks.sh --dry-run          # Preview issues without processing
 #   .agent/run-tasks.sh --label "bug"      # Use a different label filter
 #   .agent/run-tasks.sh --linear           # Use Linear for issue tracking
 #
 # Prerequisites:
 #   - GitHub CLI (gh) installed and authenticated
-#   - Claude Code or OpenCode CLI installed
+#   - Kiro CLI installed (kiro-cli)
 #   - Git configured with push access
 #
 # Workflow:
@@ -34,10 +34,18 @@ cleanup_and_push() {
   # Prevent infinite recursion: unset traps before exiting
   trap - EXIT INT TERM
   local exit_code=$?
-  # Clean up temp dir for issue bodies
-  [ -d "$ISSUE_BODIES_DIR" ] && rm -rf "$ISSUE_BODIES_DIR"
+
+  # Kill any background review processes
+  for pid in "${REVIEW_PIDS[@]}"; do
+    kill "$pid" 2>/dev/null || true
+  done
+  rm -rf /tmp/oc-review-* 2>/dev/null || true
+
   if [ -n "$RUN_BRANCH" ]; then
     echo -e "\033[1;33m[CLEANUP]\033[0m Ensuring all changes are pushed before exit..."
+    # cd into worktree if it exists
+    local wt_path="${AGENT_WORKTREE:-${PROJECT_ROOT}/../opensaas-agent}"
+    [ -d "$wt_path" ] && cd "$wt_path"
     # Check if we're on the run branch
     local current_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
     if [ "$current_branch" = "$RUN_BRANCH" ]; then
@@ -46,10 +54,10 @@ cleanup_and_push() {
         git add -A 2>/dev/null
         git commit -m "chore: Auto-commit on exit (interrupted run)
 
-Co-Authored-By: Claude <noreply@anthropic.com>" 2>/dev/null || true
+Co-Authored-By: suelo-kiro[bot] <260422584+suelo-kiro[bot]@users.noreply.github.com>" 2>/dev/null || true
       fi
       # Push any unpushed commits
-      git push origin "$RUN_BRANCH" 2>/dev/null || true
+      HUSKY=0 git push origin "$RUN_BRANCH" 2>/dev/null || true
     fi
   fi
   exit $exit_code
@@ -82,10 +90,8 @@ if [ -z "$AGENT_CLI" ]; then
   # Default configuration
   AGENT_CLI="kiro"
   KIRO_CMD="kiro-cli chat --trust-all-tools --no-interactive"
-  CLAUDE_CMD="claude --print --dangerously-skip-permissions"
-  OPENCODE_CMD="opencode run -m zai-coding-plan/glm-4.7"
   SOURCE_BRANCH="main"        # Branch to create run branch FROM (pull fresh code)
-  PR_TARGET_BRANCH="claudeee"  # Branch to create PR TO (staging branch)
+  PR_TARGET_BRANCH="staging"  # Branch to create PR TO (staging branch)
   BRANCH_PREFIX="agent"
   TASK_SOURCE="issues"
   ISSUE_LABEL_READY="agent-ready"
@@ -102,6 +108,11 @@ TASK_SOURCE="${TASK_SOURCE:-issues}"
 GITHUB_REPO="${GITHUB_REPO:-}"
 
 # Run tracking
+# Review tracking
+REVIEW_PIDS=()
+LOG_DIR="${SCRIPT_DIR}/logs"
+mkdir -p "$LOG_DIR" 2>/dev/null || true
+
 RUN_ID=""
 RUN_BRANCH=""
 COMPLETED_ISSUES=()
@@ -109,15 +120,13 @@ FAILED_ISSUES=()
 REVIEW_FAILED_ISSUES=()
 TEST_FAILED_ISSUES=()
 
-# Temp dir for storing issue bodies (bash arrays can't handle multiline values well)
-ISSUE_BODIES_DIR=$(mktemp -d)
-
 # Parse command line arguments
 MAX_TASKS=0  # 0 means unlimited
 DRY_RUN=false
 AGENT_OVERRIDE=""
 ISSUE_LABEL="${ISSUE_LABEL_READY:-agent-ready}"
 TASK_SOURCE_OVERRIDE=""
+SINGLE_ISSUE=""
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -135,6 +144,11 @@ while [[ $# -gt 0 ]]; do
       ;;
     --label)
       ISSUE_LABEL="$2"
+      shift 2
+      ;;
+    --issue)
+      SINGLE_ISSUE="$2"
+      TASK_SOURCE_OVERRIDE="linear"
       shift 2
       ;;
     --source)
@@ -158,12 +172,13 @@ while [[ $# -gt 0 ]]; do
       echo ""
       echo "Options:"
       echo "  --max-tasks N    Process at most N tasks (default: unlimited)"
-      echo "  --agent NAME     Use specific agent CLI: kiro, claude, or opencode"
+      echo "  --agent NAME     Use specific agent CLI (default: kiro)"
       echo "  --source SOURCE  Task source: 'issues', 'projects', or 'linear'"
       echo "  --projects       Shorthand for --source projects (use mercury board)"
       echo "  --mercury        Alias for --projects"
       echo "  --issues         Shorthand for --source issues (use GitHub Issues labels)"
       echo "  --linear         Shorthand for --source linear (use Linear.app)"
+      echo "  --issue ID       Process a single Linear issue by identifier (e.g., DEV-1076)"
       echo "  --label LABEL    Filter issues by label (when using --issues)"
       echo "  --dry-run        Preview tasks without processing"
       echo "  --help           Show this help message"
@@ -171,7 +186,7 @@ while [[ $# -gt 0 ]]; do
       echo "Task Sources:"
       echo "  issues    - GitHub Issues with agent-ready label (default)"
       echo "  projects  - GitHub Projects board (mercury) with 'spec prepared' status"
-      echo "  linear    - Linear.app issues with 'Claude' label in 'Open' state"
+      echo "  linear    - Linear.app issues with 'hero' label in 'Open' state"
       echo ""
       echo "Mercury Status Flow:"
       echo "  spec prepared → in progress → done (or in review)"
@@ -206,11 +221,7 @@ fi
 
 # Get the agent command based on CLI choice
 get_agent_cmd() {
-  case "$AGENT_CLI" in
-    claude) echo "$CLAUDE_CMD" ;;
-    opencode) echo "$OPENCODE_CMD" ;;
-    *) echo "$KIRO_CMD" ;;
-  esac
+  echo "$KIRO_CMD"
 }
 
 # =============================================================================
@@ -227,55 +238,76 @@ spawn_task_subprocess() {
   local issue_ref=""
   local commit_prefix=""
   if [ "$TASK_SOURCE" = "linear" ]; then
-    # Linear uses identifiers like CON-123 (no # prefix)
     issue_ref="Linear issue $issue_number"
-    commit_prefix="$issue_number"  # e.g., CON-123
+    commit_prefix="$issue_number"
   else
-    # GitHub uses #123 format
     issue_ref="GitHub issue #$issue_number"
     commit_prefix="#$issue_number"
   fi
 
-  # Write prompt to temp file (avoids escaping issues with multiline content)
+  # --- Workpad: per-task scratch file for acceptance criteria + agent notes ---
+  local workpad_dir="$SCRIPT_DIR/workpads"
+  mkdir -p "$workpad_dir"
+  local workpad_file="$workpad_dir/${issue_number}.md"
+
+  # Extract acceptance criteria from task body (looks for common header patterns)
+  local acceptance_criteria=""
+  acceptance_criteria=$(echo "$issue_body" | sed -n '/^##\? *[Aa]cceptance [Cc]riteria/,/^##\? /{ /^##\? *[Aa]cceptance/d; /^##\? /d; p; }' | sed '/^$/d')
+  if [ -z "$acceptance_criteria" ]; then
+    # Fallback: look for checkbox-style criteria anywhere
+    acceptance_criteria=$(echo "$issue_body" | grep -E '^\s*[-*] \[[ x]\]' || true)
+  fi
+
+  cat > "$workpad_file" << WORKPAD_EOF
+# workpad: $issue_number — $issue_title
+# created: $(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+## acceptance criteria
+
+$( [ -n "$acceptance_criteria" ] && echo "$acceptance_criteria" || echo "_no acceptance criteria found in task body — read the full description carefully_" )
+
+## implementation notes
+
+_write your research findings, approach decisions, and anything useful here as you work_
+
+## improvements noticed
+
+_if you spot workflow issues, missing scripts, broken patterns — note them here. don't fix infrastructure during a feature task._
+
+WORKPAD_EOF
+  log_info "Workpad created: $workpad_file"
+
+  # --- Build the task prompt (agent personality loaded by kiro-cli --agent) ---
   local prompt_file=$(mktemp)
   cat > "$prompt_file" << PROMPT_EOF
-You are working on $issue_ref.
+you are working on $issue_ref.
 
-**Title:** $issue_title
+**title:** $issue_title
 
-**Description:**
+**workpad file:** $workpad_file
+read this file first. write your notes to it as you work. check every acceptance criterion before committing.
+
+**description:**
 $issue_body
 
-Instructions:
-1. Read CLAUDE.md for project guidelines
-2. Research the codebase to understand relevant files
-3. Implement the changes following RPI (Research-Plan-Implement) workflow
-4. Commit with message: 'fix($commit_prefix): brief description'
-5. Do NOT push - we push all commits together at the end
-
-Important guidelines (from CLAUDE.md):
-- Use API_BASE_URL for all API calls, never relative /api/ URLs
-- Use logger + Sentry for errors, never console.log/error/warn
-- Test your changes before committing
-
-Begin by researching the codebase for: $issue_title
+commit with message: 'fix($commit_prefix): brief description'
+do NOT push — we push all commits together at the end of the run.
 PROMPT_EOF
 
-  # Spawn agent subprocess with --print (non-interactive, exits on completion)
-  # NOTE: Redirect stdin from /dev/null to prevent agent from consuming the while-read loop's input
-  # NOTE: --dangerously-skip-permissions allows Claude to actually make file changes without interactive prompts
-  log_info "Starting $AGENT_CLI subprocess for $issue_ref..."
+  # Spawn agent subprocess
+  log_info "Starting $AGENT_CLI subprocess for $issue_ref (agent: $agent_type)..."
 
   local agent_cmd=$(get_agent_cmd)
-  $agent_cmd "$(cat "$prompt_file")" < /dev/null
-  local exit_code=$?
+  local task_log="$LOG_DIR/task-${issue_number}.log"
+  $agent_cmd "$(cat "$prompt_file")" < /dev/null 2>&1 | tee "$task_log"
+  local exit_code=${PIPESTATUS[0]}
 
   rm -f "$prompt_file"
 
   if [ $exit_code -eq 0 ]; then
-    log_success "Subprocess completed for issue #$issue_number"
+    log_success "Subprocess completed for $issue_number"
   else
-    log_warning "Subprocess for issue #$issue_number exited with code $exit_code"
+    log_warning "Subprocess for $issue_number exited with code $exit_code"
   fi
 
   return $exit_code
@@ -375,21 +407,9 @@ check_prerequisites() {
   fi
 
   # Check for agent CLI
-  if [ "$AGENT_CLI" = "claude" ]; then
-    if ! command -v claude &> /dev/null; then
-      log_error "Claude Code CLI is not installed"
-      exit 1
-    fi
-  elif [ "$AGENT_CLI" = "opencode" ]; then
-    if ! command -v opencode &> /dev/null; then
-      log_error "OpenCode CLI is not installed"
-      exit 1
-    fi
-  else
-    if ! command -v kiro-cli &> /dev/null; then
-      log_error "Kiro CLI is not installed"
-      exit 1
-    fi
+  if ! command -v kiro-cli &> /dev/null; then
+    log_error "Kiro CLI is not installed"
+    exit 1
   fi
 
   # Check for git
@@ -643,7 +663,7 @@ get_project_tasks() {
 # LINEAR SUPPORT
 # =============================================================================
 
-# Get open tasks from Linear (Claude label + Open state, oldest first)
+# Get open tasks from Linear (hero label + Open state, oldest first)
 get_linear_tasks() {
   if [ -z "$LINEAR_API_KEY" ]; then
     log_error "LINEAR_API_KEY environment variable not set"
@@ -669,10 +689,24 @@ get_linear_tasks() {
 
   # Transform Linear format to match GitHub Issues format
   # For Linear: number = identifier (e.g., "CON-123"), use id for API calls
+  # Merge description + comments so the agent sees full context
   echo "$linear_issues" | jq -c '{
     number: .identifier,
     title: .title,
-    body: (.description // ""),
+    body: ((.description // "") + (
+      if (.comments.nodes | length) > 0 then
+        "
+
+---
+## Comments
+
+" + ([.comments.nodes[] | "**" + .user.name + "** (" + .createdAt + "):
+" + .body + "
+"] | join("
+---
+"))
+      else "" end
+    )),
     linear_id: .id
   }' 2>/dev/null
 }
@@ -693,6 +727,9 @@ update_linear_task_status() {
       ;;
     "review"|"in_review"|"In Review")
       state_id="$LINEAR_STATE_IN_REVIEW_ID"
+      ;;
+    "staging"|"Staging")
+      state_id="$LINEAR_STATE_STAGING_ID"
       ;;
     "completed"|"done"|"Done")
       state_id="$LINEAR_STATE_DONE_ID"
@@ -734,6 +771,64 @@ add_linear_comment() {
     log_warning "Failed to add comment to Linear issue"
     return 1
   fi
+}
+
+# Get a single Linear issue by identifier (e.g., "DEV-1076") with full comments
+get_single_linear_issue() {
+  local identifier="$1"
+  local team_id="${LINEAR_TEAM_ID:-}"
+
+  if [ -z "$LINEAR_API_KEY" ]; then
+    log_error "LINEAR_API_KEY environment variable not set"
+    return 1
+  fi
+
+  if [ -z "$team_id" ]; then
+    log_error "LINEAR_TEAM_ID not set in config.sh"
+    return 1
+  fi
+
+  # Extract number from identifier (e.g., "DEV-1076" -> 1076)
+  local issue_number="${identifier##*-}"
+
+  local query="
+    query {
+      issues(
+        filter: {
+          team: { id: { eq: \"$team_id\" } }
+          number: { eq: $issue_number }
+        }
+        first: 1
+      ) {
+        nodes {
+          id
+          identifier
+          title
+          description
+          createdAt
+          comments {
+            nodes {
+              body
+              user { name }
+              createdAt
+            }
+          }
+        }
+      }
+    }
+  "
+
+  # Fetch and transform to match get_linear_tasks format (merges comments into body)
+  linear_graphql "$query" | jq -c '.data.issues.nodes[0] // empty | {
+    number: .identifier,
+    title: .title,
+    body: ((.description // "") + (
+      if (.comments.nodes | length) > 0 then
+        "\n\n---\n## Comments\n\n" + ([.comments.nodes[] | "**" + .user.name + "** (" + .createdAt + "):\n" + .body + "\n"] | join("\n---\n"))
+      else "" end
+    )),
+    linear_id: .id
+  }' 2>/dev/null
 }
 
 # Update task status based on task source
@@ -782,79 +877,377 @@ update_task_status() {
 }
 
 # Create the run branch
+
+# =============================================================================
+# PERSISTENT WORKTREE — one worktree, stays alive across runs
+# =============================================================================
+
+setup_workspace() {
+  cd "$PROJECT_ROOT" || { log_error "Cannot cd to $PROJECT_ROOT"; exit 1; }
+
+  git fetch origin 2>/dev/null || true
+
+  # Remove any worktree holding staging so we can checkout here
+  local wt
+  wt=$(git worktree list --porcelain 2>/dev/null | grep -B1 'branch refs/heads/staging' | head -1 | sed 's/worktree //')
+  if [[ -n "$wt" && "$wt" != "$PROJECT_ROOT" ]]; then
+    git worktree remove "$wt" --force 2>/dev/null || true
+  fi
+
+  # Checkout staging (create from origin if needed)
+  git checkout staging 2>/dev/null || git checkout -b staging "origin/staging" || {
+    log_error "Cannot checkout staging branch"
+    exit 1
+  }
+
+  # Sync with remote staging first (avoids non-fast-forward on push later)
+  git pull --rebase origin staging 2>/dev/null || {
+    git rebase --abort 2>/dev/null
+    log_warning "Pull --rebase from origin/staging failed — continuing with current state"
+  }
+
+  # Merge main to pick up any new commits (preserves staging history)
+  git merge "origin/$SOURCE_BRANCH" --no-edit 2>/dev/null || {
+    git merge --abort 2>/dev/null
+    log_warning "Merge from origin/$SOURCE_BRANCH conflict — continuing with current staging state"
+  }
+
+  rm -rf /tmp/oc-review-* 2>/dev/null || true
+  log_info "Workspace ready at $PROJECT_ROOT (staging)"
+}
+
+# =============================================================================
+# POST-RUN: DEPLOY → FIX LOOP → SCENARIO TESTS → LINEAR TASK
+# =============================================================================
+
+STAGING_URL="${STAGING_URL:-https://staging.consuelohq.com}"
+MAX_DEPLOY_FIX_ATTEMPTS=3
+
+# Check if staging is healthy
+check_staging_health() {
+  local status
+  status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 15 "$STAGING_URL" 2>/dev/null)
+  [ "$status" = "200" ] || [ "$status" = "301" ] || [ "$status" = "302" ]
+}
+
+# Wait for Railway deploy + health check
+wait_for_deploy() {
+  local max_wait=300  # 5 minutes
+  local interval=30
+  local elapsed=0
+
+  log_info "Waiting for Railway deploy at $STAGING_URL..."
+  while [ $elapsed -lt $max_wait ]; do
+    sleep "$interval"
+    elapsed=$((elapsed + interval))
+    if check_staging_health; then
+      log_success "Staging is healthy after ${elapsed}s"
+      return 0
+    fi
+    log_info "Health check failed, waiting... (${elapsed}/${max_wait}s)"
+  done
+  log_warning "Staging not healthy after ${max_wait}s"
+  return 1
+}
+
+# Kiro fix loop for deploy failures
+deploy_fix_loop() {
+  local attempt=0
+  while [ $attempt -lt $MAX_DEPLOY_FIX_ATTEMPTS ]; do
+    attempt=$((attempt + 1))
+    log_info "Deploy fix attempt $attempt/$MAX_DEPLOY_FIX_ATTEMPTS"
+
+    # Get the error from railway logs
+    local error_log
+    error_log=$(railway logs --service opensaas 2>&1 | tail -50)
+
+    local fix_prompt="the staging deploy at $STAGING_URL is failing. here are the last 50 lines of railway logs:
+
+$error_log
+
+fix the issue. commit and push to the current branch. do NOT create a new branch."
+
+    # Run kiro to fix
+    echo "$fix_prompt" | $KIRO_CMD 2>&1 | tee "$LOG_DIR/deploy-fix-$attempt.log" || true
+
+    # Push fixes
+    HUSKY=0 git push origin "$RUN_BRANCH" 2>/dev/null || true
+
+    # Wait for redeploy
+    if wait_for_deploy; then
+      log_success "Deploy fixed on attempt $attempt"
+      return 0
+    fi
+  done
+
+  log_warning "Deploy still failing after $MAX_DEPLOY_FIX_ATTEMPTS attempts"
+  return 1
+}
+
+# Run agent-browser scenarios for the current phase
+run_scenarios() {
+  local phase_number="$1"
+  local scenario_file="$SCRIPT_DIR/scenarios/phase-${phase_number}.yml"
+  local results_dir="/tmp/scenario-results/$RUN_ID"
+  mkdir -p "$results_dir"
+
+  if [ ! -f "$scenario_file" ]; then
+    log_info "No scenario file for phase $phase_number, skipping"
+    return 0
+  fi
+
+  log_info "Running scenarios from $scenario_file against $STAGING_URL"
+
+  local scenario_prompt="invoke the agent-browser skill.
+
+read the scenario file at $scenario_file. run every scenario against $STAGING_URL.
+save screenshots to $results_dir/.
+
+for each scenario, drive agent-browser step by step:
+- open: agent-browser open <url>
+- click: agent-browser click <selector>
+- fill: agent-browser fill <selector> <text>
+- wait: agent-browser wait <selector|ms>
+- snapshot: agent-browser screenshot <path>
+- assert visible: agent-browser snapshot --json, check element exists
+- assert text: agent-browser get text <selector>, compare
+
+track results: scenario name, pass/fail, duration, failure details if any.
+
+when done, output a JSON summary to $results_dir/results.json:
+{
+  \"phase\": $phase_number,
+  \"scenarios\": [
+    {\"name\": \"...\", \"status\": \"pass|fail|blocked\", \"duration_ms\": N, \"error\": \"...\"}
+  ]
+}"
+
+  echo "$scenario_prompt" | $KIRO_CMD 2>&1 | tee "$LOG_DIR/scenarios-phase-$phase_number.log" || true
+
+  # Check if results were produced
+  if [ -f "$results_dir/results.json" ]; then
+    return 0
+  else
+    log_warning "No scenario results produced"
+    return 1
+  fi
+}
+
+# Create linear task with scenario results (ALWAYS — pass or fail)
+create_scenario_linear_task() {
+  local phase_number="$1"
+  local results_dir="/tmp/scenario-results/$RUN_ID"
+  local results_file="$results_dir/results.json"
+
+  # Build the task body from results
+  local task_body=""
+  local task_title=""
+  local task_state=""
+  local total=0 passed=0 failed=0 blocked=0
+
+  if [ -f "$results_file" ]; then
+    total=$(jq '.scenarios | length' "$results_file" 2>/dev/null || echo 0)
+    passed=$(jq '[.scenarios[] | select(.status == "pass")] | length' "$results_file" 2>/dev/null || echo 0)
+    failed=$(jq '[.scenarios[] | select(.status == "fail")] | length' "$results_file" 2>/dev/null || echo 0)
+    blocked=$(jq '[.scenarios[] | select(.status == "blocked")] | length' "$results_file" 2>/dev/null || echo 0)
+
+    # Build results table
+    local table
+    table=$(jq -r '.scenarios[] | "| \(.name) | \(if .status == "pass" then "✅ PASS" elif .status == "fail" then "❌ FAIL" else "⏭️ BLOCKED" end) | \(.duration_ms // 0)ms | \(.error // "") |"' "$results_file" 2>/dev/null)
+
+    task_body="## Scenario Results — Phase $phase_number
+**Staging URL:** $STAGING_URL
+**Run ID:** $RUN_ID
+**Date:** $(date -u +%Y-%m-%dT%H:%M:%SZ)
+
+### Results
+| Scenario | Status | Duration | Notes |
+|----------|--------|----------|-------|
+$table
+
+### Summary
+$passed/$total passed, $failed failed, $blocked blocked."
+  else
+    task_body="## Scenario Results — Phase $phase_number
+**Staging URL:** $STAGING_URL
+**Run ID:** $RUN_ID
+
+Scenario runner did not produce results. Check logs at $LOG_DIR/scenarios-phase-$phase_number.log"
+    failed=1
+  fi
+
+  if [ "$failed" -gt 0 ]; then
+    task_title="[test] Phase $phase_number: $failed scenario(s) failed ❌"
+    task_state="$LINEAR_STATE_OPEN"
+  else
+    task_title="[test] Phase $phase_number: all scenarios passed ✅"
+    task_state="$LINEAR_STATE_DONE"
+  fi
+
+  # Create the linear task
+  local query='mutation($input: IssueCreateInput!) { issueCreate(input: $input) { success issue { id identifier url } } }'
+  local variables
+  variables=$(jq -n \
+    --arg title "$task_title" \
+    --arg desc "$task_body" \
+    --arg teamId "$LINEAR_TEAM_ID" \
+    --arg stateId "$task_state" \
+    --arg labelId "$LINEAR_LABEL_KIRO_ID" \
+    '{
+      "input": {
+        "title": $title,
+        "description": $desc,
+        "teamId": $teamId,
+        "stateId": $stateId,
+        "labelIds": [$labelId]
+      }
+    }')
+
+  local result
+  result=$(linear_graphql "$query" "$variables")
+  local issue_url
+  issue_url=$(echo "$result" | jq -r '.data.issueCreate.issue.url // empty')
+
+  if [ -n "$issue_url" ]; then
+    log_success "Created scenario task: $issue_url"
+  else
+    log_warning "Failed to create scenario task: $result"
+  fi
+
+  # Cleanup screenshots
+  rm -rf "$results_dir" 2>/dev/null || true
+}
+
+# Main post-run orchestrator
+post_run_deploy_and_test() {
+  log_info "=========================================="
+  log_info "POST-RUN: Deploy + Scenario Testing"
+  log_info "=========================================="
+
+  # Merge PR into staging (squash merge)
+  if [ -n "$PR_URL" ]; then
+    local pr_number
+    pr_number=$(echo "$PR_URL" | grep -oE '[0-9]+$')
+    log_info "Merging PR #$pr_number into staging..."
+    gh pr merge "$pr_number" --squash --repo consuelohq/opensaas 2>&1 || {
+      log_warning "PR merge failed — may need manual merge"
+      return 1
+    }
+  fi
+
+  # Wait for Railway to deploy
+  if ! wait_for_deploy; then
+    log_warning "Staging deploy failed, starting fix loop..."
+    if ! deploy_fix_loop; then
+      # Create linear task for deploy failure
+      create_scenario_linear_task "deploy-failure"
+      if [ -f "$SCRIPT_DIR/notify.sh" ]; then
+        source "$SCRIPT_DIR/notify.sh"
+        send_slack_notification "Deploy Failed" "Staging deploy failed after $MAX_DEPLOY_FIX_ATTEMPTS fix attempts. Manual intervention needed." "failure"
+      fi
+      return 1
+    fi
+  fi
+
+  # Detect phase number from the issues we processed
+  local phase_number=""
+  for scenario_file in "$SCRIPT_DIR"/scenarios/phase-*.yml; do
+    [ -f "$scenario_file" ] || continue
+    local pnum
+    pnum=$(basename "$scenario_file" | sed 's/phase-\([0-9]*\)\.yml/\1/')
+    phase_number="$pnum"
+    break  # run first matching phase for now
+  done
+
+  if [ -z "$phase_number" ]; then
+    log_info "No scenario files found, skipping scenario testing"
+    return 0
+  fi
+
+  # Run scenarios
+  run_scenarios "$phase_number"
+
+  # Always create linear task with results
+  create_scenario_linear_task "$phase_number"
+
+  # Slack notification
+  if [ -f "$SCRIPT_DIR/notify.sh" ]; then
+    source "$SCRIPT_DIR/notify.sh"
+    local results_file="/tmp/scenario-results/$RUN_ID/results.json"
+    if [ -f "$results_file" ]; then
+      local passed failed
+      passed=$(jq '[.scenarios[] | select(.status == "pass")] | length' "$results_file" 2>/dev/null || echo 0)
+      failed=$(jq '[.scenarios[] | select(.status == "fail")] | length' "$results_file" 2>/dev/null || echo 0)
+      if [ "$failed" -gt 0 ]; then
+        send_slack_notification "Scenarios: $failed failed" "Phase $phase_number: $passed passed, $failed failed" "failure"
+      else
+        send_slack_notification "Scenarios: all passed ✅" "Phase $phase_number: $passed/$passed scenarios passed" "success"
+      fi
+    fi
+  fi
+}
+
 create_run_branch() {
   RUN_ID=$(generate_run_id)
-  RUN_BRANCH="${BRANCH_PREFIX}/run-${RUN_ID}"
+  RUN_BRANCH="staging"
 
-  log_info "Creating run branch: $RUN_BRANCH (from $SOURCE_BRANCH, PR will target $PR_TARGET_BRANCH)"
+  log_info "Using staging branch (run $RUN_ID, up to date from $SOURCE_BRANCH)"
 
-  # Fetch and checkout source branch (main - for fresh code)
-  git fetch origin "$SOURCE_BRANCH" 2>/dev/null || true
-  git checkout "$SOURCE_BRANCH" 2>/dev/null || git checkout -b "$SOURCE_BRANCH" "origin/$SOURCE_BRANCH"
-  git pull origin "$SOURCE_BRANCH" 2>/dev/null || true
+  # Work directly in main repo on staging (kiro-cli resolves project root from .kiro)
+  setup_workspace
 
-  # Create the run branch from source
-  git checkout -b "$RUN_BRANCH"
-
-  log_success "Run branch created: $RUN_BRANCH (based on $SOURCE_BRANCH)"
+  log_success "Staging branch ready (run $RUN_ID)"
 }
 
 # Global variable to store PR URL once created
 PR_URL=""
-
-# Create a draft PR at the start of the run (so pushes go to an existing PR)
+# Reuse existing staging→main PR or create one
 create_draft_pr() {
   local issue_count="$1"
   local issue_list="$2"
 
-  log_info "Creating draft PR for run..."
+  HUSKY=0 git push -u origin staging 2>/dev/null || {
+    log_warning "Initial push failed (non-fast-forward?) — pulling and retrying..."
+    git pull --rebase origin staging 2>/dev/null || {
+      git rebase --abort 2>/dev/null
+      log_warning "Pull --rebase failed — continuing anyway"
+    }
+    HUSKY=0 git push -u origin staging 2>/dev/null || log_warning "Push still failing — PR creation may fail"
+  }
 
-  # Need at least one commit to create a PR - create an empty commit
-  # Use here-document with git commit -F to reliably handle multi-line messages
-  cat > .agent/commit_msg.txt << EOF
-chore: Start agent run $RUN_ID
+  # Check for existing open PR from staging → main
+  PR_URL=$(gh pr list --base "$PR_TARGET_BRANCH" --head staging --state open --json url --jq '.[0].url' 2>/dev/null)
+
+  if [ -n "$PR_URL" ]; then
+    log_success "Reusing existing staging PR: $PR_URL"
+    gh pr comment "$PR_URL" --body "## Run $RUN_ID started
 
 Processing $issue_count issue(s):
-$issue_list
+$issue_list" 2>/dev/null || true
+    return
+  fi
 
-Co-Authored-By: Claude <noreply@anthropic.com>
-EOF
-  git commit --allow-empty -F .agent/commit_msg.txt
-  rm -f .agent/commit_msg.txt
+  log_info "Creating staging → $PR_TARGET_BRANCH PR..."
+  git commit --allow-empty -m "chore: Start agent run $RUN_ID
 
-  # Push the branch with the initial commit
-  log_info "Pushing branch to GitHub..."
-  git push -u origin "$RUN_BRANCH"
-
-  # Create draft PR
-  local pr_body="## Agent Run In Progress
-
-**Run ID:** \`$RUN_ID\`
-**Branch:** \`$RUN_BRANCH\`
-**Status:** 🔄 Running...
-
----
-
-### Issues to Process
-
-$issue_list
-
----
-
-*This PR will be updated as tasks complete.*"
+Co-Authored-By: suelo-kiro[bot] <260422584+suelo-kiro[bot]@users.noreply.github.com>"
+  HUSKY=0 git push origin staging
 
   PR_URL=$(gh pr create \
     --base "$PR_TARGET_BRANCH" \
-    --head "$RUN_BRANCH" \
-    --title "[WIP] Agent Run: $issue_count issue(s)" \
-    --body "$pr_body" \
-    --draft \
-    --json url 2>&1 | jq -r '.url // empty')
+    --head staging \
+    --title "staging" \
+    --body "Persistent PR for agent work. Merges staging → $PR_TARGET_BRANCH.
 
-  if [ $? -eq 0 ]; then
-    log_success "Draft PR created: $PR_URL"
+### Current Run: $RUN_ID ($issue_count issues)
+
+$issue_list" \
+    --draft 2>&1)
+
+  if [ $? -eq 0 ] && [ -n "$PR_URL" ]; then
+    log_success "Staging PR created: $PR_URL"
   else
-    log_warning "Failed to create draft PR: $PR_URL"
+    log_warning "Failed to create staging PR (non-fatal)"
     PR_URL=""
   fi
 }
@@ -864,12 +1257,17 @@ push_task_commits() {
   local issue_number="$1"
 
   log_info "Pushing commits for issue #$issue_number..."
-  git push origin "$RUN_BRANCH"
+  HUSKY=0 git push origin "$RUN_BRANCH"
 
   if [ $? -eq 0 ]; then
     log_success "Pushed to PR"
   else
-    log_warning "Push failed for issue #$issue_number"
+    log_warning "Push failed for issue #$issue_number — pulling and retrying..."
+    git pull --rebase origin "$RUN_BRANCH" 2>/dev/null || {
+      git rebase --abort 2>/dev/null
+      log_warning "Pull --rebase failed"
+    }
+    HUSKY=0 git push origin "$RUN_BRANCH" || log_warning "Push still failing for #$issue_number"
   fi
 }
 
@@ -888,18 +1286,18 @@ Run ID: $RUN_ID
 Completed: ${#COMPLETED_ISSUES[@]}
 Needs Review: $((${#REVIEW_FAILED_ISSUES[@]} + ${#TEST_FAILED_ISSUES[@]}))
 
-Co-Authored-By: Claude <noreply@anthropic.com>" || true
+Co-Authored-By: suelo-kiro[bot] <260422584+suelo-kiro[bot]@users.noreply.github.com>" || true
   fi
 
   # Check for unpushed commits
   local unpushed=$(git rev-list --count "origin/$RUN_BRANCH".."$RUN_BRANCH" 2>/dev/null || echo "0")
   if [ "$unpushed" -gt 0 ]; then
     log_info "Pushing $unpushed unpushed commit(s)..."
-    git push origin "$RUN_BRANCH"
+    HUSKY=0 git push origin "$RUN_BRANCH"
     if [ $? -eq 0 ]; then
       log_success "All changes pushed to GitHub"
     else
-      log_error "Failed to push final changes! Manual push required: git push origin $RUN_BRANCH"
+      log_error "Failed to push final changes! Manual push required: HUSKY=0 git push origin $RUN_BRANCH"
     fi
   else
     log_info "All commits already pushed to GitHub"
@@ -922,132 +1320,6 @@ send_start_notification() {
 
 # Run code review on current changes
 # Returns 0 if passed, 1 if issues found (issues written to temp file)
-run_code_review() {
-  local issue_number="$1"
-  local issues_file="$2"
-
-  log_info "Running code review for issue #$issue_number..."
-
-  # Get the diff to review (compare to base branch)
-  local diff_content=$(git diff "$PR_TARGET_BRANCH"...HEAD 2>/dev/null)
-
-  if [ -z "$diff_content" ]; then
-    log_warning "No changes to review"
-    return 0
-  fi
-
-  # Truncate diff if too large (agent has context limits)
-  local diff_lines=$(echo "$diff_content" | wc -l | tr -d ' ')
-  diff_lines=${diff_lines:-0}
-  [[ "$diff_lines" =~ ^[0-9]+$ ]] || diff_lines=0
-
-  if [ "$diff_lines" -gt 500 ]; then
-    log_warning "Diff too large ($diff_lines lines), truncating to 500 lines"
-    diff_content=$(echo "$diff_content" | head -n 500)
-    diff_content="$diff_content
-
-... [TRUNCATED - $diff_lines total lines] ..."
-  fi
-
-  # Create review prompt with the skill invocation
-  local review_prompt="Invoke the code-review-excellence skill and review this code change.
-
-CRITICAL INSTRUCTION: Do NOT just pass to pass. If there are REAL blocking issues, you MUST report them. This is a quality gate.
-
-After reviewing, output your findings in this EXACT format (this format is parsed by automation):
-
-REVIEW_STATUS: PASS
-(or)
-REVIEW_STATUS: FAIL
-
-BLOCKING_ISSUES:
-- None
-(or list each issue on its own line with a leading dash)
-
-=== DIFF TO REVIEW ===
-\`\`\`diff
-$diff_content
-\`\`\`
-=== END DIFF ===
-
-WHAT TO FLAG (blocking):
-- Security vulnerabilities (SQL injection, XSS, hardcoded secrets)
-- Missing error handling for critical paths
-- Breaking API changes without migration
-- console.log/error/warn instead of logger+Sentry (per CLAUDE.md)
-- Relative /api/ URLs instead of API_BASE_URL (per CLAUDE.md)
-- Obvious bugs or logic errors
-
-WHAT NOT TO FLAG:
-- Minor style preferences (linters handle this)
-- Nitpicks that don't affect functionality
-- Suggestions for improvement (save for PR comments)
-
-Remember: Output REVIEW_STATUS: PASS or REVIEW_STATUS: FAIL followed by BLOCKING_ISSUES section."
-
-  # Write prompt to temp file
-  local prompt_file=$(mktemp)
-  echo "$review_prompt" > "$prompt_file"
-
-  # Run agent with review prompt
-  log_info "Invoking $AGENT_CLI for code review..."
-
-  local review_output
-  local review_exit_code
-  local agent_cmd=$(get_agent_cmd)
-  review_output=$($agent_cmd "$(cat "$prompt_file")" 2>&1)
-  review_exit_code=$?
-
-  rm -f "$prompt_file"
-
-  if [ $review_exit_code -ne 0 ]; then
-    log_warning "Code review agent exited with code $review_exit_code"
-  fi
-
-  # Parse output for REVIEW_STATUS
-  if echo "$review_output" | grep -q "REVIEW_STATUS: PASS"; then
-    log_success "Code review passed"
-    return 0
-  else
-    log_warning "Code review found issues"
-
-    # Extract blocking issues section and write to file
-    echo "$review_output" | sed -n '/BLOCKING_ISSUES:/,/^$/p' > "$issues_file"
-
-    # Also save full output for debugging
-    echo "$review_output" > "${issues_file}.full"
-
-    return 1
-  fi
-}
-
-# Create GitHub issues from review findings
-create_review_issues() {
-  local issues_file="$1"
-  local parent_issue_number="$2"
-
-  log_info "Creating GitHub issues for review findings..."
-
-  # Read issues and create GitHub issues for each
-  while IFS= read -r line; do
-    # Skip empty lines, header, and "None"
-    if [[ -n "$line" && "$line" != "BLOCKING_ISSUES:" && "$line" != "- None" && "$line" != "None" ]]; then
-      # Remove leading "- " if present
-      local issue_text="${line#- }"
-      # Remove leading whitespace
-      issue_text="${issue_text#"${issue_text%%[![:space:]]*}"}"
-
-      if [ -n "$issue_text" ] && [ "$issue_text" != "None" ]; then
-        log_info "  Creating issue: $issue_text"
-        gh issue create \
-          --title "[REVIEW] $issue_text" \
-          --body "Found during code review of issue #$parent_issue_number" \
-          --label "agent-ready" \
-          2>/dev/null || true
-      fi
-    fi
-  done < "$issues_file"
-}
 
 # Import Sentry bot issues from GitHub PR comments as GitHub issues
 import_sentry_issues() {
@@ -1146,180 +1418,6 @@ $ai_prompt
 }
 
 # Re-prompt agent to fix review issues
-fix_review_issues() {
-  local issue_number="$1"
-  local issues_file="$2"
-
-  local issues_content=$(cat "$issues_file")
-
-  local fix_prompt="The automated code review for GitHub issue #$issue_number found BLOCKING issues that MUST be fixed before merge.
-
-ISSUES TO FIX:
-$issues_content
-
-Instructions:
-1. Fix ALL of these issues in the code
-2. Stage and commit your fixes with a message like 'fix(#$issue_number): address code review feedback'
-3. Do NOT push - the review will run again automatically
-
-Be thorough - the code review will run again after your fixes."
-
-  log_info "Re-prompting agent to fix review issues..."
-
-  local prompt_file=$(mktemp)
-  echo "$fix_prompt" > "$prompt_file"
-
-  local agent_cmd=$(get_agent_cmd)
-  $agent_cmd "$(cat "$prompt_file")" < /dev/null
-  local exit_code=$?
-
-  rm -f "$prompt_file"
-  return $exit_code
-}
-
-# =============================================================================
-# QUALITY GATES - Code review and tests run after each subprocess
-# =============================================================================
-
-# Run quality gates (code review + tests) for an issue
-# This runs AFTER the subprocess completes and commits
-run_quality_gates() {
-  local issue_number="$1"
-  local issue_title="$2"
-  local linear_id="${3:-}"  # Optional: Linear UUID for status updates
-
-  # Determine display format based on task source
-  local issue_display=""
-  if [ "$TASK_SOURCE" = "linear" ]; then
-    issue_display="$issue_number"  # e.g., CON-123
-  else
-    issue_display="#$issue_number"
-  fi
-
-  local review_passed=false
-  local tests_passed=false
-
-  # Code review loop (with fix attempts)
-  local max_review_attempts=3
-  local review_attempt=0
-  local issues_file=$(mktemp)
-
-  while [ $review_attempt -lt $max_review_attempts ]; do
-    review_attempt=$((review_attempt + 1))
-    log_info "Code review attempt $review_attempt of $max_review_attempts..."
-
-    if run_code_review "$issue_number" "$issues_file"; then
-      review_passed=true
-      break
-    else
-      # Create GitHub issues for tracking
-      create_review_issues "$issues_file" "$issue_number"
-
-      if [ $review_attempt -lt $max_review_attempts ]; then
-        # Re-prompt agent to fix issues
-        fix_review_issues "$issue_number" "$issues_file"
-      else
-        log_error "Max review attempts reached ($max_review_attempts). Issues remain unfixed."
-      fi
-    fi
-  done
-
-  # Clean up issues file
-  rm -f "$issues_file" "${issues_file}.full"
-
-  # Run Playwright tests
-  log_info "Running Playwright agent tests..."
-  if npx playwright test e2e/tests/agent/ --reporter=list 2>&1; then
-    log_success "Tests passed"
-    tests_passed=true
-  else
-    log_error "Tests failed for issue #$issue_number"
-
-    # Analyze test failure to provide helpful context
-    log_info "Analyzing test failure..."
-    if ls e2e/test-results/**/error-context.md 1>/dev/null 2>&1; then
-      # Check for build/compile errors (most common agent mistake)
-      if grep -q "Compiled with problems" e2e/test-results/**/error-context.md 2>/dev/null; then
-        log_error "BUILD ERROR DETECTED - The React app failed to compile!"
-        log_info "Syntax errors found in these files:"
-        grep -h "src/components\|src/hooks\|src/utils" e2e/test-results/**/error-context.md 2>/dev/null | head -10 || true
-        log_info "Fix the syntax errors above, then re-run tests."
-      # Check for Clerk loading timeout
-      elif grep -q "header-skeleton\|sign-in-button\|networkidle" e2e/test-results/**/error-context.md 2>/dev/null; then
-        log_warning "Clerk authentication may be slow or failing to load."
-        log_info "This might be a transient issue - consider re-running tests."
-      fi
-    fi
-  fi
-
-  # Determine outcome and update issue labels
-  # Priority: agent-test (tests failed) > agent-review (code review failed) > agent-completed
-  local final_label=""
-  local task_status=""
-
-  if [ "$review_passed" = true ] && [ "$tests_passed" = true ]; then
-    # Always use agent-review so human can verify in GitHub/Linear
-    # Slack notifications show pass/fail details
-    final_label="${ISSUE_LABEL_REVIEW:-agent-review}"
-    task_status="completed"
-    COMPLETED_ISSUES+=("$issue_number:$issue_title:$linear_id")
-    log_success "Issue $issue_display ready for review (all gates passed)"
-  elif [ "$tests_passed" = false ]; then
-    # Tests failed - always use agent-test label (even if code review also failed)
-    final_label="${ISSUE_LABEL_TEST:-agent-test}"
-    task_status="test_failed"
-    TEST_FAILED_ISSUES+=("$issue_number:$issue_title:$linear_id")
-    if [ "$review_passed" = false ]; then
-      REVIEW_FAILED_ISSUES+=("$issue_number:$issue_title:$linear_id")
-    fi
-    log_warning "Issue $issue_display tests failed"
-  else
-    # Only code review failed (tests passed)
-    final_label="${ISSUE_LABEL_REVIEW:-agent-review}"
-    task_status="review_failed"
-    REVIEW_FAILED_ISSUES+=("$issue_number:$issue_title:$linear_id")
-    log_warning "Issue $issue_display code review failed"
-  fi
-
-  # Update daily metrics (track completed vs needs_review)
-  if [ -f "$SCRIPT_DIR/notify.sh" ]; then
-    source "$SCRIPT_DIR/notify.sh"
-    if [ "$task_status" = "completed" ]; then
-      update_metrics "success"
-    else
-      update_metrics "needs_review"
-    fi
-  fi
-
-  # Update task final status
-  # NOTE: All tasks go to "in review" status - human must approve before marking "done"
-  if [ "$TASK_SOURCE" = "projects" ]; then
-    local project_status="${PROJECT_STATUS_REVIEW:-Review}"  # Always use review status
-    update_project_item_status "$issue_number" "$project_status"
-  elif [ "$TASK_SOURCE" = "linear" ]; then
-    # All Linear tasks go to "In Review" status - human must approve
-    update_linear_task_status "$issue_number" "$linear_id" "In Review"
-    # Add comment with PR link if available
-    if [ -n "$PR_URL" ] && [ -n "$linear_id" ]; then
-      local comment_body="Agent completed work. Review PR: $PR_URL
-
-**Quality Gates:**
-- Code Review: $([ "$review_passed" = true ] && echo "Passed" || echo "Failed")
-- Tests: $([ "$tests_passed" = true ] && echo "Passed" || echo "Failed")"
-      add_linear_comment "$linear_id" "$comment_body" || true
-    fi
-  else
-    # Remove all status labels before setting final label
-    gh issue edit "$issue_number" \
-      --remove-label "${ISSUE_LABEL_READY:-agent-ready}" \
-      --remove-label "${ISSUE_LABEL_WORKING:-agent-working}" \
-      --remove-label "${ISSUE_LABEL_REVIEW:-agent-review}" \
-      --remove-label "${ISSUE_LABEL_TEST:-agent-test}" \
-      --add-label "$final_label" 2>/dev/null || true
-  fi
-
-  return 0
-}
 
 # Process a single issue using fresh subprocess (commits to the shared run branch)
 process_issue() {
@@ -1338,11 +1436,6 @@ process_issue() {
   else
     issue_display="#$issue_number"
     commit_ref="#$issue_number"
-  fi
-
-  # Store issue body for later use in PR body generation
-  if [ -n "$issue_body" ] && [ -d "$ISSUE_BODIES_DIR" ]; then
-    echo "$issue_body" > "$ISSUE_BODIES_DIR/$issue_number"
   fi
 
   log_info "=========================================="
@@ -1376,6 +1469,16 @@ process_issue() {
   # Spawn fresh $AGENT_CLI subprocess (isolated context)
   spawn_task_subprocess "$issue_number" "$issue_title" "$issue_body"
   local subprocess_exit=$?
+
+  # Post output summary to Linear
+  if [ "$TASK_SOURCE" = "linear" ] && [ -n "$linear_id" ]; then
+    local task_log="$LOG_DIR/task-${issue_number}.log"
+    if [ -f "$task_log" ]; then
+      local summary
+      summary=$(tail -50 "$task_log" | head -c 4000)
+      add_linear_comment "$linear_id" "$(printf '**kiro output (last 50 lines):**\n```\n%s\n```' "$summary")"
+    fi
+  fi
 
   # Capture HEAD after subprocess
   local head_after=$(git rev-parse HEAD)
@@ -1422,72 +1525,17 @@ process_issue() {
 
 Automated commit by agent workflow.
 
-Co-Authored-By: Claude <noreply@anthropic.com>" || true
+Co-Authored-By: suelo-kiro[bot] <260422584+suelo-kiro[bot]@users.noreply.github.com>" || true
   fi
 
   # Run quality gates (code review + tests) - pass linear_id for status updates
-  run_quality_gates "$issue_number" "$issue_title" "$linear_id"
+  # Coderabbit reviews on PR — no local review gate needed
+  COMPLETED_ISSUES+=("$issue_number:$issue_title:$linear_id")
 
   # Push commits immediately (so work is saved even if script crashes)
   push_task_commits "$issue_number"
 
   return 0
-}
-
-# Extract first paragraph of issue body as spec summary (truncated to 500 chars)
-get_spec_summary() {
-  local issue_number="$1"
-  local body_file="$ISSUE_BODIES_DIR/$issue_number"
-  if [ ! -f "$body_file" ]; then
-    echo ""
-    return
-  fi
-  # Get first non-empty paragraph (up to first blank line after content starts)
-  local summary=""
-  local found_content=false
-  while IFS= read -r line; do
-    # Skip leading blank lines and markdown headers
-    if [ "$found_content" = false ]; then
-      [[ -z "$line" || "$line" == "---" || "$line" == "#"* ]] && continue
-      found_content=true
-    fi
-    # Stop at blank line after content
-    [ -z "$line" ] && break
-    summary+="$line "
-  done < "$body_file"
-  # Truncate to 500 chars
-  echo "${summary:0:500}"
-}
-
-# Extract Verification Criteria section from issue body
-get_verification_criteria() {
-  local issue_number="$1"
-  local body_file="$ISSUE_BODIES_DIR/$issue_number"
-  if [ ! -f "$body_file" ]; then
-    echo ""
-    return
-  fi
-  # Extract lines between "Verification Criteria" (or "VERIFICATION") header and next section/blank
-  local in_section=false
-  local criteria=""
-  while IFS= read -r line; do
-    if echo "$line" | grep -qiE '(verification criteria|VERIFICATION)'; then
-      in_section=true
-      continue
-    fi
-    if [ "$in_section" = true ]; then
-      # Stop at next markdown header or horizontal rule
-      if [[ "$line" == "#"* || "$line" == "---" ]]; then
-        break
-      fi
-      # Only capture checkbox lines
-      if echo "$line" | grep -q '^\- \['; then
-        criteria+="$line
-"
-      fi
-    fi
-  done < "$body_file"
-  echo "$criteria"
 }
 
 # Finalize the PR (update description and mark ready for review)
@@ -1536,7 +1584,7 @@ finalize_pr() {
     fi
   }
 
-  # Add completed issues section with Linear spec context
+  # Add completed issues section
   # NOTE: Using "Related to" instead of "Closes" to avoid auto-closing issues on merge.
   # Human review is required before closing issues.
   if [ ${#COMPLETED_ISSUES[@]} -gt 0 ]; then
@@ -1549,25 +1597,9 @@ finalize_pr() {
       local title="${rest%%:*}"
       local ref=$(format_issue_ref "$num")
       if [ "$TASK_SOURCE" = "linear" ]; then
-        # Include Linear URL and spec context for the reviewer
-        pr_body+="#### $ref - $title
-**Linear:** https://linear.app/consuelo/issue/$num
-
+        # Linear auto-links with identifier, no need for "Related to"
+        pr_body+="- $ref - $title
 "
-        # Add spec summary if available
-        local spec_summary=$(get_spec_summary "$num")
-        if [ -n "$spec_summary" ]; then
-          pr_body+="**Spec Summary:** $spec_summary
-
-"
-        fi
-        # Add verification criteria if available
-        local criteria=$(get_verification_criteria "$num")
-        if [ -n "$criteria" ]; then
-          pr_body+="**Verification Criteria:**
-$criteria
-"
-        fi
       else
         pr_body+="- Related to $ref - $title
 "
@@ -1587,13 +1619,8 @@ $criteria
       local rest="${entry#*:}"
       local title="${rest%%:*}"
       local ref=$(format_issue_ref "$num")
-      if [ "$TASK_SOURCE" = "linear" ]; then
-        pr_body+="- $ref - $title ([Linear](https://linear.app/consuelo/issue/$num))
+      pr_body+="- $ref - $title
 "
-      else
-        pr_body+="- $ref - $title
-"
-      fi
     done
     pr_body+="
 "
@@ -1609,13 +1636,8 @@ $criteria
       local rest="${entry#*:}"
       local title="${rest%%:*}"
       local ref=$(format_issue_ref "$num")
-      if [ "$TASK_SOURCE" = "linear" ]; then
-        pr_body+="- $ref - $title ([Linear](https://linear.app/consuelo/issue/$num))
+      pr_body+="- $ref - $title
 "
-      else
-        pr_body+="- $ref - $title
-"
-      fi
     done
     pr_body+="
 "
@@ -1695,6 +1717,18 @@ $criteria
 *Created by autonomous agent workflow*
 *Task Source: $TASK_SOURCE*"
 
+  # Move completed Linear issues to "In Review"
+  if [ "$TASK_SOURCE" = "linear" ]; then
+    for entry in "${COMPLETED_ISSUES[@]}"; do
+      local num="${entry%%:*}"
+      local rest="${entry#*:}"
+      local lid="${rest##*:}"
+      if [ -n "$lid" ] && [ "$lid" != "$num" ]; then
+        update_linear_task_status "$num" "$lid" "In Review"
+      fi
+    done
+  fi
+
   # Update PR title and body
   if [ -n "$PR_URL" ]; then
     log_info "Updating PR description..."
@@ -1708,7 +1742,7 @@ $criteria
   else
     # Fallback: create PR if draft creation failed earlier
     log_info "Creating PR (draft creation may have failed earlier)..."
-    git push -u origin "$RUN_BRANCH" 2>/dev/null || true
+    HUSKY=0 git push -u origin "$RUN_BRANCH" 2>/dev/null || true
 
     PR_URL=$(gh pr create \
       --base "$PR_TARGET_BRANCH" \
@@ -1716,7 +1750,12 @@ $criteria
       --title "$pr_title" \
       --body "$pr_body" 2>&1)
 
-    log_success "PR created: $PR_URL"
+    if [ $? -eq 0 ] && [ -n "$PR_URL" ]; then
+      log_success "PR created: $PR_URL"
+    else
+      log_warning "Failed to create PR: $PR_URL"
+      PR_URL=""
+    fi
   fi
 
   # Send Slack notification with session results
@@ -1758,7 +1797,7 @@ main() {
   elif [ "$TASK_SOURCE" = "linear" ]; then
     log_info "Autonomous Agent Task Runner (Linear)"
     log_info "Team ID: ${LINEAR_TEAM_ID}"
-    log_info "Label: ${LINEAR_LABEL_NAME:-Claude}"
+    log_info "Label: ${LINEAR_LABEL_NAME:-hero}"
     log_info "Ready state: ${LINEAR_STATE_OPEN:-Open}"
   else
     log_info "Autonomous Agent Task Runner (GitHub Issues)"
@@ -1789,14 +1828,22 @@ main() {
   fi
 
   # Get open tasks
-  local issues=$(get_open_issues)
+  local issues=""
+  if [ -n "$SINGLE_ISSUE" ]; then
+    log_info "Fetching single issue: $SINGLE_ISSUE"
+    issues=$(get_single_linear_issue "$SINGLE_ISSUE")
+  else
+    issues=$(get_open_issues)
+  fi
 
   # Handle empty results properly
   if [ -z "$issues" ] || [ "$issues" = "" ]; then
-    if [ "$TASK_SOURCE" = "projects" ]; then
+    if [ -n "$SINGLE_ISSUE" ]; then
+      log_error "Issue $SINGLE_ISSUE not found in Linear"
+    elif [ "$TASK_SOURCE" = "projects" ]; then
       log_success "No tasks with status '${PROJECT_STATUS_READY}' in mercury project"
     elif [ "$TASK_SOURCE" = "linear" ]; then
-      log_success "No Linear issues with '${LINEAR_LABEL_NAME:-Claude}' label in '${LINEAR_STATE_OPEN:-Open}' state"
+      log_success "No Linear issues with '${LINEAR_LABEL_NAME:-hero}' label in '${LINEAR_STATE_OPEN:-Open}' state"
     else
       log_success "No open issues with label '$ISSUE_LABEL' to process"
     fi
@@ -1813,7 +1860,7 @@ main() {
     if [ "$TASK_SOURCE" = "projects" ]; then
       log_success "No tasks with status '${PROJECT_STATUS_READY}' in mercury project"
     elif [ "$TASK_SOURCE" = "linear" ]; then
-      log_success "No Linear issues with '${LINEAR_LABEL_NAME:-Claude}' label in '${LINEAR_STATE_OPEN:-Open}' state"
+      log_success "No Linear issues with '${LINEAR_LABEL_NAME:-hero}' label in '${LINEAR_STATE_OPEN:-Open}' state"
     else
       log_success "No open issues with label '$ISSUE_LABEL' to process"
     fi
@@ -1871,11 +1918,11 @@ main() {
   local processed=0
   local total_count=$issue_count
 
-  # Save issues to a temp file to avoid stdin interference from claude command
+  # Save issues to a temp file to avoid stdin interference from agent command
   local issues_file=$(mktemp)
   echo "$issues" > "$issues_file"
 
-  while read -r issue_json; do
+  while read -r issue_json <&3; do
     # Skip empty lines and non-JSON content
     [[ -z "$issue_json" || "$issue_json" != "{"* ]] && continue
 
@@ -1891,7 +1938,7 @@ main() {
     save_run_state "$processed"
 
     echo ""
-  done < "$issues_file"
+  done 3< "$issues_file"
 
   rm -f "$issues_file"
 

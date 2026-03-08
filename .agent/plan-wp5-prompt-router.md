@@ -803,7 +803,7 @@ curl -X POST "http://localhost:5000/api/analytics/test123/generate"
 ### STEP 14: Update Documentation
 **Time:** 30 minutes
 **Priority:** HIGH
-**File:** `/Users/kokayi/Dev/consuelo_on_call_coaching/CLAUDE.md`
+**File:** `/path/to/your/project/CLAUDE.md`
 
 **Add Section:**
 ```markdown

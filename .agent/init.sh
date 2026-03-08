@@ -21,13 +21,12 @@ fi
 # Check required tools
 echo "Checking required tools..."
 command -v node >/dev/null 2>&1 || { echo "ERROR: Node.js required"; exit 1; }
-command -v python3 >/dev/null 2>&1 || { echo "ERROR: Python3 required"; exit 1; }
 command -v jq >/dev/null 2>&1 || { echo "ERROR: jq required (install via: brew install jq / apt install jq)"; exit 1; }
 command -v gh >/dev/null 2>&1 || { echo "WARNING: GitHub CLI (gh) not installed - needed for agent workflow"; }
+command -v kiro-cli >/dev/null 2>&1 || { echo "WARNING: kiro-cli not installed - needed for agent workflow"; }
 
 echo "  - Node.js: $(node --version)"
-echo "  - Python: $(python3 --version)"
-echo "  - npm: $(npm --version)"
+echo "  - Yarn: $(yarn --version 2>/dev/null || echo 'not found')"
 echo "  - jq: $(jq --version)"
 echo ""
 
@@ -37,8 +36,8 @@ if [ ! -f "package.json" ]; then
   exit 1
 fi
 
-# Sync with claudeee branch (once per session)
-echo "Syncing with claudeee branch..."
+# Sync with staging branch (once per session)
+echo "Syncing with staging branch..."
 CURRENT_BRANCH=$(git branch --show-current)
 
 # Stash any uncommitted changes
@@ -49,21 +48,21 @@ if [ -n "$(git status --porcelain)" ]; then
   STASH_NEEDED=true
 fi
 
-# Fetch and merge claudeee
-git fetch origin claudeee
-BEHIND=$(git rev-list HEAD..origin/claudeee --count 2>/dev/null || echo "0")
+# Fetch and merge staging
+git fetch origin staging
+BEHIND=$(git rev-list HEAD..origin/staging --count 2>/dev/null || echo "0")
 if [ "$BEHIND" -gt 0 ]; then
-  echo "  Merging $BEHIND commits from claudeee..."
-  git merge origin/claudeee --no-edit || {
+  echo "  Merging $BEHIND commits from staging..."
+  git merge origin/staging --no-edit || {
     echo "ERROR: Merge conflict. Resolve manually or run: git merge --abort"
     if [ "$STASH_NEEDED" = true ]; then
       git stash pop
     fi
     exit 1
   }
-  echo "  ✓ Synced with claudeee"
+  echo "  ✓ Synced with staging"
 else
-  echo "  ✓ Already up-to-date with claudeee"
+  echo "  ✓ Already up-to-date with staging"
 fi
 
 # Restore stashed changes
@@ -85,41 +84,33 @@ echo ""
 
 # Check dependencies
 if [ ! -d "node_modules" ]; then
-  echo "Installing npm dependencies..."
-  npm install
+  echo "Installing dependencies..."
+  yarn install
 else
-  echo "npm dependencies already installed"
-fi
-
-# Check Python virtual environment
-if [ -d "venv" ]; then
-  echo "Python venv exists"
-else
-  echo "No Python venv found (will use system Python)"
+  echo "Dependencies already installed"
 fi
 
 # Quick health check (if servers are running)
 echo ""
 echo "Health checks:"
 
-# Check backend
-if curl -s -o /dev/null -w "%{http_code}" http://localhost:5000/health 2>/dev/null | grep -q "200"; then
-  echo "  - Backend (5000): HEALTHY"
+# Check backend (twenty-server on port 3000)
+if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/health 2>/dev/null | grep -q "200"; then
+  echo "  - Backend (3000): HEALTHY"
 else
-  echo "  - Backend (5000): NOT RUNNING"
+  echo "  - Backend (3000): NOT RUNNING"
 fi
 
-# Check frontend
-if curl -s -o /dev/null -w "%{http_code}" http://localhost:3000 2>/dev/null | grep -q "200"; then
-  echo "  - Frontend (3000): HEALTHY"
+# Check frontend (twenty-front on port 3001)
+if curl -s -o /dev/null -w "%{http_code}" http://localhost:3001 2>/dev/null | grep -q "200"; then
+  echo "  - Frontend (3001): HEALTHY"
 else
-  echo "  - Frontend (3000): NOT RUNNING"
+  echo "  - Frontend (3001): NOT RUNNING"
 fi
 
 echo ""
 echo "=== Init Complete ==="
 echo ""
-echo "To start dev servers, run: npm start"
-echo "To create an agent task: gh issue create --label agent-ready --title \"Task description\""
-echo "To list agent tasks: gh issue list --label agent-ready"
-echo "To run agent workflow: .agent/run-tasks.sh"
+echo "To start dev servers, run: yarn start"
+echo "To run agent workflow: .agent/run-tasks.sh --linear"
+echo "To dry-run agent workflow: .agent/run-tasks.sh --linear --dry-run"

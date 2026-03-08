@@ -1,448 +1,230 @@
-# Claude Agent Workflow Template
+# openengineer
 
-An autonomous AI agent workflow system for Claude Code that processes tasks from a queue, implements changes, runs quality gates, and creates pull requests automatically. 
+battle-tested autonomous ai agent infrastructure. this is the actual .agent/ directory from a production monorepo — extracted, cleaned, and shared so you can run your own coding agents.
 
-Coding agent pro tip: use 1-3 times-daily by adding 10-20 (30?) tasks in the morning, afternoon, and evening and let Claude work for a few hours and your job becomes a decision maker and code reviewer, not code writer
+the setup: linear webhooks → webhook-receiver.py → kiro-cli or opencode → commits, prs, and code review, all autonomous.
 
-COO: Plan work that needs to be done, set the automation in action and update and add as you see ways to improve for your use case.
-
-## What This Does
-
-This workflow turns Claude Code into an autonomous coding agent that:
-
-1. **Picks up tasks** from a Beads task queue
-2. **Researches** the codebase to understand context
-3. **Plans** implementation with file paths and steps
-4. **Implements** changes following project patterns
-5. **Reviews** its own code with automated quality checks
-6. **Tests** changes with your test suite
-7. **Creates PRs** with status indicators (passed/failed gates)
-8. **Notifies** you via Slack (optional)
-
-## The RPI Workflow
-
-Every task follows the **Research-Plan-Implement** pattern:
+## how it works
 
 ```
-Research (2-30 min)     Plan (2-15 min)         Implement (5-60 min)
-├── Explore codebase     ├── Detailed steps      ├── Execute plan
-├── Find patterns        ├── File paths          ├── Commit changes
-└── Compress findings    └── Test strategy       └── Run quality gates
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                           LINEAR (TASK SOURCE)                              │
+│  issues tagged with "kiro" label → picked up by webhook                     │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼ webhook (mention, assign, delegate)
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                        WEBHOOK-RECEIVER.PY                                  │
+│  listens on port 8848, authenticates linear webhooks, dispatches tasks      │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐          │
+│  │ @mention        │    │ assign/delegate │    │ comment created │          │
+│  │ → kiro-cli chat │    │ → run-tasks.sh  │    │ → context sync  │          │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘          │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         RUN-TASKS.SH                                        │
+│  orchestrates the full loop: fetch task → create branch → implement → pr    │
+│  ┌───────────────────────────────────────────────────────────────────────┐  │
+│  │ 1. fetch issues from linear (kiro label + open state)                 │  │
+│  │ 2. create worktree branch (agent/run-YYYY-MM-DD-<hash>)               │  │
+│  │ 3. for each issue:                                                     │  │
+│  │    - kiro-cli implements (or opencode if configured)                   │  │
+│  │    - commit with co-authored-by suelo-kiro[bot]                        │  │
+│  │    - optional: opencode code review (posts gh pr comment)              │  │
+│  │ 4. create single pr with all commits                                   │  │
+│  │ 5. update linear issue status (in progress → in review)                │  │
+│  └───────────────────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────────────────┘
+                                    │
+                                    ▼
+┌─────────────────────────────────────────────────────────────────────────────┐
+│                         KIRO-CLI / OPENCODE                                 │
+│  kiro: orchestrator (plans, reviews, coordinates)                           │
+│  opencode: executor (implements features, does heavy lifting)               │
+└─────────────────────────────────────────────────────────────────────────────┘
 ```
 
-## Prerequisites
-
-Before installing, ensure you have:
-
-- **Node.js** (v18+) - `node --version`
-- **Python** (3.9+) - `python3 --version`
-- **jq** - JSON processor
-  - macOS: `brew install jq`
-  - Ubuntu/Debian: `apt install jq`
-  - Windows: `choco install jq`
-- **GitHub CLI** (`gh`) - `gh --version`
-  - Install: https://cli.github.com
-  - Auth: `gh auth login`
-- **Claude Code CLI** - `claude --version`
-  - Or **OpenCode** if using that instead
-- **Beads CLI** (`bd`) - Task management
-  - Install: https://github.com/steveyegge/beads
-  - Or use pip: `pip install beads-cli`
-
-## Copy into Claude Code for Easy Setup
+## file structure
 
 ```
-I want to set up the Claude Agent Workflow from this repo. Please help me:
-
-1. First, check which prerequisites I'm missing (node, python, jq, gh, claude/opencode, bd) and install any that are missing using the appropriate package manager for my system.
-
-2. Clone https://github.com/kokayicobb/consuelo-internal-agents to a temporary location, then copy the .agent/ and .claude/ directories to my current project.
-
-3. Initialize Beads in my project with `bd init`.
-
-4. Update .agent/config.sh with my project's settings:
-   - Set the correct BASE_BRANCH (check what my main branch is called)
-   - Set TEST_COMMAND to whatever test command my project uses (check package.json or pyproject.toml)
-   - Keep AGENT_CLI as "claude" unless I'm using opencode
-
-5. Make all scripts executable.
-
-6. Run .agent/init.sh to verify everything is set up correctly.
-
-7. Walk me through setting up any optional integrations:
-   - Slack notifications: Help me create a Slack webhook URL (guide me through Slack API → Create App → Incoming Webhooks) and add it to config.sh
-   - GitHub CLI auth: Make sure `gh auth status` works, if not guide me through `gh auth login`
-   - Any environment variables I need to set in ~/.zshrc or ~/.bashrc
-
-8. Show me a summary of what was configured, what integrations are active, and how to create my first task with `bd create`.
+.agent/
+├── config.sh              # configuration (agent cli, git branches, linear settings)
+├── run-tasks.sh           # main orchestrator — fetches issues, runs agents, creates prs
+├── webhook-receiver.py    # flask server — listens for linear webhooks, dispatches tasks
+├── linear-api.sh          # graphql helper — queries and mutates linear issues
+├── linear-comment.sh      # post comments to linear issues (as kiro bot)
+├── linear-setup.sh        # one-time linear oauth setup
+├── manage-labels.sh       # sync linear labels with expected set
+├── init.sh                # session startup — health checks, git sync
+├── notify.sh              # slack notifications + metrics
+├── label-pr.sh            # auto-label prs by changed files
+├── watch.sh               # file watcher for triggering agent runs
+├── append-research.sh     # append notes to research files
+├── prune-progress.sh      # clean old progress logs
+├── human.md               # user guide (copy to your project)
+├── webhook-relay/         # docker relay for public webhook endpoint
+│   ├── Dockerfile
+│   └── server.py
+├── research/              # research notes (auto-generated)
+└── scenarios/             # test scenario definitions
 ```
 
-## Quick Start
+## quick start
 
-### Option 1: Clone and Install (Recommended)
+### prerequisites
 
+- **node.js** 18+ 
+- **python** 3.9+
+- **jq** — `brew install jq`
+- **github cli** — `brew install gh` + `gh auth login`
+- **kiro-cli** or **opencode** — the ai agent cli
+- **linear account** — for task management
+
+### setup
+
+1. **copy the .agent/ directory to your project:**
+   ```bash
+   cp -r .agent /path/to/your/project/
+   cd /path/to/your/project
+   ```
+
+2. **configure environment variables:**
+   ```bash
+   # add to ~/.zshrc or ~/.bashrc
+   export LINEAR_API_KEY="your-linear-api-key"
+   export SLACK_WEBHOOK_URL="https://hooks.slack.com/..."  # optional
+   ```
+
+3. **edit .agent/config.sh for your project:**
+   ```bash
+   AGENT_CLI="kiro"                    # or "opencode"
+   BASE_BRANCH="main"                  # your main branch
+   GITHUB_REPO="your-org/your-repo"    # github repo
+   TASK_SOURCE="linear"                # use linear for issues
+   LINEAR_TEAM_ID="your-team-uuid"     # from linear settings
+   ```
+
+4. **run the webhook receiver:**
+   ```bash
+   python3 .agent/webhook-receiver.py
+   # listens on http://localhost:8848
+   ```
+
+5. **(optional) expose webhook publicly:**
+   ```bash
+   cd .agent/webhook-relay
+   docker build -t webhook-relay .
+   docker run -p 8848:8848 webhook-relay
+   ```
+
+6. **configure linear webhook:**
+   - go to linear settings → api → webhooks
+   - add webhook: `https://your-domain.com/webhook/linear`
+   - select triggers: issue created, comment created, issue assigned
+
+### usage
+
+**run tasks manually:**
 ```bash
-# Clone the template
-git clone https://github.com/kokayicobb/consuelo-internal-agents
-cd claude-agent-workflow
+# process all issues with kiro label
+.agent/run-tasks.sh
 
-# Copy to your project
-cp -r .agent /path/to/your/project/
-cp -r .claude /path/to/your/project/
-cd /path/to/your/project
-
-# Run the installer
-chmod +x .agent/install.sh
-.agent/install.sh
-```
-
-### Option 2: Manual Setup
-
-1. Copy `.agent/` and `.claude/` directories to your project root
-2. Edit `.agent/config.sh` with your settings
-3. Run `bd init` to initialize Beads
-4. Make scripts executable: `chmod +x .agent/*.sh .claude/hooks/**/*.sh`
-
-## Configuration
-
-Edit `.agent/config.sh` to customize for your project:
-
-```bash
-# Which AI CLI to use
-AGENT_CLI="claude"           # or "opencode"
-
-# Git settings
-BASE_BRANCH="main"           # Branch for PRs (change to your main branch)
-BRANCH_PREFIX="agent"        # Prefix for agent branches
-
-# Testing
-TEST_COMMAND="npm test"      # Your test command
-RUN_TESTS_AFTER_TASK=true    # Run tests after each task
-
-# Notifications (optional)
-SLACK_WEBHOOK_URL=""         # Slack webhook for notifications
-```
-
-## Directory Structure
-
-After installation, your project will have:
-
-```
-your-project/
-├── .agent/
-│   ├── config.sh            # Configuration settings
-│   ├── init.sh              # Environment verification
-│   ├── run-tasks.sh         # Main task runner
-│   ├── append-research.sh   # Research note helper
-│   ├── label-pr.sh          # PR labeling automation
-│   ├── notify.sh            # Slack notifications + metrics
-│   ├── prune-progress.sh    # Log maintenance
-│   ├── human.md             # User guide
-│   ├── claude-progress.txt  # Session history (auto-generated)
-│   ├── metrics.json         # Task metrics (auto-generated)
-│   └── research/
-│       └── current-task.md  # Research notes (auto-generated)
-│
-├── .claude/
-│   └── hooks/
-│       ├── pre-tool-use/
-│       │   ├── code-rules.sh     # Code quality checks
-│       │   └── loop-detection.sh # Runaway loop prevention
-│       ├── post-tool-use/
-│       │   └── track-result.sh   # Success tracking
-│       ├── session-end/
-│       │   └── update-beads.sh   # Progress tracking
-│       └── stop/
-│           └── quality-gates.sh  # Test validation
-│
-└── .beads/                  # Beads task database (auto-created)
-```
-
-## Usage
-
-### Daily Workflow
-
-**Morning (CEO Mode - 15 mins):**
-```bash
-# Add tasks for the day
-bd create "Fix 500 error when uploading large files"
-bd create "Add CSV export for user data"
-bd create "Optimize dashboard loading time"
-
-# Launch the agent
+# process at most 3 issues
 .agent/run-tasks.sh --max-tasks 3
+
+# process a single issue by id
+.agent/run-tasks.sh --issue DEV-123
+
+# preview without processing
+.agent/run-tasks.sh --dry-run
 ```
 
-**During Day:**
-- Agent works autonomously
-- Check PR status: `gh pr list --head "agent/*"`
-- You do other work
-
-**Evening (CTO Mode - 30 mins):**
-```bash
-# Review PRs
-gh pr list --state open
-
-# For each PR
-gh pr view <number>          # Read summary
-gh pr diff <number>          # Check changes
-gh pr merge <number> --squash
-
-# Push to production when ready
-git checkout main
-git merge <your-base-branch>
-git push origin main
+**mention the agent in a linear comment:**
+```
+@kiro implement the password reset flow
 ```
 
-### Command Reference
+**delegate an issue to the agent:**
+- assign the issue to "kiro" in linear
+- the agent picks it up automatically
 
-```bash
-# Task Management
-bd create "Task description"     # Add a task
-bd list                          # List open tasks
-bd show <task-id>                # Show task details
-bd close <task-id>               # Close a task
+## key scripts explained
 
-# Running the Agent
-.agent/run-tasks.sh                    # Process all open tasks
-.agent/run-tasks.sh --max-tasks 3      # Process at most 3 tasks
-.agent/run-tasks.sh --dry-run          # Preview without processing
-.agent/run-tasks.sh --agent opencode   # Use OpenCode instead
+### run-tasks.sh
 
-# Utilities
-.agent/init.sh                   # Check environment status
-.agent/notify.sh --show-metrics  # View task metrics
-.agent/prune-progress.sh         # Clean old progress entries
-```
+the main orchestrator. fetches issues from linear (or github issues/projects), creates a worktree, runs the agent cli for each issue, commits with proper attribution, and creates a single pr at the end.
 
-## Quality Gates
+features:
+- multi-source: linear, github issues, github projects
+- worktree isolation: each run in its own git worktree
+- single pr per run: easy review of batch work
+- opencode review: optional second-pass code review
+- cleanup on exit: traps signals, ensures changes are pushed
 
-The workflow includes two automatic quality checks:
+### webhook-receiver.py
 
-### 1. Code Review (runs before PR)
-- Security issues (SQL injection, XSS, hardcoded secrets)
-- Missing error handling
-- Code pattern violations
-- Up to 3 retry attempts if issues found
+flask server that listens for linear webhooks. handles three triggers:
 
-### 2. Test Suite (configurable)
-- Runs your test command from `config.sh`
-- Blocks PR if tests fail
-- Captures test output for debugging
+1. **@mention in comment** → runs kiro-cli chat (multi-turn conversation)
+2. **assign/delegate** → launches run-tasks.sh in tmux session
+3. **comment created** → syncs context for ongoing agent sessions
 
-### PR Status Labels
+authenticates webhooks with hmac-sha256, refreshes oauth tokens automatically.
 
-PRs are automatically labeled based on quality gate results:
+### linear-api.sh
 
-| Status | Meaning |
-|--------|---------|
-| Clean PR | Both gates passed, task auto-closed |
-| `[TESTS FAILED]` | Code review passed, tests failed |
-| `[REVIEW ISSUES]` | Tests passed, code review found problems |
-| `[NEEDS REVIEW]` | Both gates failed |
+bash wrapper for linear's graphql api. provides:
+- `linear_graphql` — raw query execution
+- `linear_get_ready_issues` — fetch issues with kiro label
+- `linear_update_state` — change issue status
 
-## Customizing for Your Project
+### linear-comment.sh
 
-### Code Rules (Required)
+posts comments to linear issues as the kiro bot (uses oauth token, not personal api key). used by agents to report progress and results.
 
-Edit `.claude/hooks/pre-tool-use/code-rules.sh` to match your project:
+## multi-agent architecture
 
-```bash
-# TODO: Add your project-specific rules
-# Examples:
-# - Required import patterns
-# - Forbidden functions
-# - Naming conventions
-# - API usage patterns
-```
+this system uses two agents in concert:
 
-### Area Labels
+- **kiro (orchestrator)** — plans, coordinates, reviews, posts to linear
+- **opencode (executor)** — implements features, does heavy code changes
 
-Edit `.agent/label-pr.sh` to define your project's file areas:
+the pattern: kiro decides what needs to happen, opencode does the actual coding, kiro reviews the result and posts back to linear. this separation keeps the orchestrator focused on coordination while the executor handles the mechanical work.
 
-```bash
-# TODO: Update these patterns for your project
-# Default patterns check for:
-# - src/     -> area/frontend
-# - app/     -> area/backend
-# - e2e/     -> area/tests
-# Add your own area patterns
-```
+## configuration reference
 
-### Notifications
+| variable | description | default |
+|----------|-------------|---------|
+| `AGENT_CLI` | which ai cli to use | `kiro` |
+| `BASE_BRANCH` | branch to create prs from | `main` |
+| `GITHUB_REPO` | github repo (org/repo) | auto-detected |
+| `TASK_SOURCE` | where to get tasks | `linear` |
+| `LINEAR_TEAM_ID` | linear team uuid | (required) |
+| `LINEAR_LABEL_NAME` | label to filter issues | `kiro` |
+| `MAX_RETRIES` | retries per failed task | `1` |
+| `AGENT_TIMEOUT` | timeout in seconds (0=none) | `0` |
+| `RUN_TESTS_AFTER_TASK` | run tests after each task | `true` |
 
-Set up Slack notifications (optional):
+see `.agent/config.sh` for the full list.
 
-```bash
-# Add to ~/.zshrc or ~/.bashrc
-export SLACK_WEBHOOK_URL="https://hooks.slack.com/services/T.../B.../..."
-```
+## what's different from the old version
 
-## Hooks Reference
+this repo is a **cleaned-up extract** from a production monorepo. the original used beads for task management and claude code as the agent. this version:
 
-### Pre-tool-use Hooks
-Run BEFORE Claude executes a tool:
+- uses **linear** as the task source (not beads)
+- uses **kiro-cli** or **opencode** as the agent (not claude code)
+- includes **webhook receiver** for real-time triggers
+- adds **opencode review** as a second-pass quality gate
+- supports **multiple task sources** (linear, github issues, github projects)
 
-- **code-rules.sh** - Validates code changes against project rules
-- **loop-detection.sh** - Prevents agent from retrying failed commands
+the old `beads` references have been removed. the hooks in `.claude/` still exist for backward compatibility but aren't used by the current setup.
 
-### Post-tool-use Hooks
-Run AFTER Claude executes a tool:
+## license
 
-- **track-result.sh** - Tracks command success to reset loop detection
+mit — use it, fork it, make it yours.
 
-### Session-end Hooks
-Run when Claude session ends:
+## credits
 
-- **update-beads.sh** - Updates task status and progress log
-
-### Stop Hooks
-Run before allowing task completion:
-
-- **quality-gates.sh** - Runs tests and validates changes
-
-## Troubleshooting
-
-### Agent stuck in a loop
-The loop detection hook prevents this by:
-1. Tracking consecutive command attempts
-2. Blocking after 3 failed attempts
-3. Instructing agent to skip to next task
-
-### Tests timing out
-Edit `.claude/hooks/stop/quality-gates.sh`:
-```bash
-TEST_TIMEOUT=120  # Increase timeout in seconds
-```
-
-### Hooks not running
-1. Check executable permissions: `chmod +x .claude/hooks/**/*.sh`
-2. Verify jq is installed: `jq --version`
-3. Check hook output: Run hook manually with sample input
-
-### No Beads tasks found
-1. Verify Beads is initialized: `bd list`
-2. Create a test task: `bd create "Test task"`
-3. Check task status: Tasks must be "open" or "pending"
-
-## Advanced Configuration
-
-### Running Overnight (Cron)
-
-```bash
-# Edit crontab
-crontab -e
-
-# Add (runs at 2 AM daily)
-0 2 * * * cd /path/to/your/project && .agent/run-tasks.sh --max-tasks 5 >> agent.log 2>&1
-```
-
-### Multiple Projects
-
-Each project needs its own:
-- `.agent/config.sh` with project-specific settings
-- `.beads/` database (run `bd init` in each project)
-- Customized code rules in `.claude/hooks/`
-
-### Integrating with CI/CD
-
-The workflow integrates with GitHub Actions via PR labels:
-- `agent-generated` - All agent PRs
-- `tests-passed` / `tests-failed` - Gate status
-- `review-passed` / `review-failed` - Review status
-
-Use these labels in CI workflows to customize behavior.
-
-## Session Continuity
-
-The agent maintains context across sessions via:
-
-- **`.agent/claude-progress.txt`** - Session history (last 6 hours)
-- **`.agent/research/current-task.md`** - Research notes per task
-- **`.agent/metrics.json`** - Daily task metrics
-
-Progress is automatically pruned after 6 hours to keep context manageable.
-
-## COO Agent Template
-
-In addition to the development-focused agent workflow, this repository includes a **COO (Chief Operating Officer) Agent** template for autonomous GTM and business automation tasks.
-
-### What the COO Agent Does
-
-The COO agent handles marketing and sales operations on a schedule:
-
-- **Morning Research** - Prospect research and lead gathering
-- **Email Generation** - Personalized cold outreach drafts
-- **Twitter Content** - Posts, threads, and engagement content
-- **Lead Processing** - Dialer lists and CRM-ready exports
-- **Metrics Tracking** - Daily activity and performance metrics
-
-### Key Features
-
-- **Scheduled Automation** - macOS launchd runs tasks at optimal times
-- **Two-Session Workflow** - Worker generates, QA validates before sending
-- **Email Warm-Up** - Gradual volume increase (10→100 emails over 14 days)
-- **Separate Task Queue** - COO Beads instance keeps business tasks separate from dev tasks
-
-### Quick Start
-
-```bash
-# Copy COO template to your project
-cp -r .coo /path/to/your/project/
-
-# Configure
-cd /path/to/your/project
-vim .coo/agent/config.sh  # Set PROJECT_ROOT
-
-# Create your business context
-cp .coo/docs/BUSINESS_CONTEXT_TEMPLATE.md .coo/docs/BUSINESS_CONTEXT.md
-vim .coo/docs/BUSINESS_CONTEXT.md  # Fill in your business details
-
-# Install launchd schedules
-.coo/agent/launchd/install-launchd.sh
-
-# Initialize Beads (separate from dev tasks)
-bd-coo init
-```
-
-### Documentation
-
-- **[.coo/README.md](.coo/README.md)** - Full overview and architecture
-- **[.coo/CUSTOMIZATION.md](.coo/CUSTOMIZATION.md)** - Step-by-step setup guide
-- **[.coo/CLAUDE.md](.coo/CLAUDE.md)** - Agent instructions and workflow
-
-### Schedule (Default)
-
-| Time | Task |
-|------|------|
-| 7:00 AM | Morning research |
-| 7:45 AM | Generate email drafts |
-| 8:00 AM | Twitter post #1 |
-| 9:00 AM | Instagram prospects |
-| 12:00 PM | Twitter post #2 |
-| 12:30 PM | Dialer leads |
-| 4:00 PM | Update metrics |
-| 4:30 PM (Tue/Thu) | Twitter thread |
-| 5:00 PM | Twitter post #3 |
-
-Customize schedules in `.coo/agent/launchd/*.plist` files.
-
----
-
-## Contributing
-
-Contributions welcome! Please:
-1. Fork this repository
-2. Create a feature branch
-3. Submit a pull request
-
-## License
-
-MIT License - see [LICENSE](LICENSE) for details.
-
-## Credits
-
-Built for use with:
-- [Claude Code](https://claude.ai/claude-code) by Anthropic
-- [Beads](https://github.com/steveyegge/beads) task management
-- [GitHub CLI](https://cli.github.com)
+extracted from [consuelohq/opensaas](https://github.com/consuelohq/opensaas) — the real monorepo where this runs in production.

@@ -16,17 +16,22 @@ we use [kiro-cli](https://kiro.dev) and [opencode](https://opencode.ai) — but 
 │  agent's prompt. every comment you add makes the agent smarter.          │
 └──────────────────────────────────────────────────────────────────────────┘
        │                    │                         │
-       │ @mention           │ assign / label          │ chain 10-15 issues
+       │ @mention           │ assign / label          │ you run it yourself
        ▼                    ▼                         ▼
 ┌──────────────┐  ┌──────────────────┐  ┌──────────────────────────────┐
-│  webhook     │  │  webhook         │  │  run-tasks.sh --linear       │
-│  receiver    │  │  receiver        │  │                              │
-│              │  │                  │  │  batch mode: fetches all     │
-│  single      │  │  dispatches to   │  │  open issues, chains them,  │
-│  session     │  │  run-tasks.sh    │  │  runs for hours unattended  │
-│  (question   │  │  for that issue  │  │                              │
-│   → answer   │  │                  │  │  each task = fresh agent     │
-│   → linear)  │  │                  │  │  session, no context bleed   │
+│  enrichment  │  │  terminal        │  │  .agent/run-tasks.sh         │
+│              │  │  dispatch         │  │                              │
+│  @mention a  │  │                  │  │  chains 10-15 issues,        │
+│  research    │  │  webhook opens   │  │  runs for hours unattended,  │
+│  agent in    │  │  a tmux session  │  │  entire epic in one command  │
+│  the issue   │  │  in the correct  │  │                              │
+│  → it reads  │  │  repo, runs the  │  │  each task = fresh agent     │
+│  your code   │  │  full pipeline   │  │  session, no context bleed   │
+│  → enriches  │  │  for that issue  │  │                              │
+│  the spec    │  │                  │  │  you just run it straight    │
+│  → posts     │  │                  │  │  in your terminal:           │
+│  back to     │  │                  │  │  .agent/run-tasks.sh         │
+│  the issue   │  │                  │  │                              │
 └──────────────┘  └──────────────────┘  └──────────────────────────────┘
        │                    │                         │
        ▼                    ▼                         ▼
@@ -42,13 +47,14 @@ we use [kiro-cli](https://kiro.dev) and [opencode](https://opencode.ai) — but 
 │                     THE ENRICHMENT WORKFLOW                               │
 │                                                                          │
 │  1. you write your expected outcome (a few lines — what should happen)   │
-│  2. tag a research agent → it explores the codebase, reads patterns,     │
-│     finds the right files, and enriches your spec with implementation    │
-│     details, file:line references, and architecture context              │
+│  2. @mention a research agent in the issue → it explores the codebase,   │
+│     reads patterns, finds the right files, and enriches your spec with   │
+│     implementation details, file:line references, and architecture       │
+│     context — all posted back as comments on the issue                   │
 │  3. the enriched spec goes to a worker agent → it doesn't research,     │
 │     it just works. every file, every line, every acceptance criterion    │
 │     is already in the prompt.                                            │
-│  4. chain 10-15 enriched issues → run one command → entire epic in hrs  │
+│  4. chain 10-15 enriched issues → .agent/run-tasks.sh → epic in hours   │
 └──────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -227,6 +233,10 @@ your agents are only safe when they have guardrails. the system enforces quality
 | 13 | STUB_HANDLER | fake data without `// STUB:` comment |
 
 these checks are project-specific — swap them for your own linting, type checking, or test suite. the pattern is what matters: the agent is told to run them, and the system verifies.
+
+**the 14th gate — only the agent sees this.** after all 13 checks pass and the agent thinks it's done, the system forces it to re-read the original task (title + description + acceptance criteria) one more time and update the workpad with what it actually did. this catches drift — agents that "finished" but silently skipped an acceptance criterion. the agent can't say it's done until the workpad confirms every criterion was addressed.
+
+**the nag hook — every 7 tool calls.** the agent gets interrupted with a checkpoint: "re-read the original requirements. what haven't you addressed yet? are you on track or drifting?" this prevents the most common agent failure mode — getting deep into implementation and forgetting what was actually asked for. it's a forced context refresh that costs almost nothing but catches expensive drift early.
 
 ## file structure
 

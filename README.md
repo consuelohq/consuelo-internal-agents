@@ -2,7 +2,7 @@
 
 bash is all you need.
 
-orchestration layer for autonomous ai agents — using linear or github issues as your control plane. battle-tested at 150-200 tasks/night in production.
+orchestration layer for autonomous ai agents — using linear or github issues as your control plane. battle tested, peak production at 160+ tasks/night in production.
 
 your job becomes: write good specs, enrich them with comments, chain 10-15 issues, run one bash command, and go to sleep. the agents do the rest.
 
